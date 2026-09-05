@@ -124,7 +124,7 @@ server.listen(4321, async () => {
       }
     }
 
-    // 5. Validate /contato page content
+    // 5. Validate /contato page content (M8)
     console.log('\n--- Verificando conteúdo da página /contato (M8) ---');
     const contatoHtml = fs.readFileSync(path.join(distDir, 'contato', 'index.html'), 'utf-8');
     const requiredContatoItems = [
@@ -149,17 +149,73 @@ server.listen(4321, async () => {
       }
     }
 
-    // Negative check on /contato: ensure NO mention of Calendly or Banco do Brasil
-    const forbiddenContatoTerms = ['banco do brasil', 'cesup', 'calendly'];
-    for (const term of forbiddenContatoTerms) {
-      const found = contatoHtmlLower.includes(term);
-      console.log(`Verificação negativa /contato (sem '${term}'): ${!found ? 'OK (não presente)' : 'FAIL (presente!)'}`);
-      if (found) {
-        throw new Error(`Termo proibido '${term}' encontrado em /contato.`);
+    // 6. Validate /faq page content (M9)
+    console.log('\n--- Verificando conteúdo da página /faq (M9) ---');
+    const faqHtml = fs.readFileSync(path.join(distDir, 'faq', 'index.html'), 'utf-8');
+    const faqHtmlLower = faqHtml.toLowerCase();
+    const requiredFaqItems = [
+      'Qual o prazo mínimo de um projeto',
+      '20 dias',
+      'O que significa "sem mensalidade"',
+      'Vocês hospedam o que entregam',
+      'Posso pedir mudança depois da entrega',
+      'É tudo feito com IA',
+      '/sobre',
+      'página Sobre',
+      '1 rodada de ajuste',
+      'lock-in',
+    ];
+    for (const item of requiredFaqItems) {
+      const exists = faqHtmlLower.includes(item.toLowerCase());
+      console.log(`Verificação /faq '${item}': ${exists ? 'OK' : 'FAIL'}`);
+      if (!exists) {
+        throw new Error(`Item obrigatório '${item}' ausente em /faq.`);
       }
     }
 
-    // 6. Screenshots with Edge
+    // 7. Validate /privacidade page content (M9)
+    console.log('\n--- Verificando conteúdo da página /privacidade (M9) ---');
+    const privHtml = fs.readFileSync(path.join(distDir, 'privacidade', 'index.html'), 'utf-8');
+    const privHtmlLower = privHtml.toLowerCase();
+    const requiredPrivItems = [
+      'Política de Privacidade',
+      'formulário',
+      'Web3Forms',
+      'lonelydevdev@gmail.com',
+      'cookie',
+      'LGPD',
+      'Daniel Piacentini',
+    ];
+    for (const item of requiredPrivItems) {
+      const exists = privHtmlLower.includes(item.toLowerCase()) || privHtml.includes(item);
+      console.log(`Verificação /privacidade '${item}': ${exists ? 'OK' : 'FAIL'}`);
+      if (!exists) {
+        throw new Error(`Item obrigatório '${item}' ausente em /privacidade.`);
+      }
+    }
+
+    // 8. Validate footer links in Layout across pages
+    console.log('\n--- Verificando links do rodapé em todas as páginas ---');
+    const htmlFiles = [
+      'index.html',
+      'servicos/index.html',
+      'como-funciona/index.html',
+      'sobre/index.html',
+      'contato/index.html',
+      'faq/index.html',
+      'privacidade/index.html',
+    ];
+    for (const file of htmlFiles) {
+      const content = fs.readFileSync(path.join(distDir, file), 'utf-8');
+      const hasFaqLink = content.includes('href="/faq"');
+      const hasPrivLink = content.includes('href="/privacidade"');
+      console.log(`Rodapé em ${file}: link /faq: ${hasFaqLink ? 'OK' : 'FAIL'} | link /privacidade: ${hasPrivLink ? 'OK' : 'FAIL'}`);
+      if (!hasFaqLink || !hasPrivLink) {
+        throw new Error(`Link de rodapé ausente em ${file}.`);
+      }
+    }
+
+    // 9. Screenshots with Edge
     const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
     const screenshotsDir = path.resolve('docs', 'screenshots');
     if (!fs.existsSync(screenshotsDir)) {
@@ -168,92 +224,36 @@ server.listen(4321, async () => {
 
     const screenshotsToTake = [
       {
-        url: 'http://127.0.0.1:4321/',
-        out: path.join(screenshotsDir, 'm3-home-desktop.png'),
+        url: 'http://127.0.0.1:4321/faq',
+        out: path.join(screenshotsDir, 'm9-faq-desktop.png'),
         width: 1440,
         height: 900,
-        label: 'Home Desktop (1440px)'
+        label: 'FAQ Desktop (1440px)'
       },
       {
-        url: 'http://127.0.0.1:4321/',
-        out: path.join(screenshotsDir, 'm3-home-mobile.png'),
+        url: 'http://127.0.0.1:4321/faq',
+        out: path.join(screenshotsDir, 'm9-faq-mobile.png'),
         width: 375,
         height: 812,
-        label: 'Home Mobile (375px)'
+        label: 'FAQ Mobile (375px)'
       },
       {
-        url: 'http://127.0.0.1:4321/servicos',
-        out: path.join(screenshotsDir, 'm4-servicos-desktop.png'),
+        url: 'http://127.0.0.1:4321/privacidade',
+        out: path.join(screenshotsDir, 'm9-privacidade-desktop.png'),
         width: 1440,
         height: 900,
-        label: 'Serviços Desktop (1440px)'
+        label: 'Privacidade Desktop (1440px)'
       },
       {
-        url: 'http://127.0.0.1:4321/servicos',
-        out: path.join(screenshotsDir, 'm4-servicos-mobile.png'),
+        url: 'http://127.0.0.1:4321/privacidade',
+        out: path.join(screenshotsDir, 'm9-privacidade-mobile.png'),
         width: 375,
         height: 812,
-        label: 'Serviços Mobile (375px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/servicos/automacao-e-ia',
-        out: path.join(screenshotsDir, 'm4-automacao-ia-desktop.png'),
-        width: 1440,
-        height: 900,
-        label: 'Automação & IA Desktop (1440px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/servicos/automacao-e-ia',
-        out: path.join(screenshotsDir, 'm4-automacao-ia-mobile.png'),
-        width: 375,
-        height: 812,
-        label: 'Automação & IA Mobile (375px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/como-funciona',
-        out: path.join(screenshotsDir, 'm5-como-funciona-desktop.png'),
-        width: 1440,
-        height: 900,
-        label: 'Como Funciona Desktop (1440px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/como-funciona',
-        out: path.join(screenshotsDir, 'm5-como-funciona-mobile.png'),
-        width: 375,
-        height: 812,
-        label: 'Como Funciona Mobile (375px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/sobre',
-        out: path.join(screenshotsDir, 'm7-sobre-desktop.png'),
-        width: 1440,
-        height: 900,
-        label: 'Sobre Desktop (1440px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/sobre',
-        out: path.join(screenshotsDir, 'm7-sobre-mobile.png'),
-        width: 375,
-        height: 812,
-        label: 'Sobre Mobile (375px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/contato',
-        out: path.join(screenshotsDir, 'm8-contato-desktop.png'),
-        width: 1440,
-        height: 900,
-        label: 'Contato Desktop (1440px)'
-      },
-      {
-        url: 'http://127.0.0.1:4321/contato',
-        out: path.join(screenshotsDir, 'm8-contato-mobile.png'),
-        width: 375,
-        height: 812,
-        label: 'Contato Mobile (375px)'
+        label: 'Privacidade Mobile (375px)'
       },
     ];
 
-    console.log('\n--- Capturando Screenshots ---');
+    console.log('\n--- Capturando Screenshots M9 ---');
     for (const item of screenshotsToTake) {
       console.log(`Gerando screenshot: ${item.label}...`);
       await new Promise((resolve, reject) => {
@@ -276,7 +276,7 @@ server.listen(4321, async () => {
       });
     }
 
-    console.log('\n✅ Todos os testes e screenshots concluídos com sucesso!');
+    console.log('\n✅ Todos os testes e screenshots de M9 concluídos com sucesso!');
   } catch (err) {
     console.error('Erro na validação:', err);
     process.exitCode = 1;

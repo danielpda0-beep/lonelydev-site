@@ -1,4 +1,4 @@
----
+﻿---
 import '../styles/global.css';
 
 interface Props {
@@ -33,12 +33,22 @@ const currentYear = new Date().getFullYear();
 
     <footer class="footer">
       <div class="container">
-        <p class="copyright">
-          © {currentYear} Lonely Dev
-        </p>
-        <p class="transparency">
-          Feito por um dev que usa IA em todo o processo — veja mais na <a href="/sobre">página Sobre</a>
-        </p>
+        <nav class="footer-nav" aria-label="Navegação do rodapé">
+          <a href="/servicos">Serviços</a>
+          <a href="/como-funciona">Como funciona</a>
+          <a href="/sobre">Sobre</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contato">Contato</a>
+          <a href="/privacidade">Privacidade</a>
+        </nav>
+        <div class="footer-meta">
+          <p class="copyright">
+            © {currentYear} Lonely Dev
+          </p>
+          <p class="transparency">
+            Feito por um dev que usa IA em todo o processo — veja mais na <a href="/sobre">página Sobre</a>
+          </p>
+        </div>
       </div>
     </footer>
 
@@ -76,16 +86,46 @@ const currentYear = new Date().getFullYear();
         margin-top: auto;
       }
 
+      .footer-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs) var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+        padding-bottom: var(--spacing-sm);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+      }
+
+      .footer-nav a {
+        color: var(--color-text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-nav a:hover {
+        color: var(--color-accent);
+      }
+
+      .footer-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+      }
+
       .copyright {
         font-family: var(--font-mono);
         font-size: 0.875rem;
         color: var(--color-text);
-        margin-bottom: var(--spacing-xs);
+        margin-bottom: 0;
       }
 
       .transparency {
         font-size: 0.875rem;
         color: var(--color-text-muted);
+        margin-bottom: 0;
       }
 
       .container {
@@ -105,6 +145,15 @@ const currentYear = new Date().getFullYear();
 
         .main {
           padding: var(--spacing-lg) 0;
+        }
+
+        .footer-nav {
+          gap: var(--spacing-xs) var(--spacing-sm);
+        }
+
+        .footer-meta {
+          flex-direction: column;
+          align-items: flex-start;
         }
       }
     </style>
