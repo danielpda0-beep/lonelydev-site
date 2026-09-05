@@ -1,0 +1,714 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import foraDeEscopoData from '../content/fora-de-escopo.json';
+
+const allServicos = await getCollection('servicos');
+
+const servicosWithContent = await Promise.all(
+  allServicos.map(async (s) => {
+    const { Content } = await render(s);
+    return { ...s, Content };
+  })
+);
+
+const pilaresConfig = [
+  {
+    id: 'automacao-ia',
+    titulo: 'Automação & IA',
+    destaque: true,
+    badge: 'Pilar Carro-chefe',
+    descricao:
+      'Automação inteligente e IA aplicada para eliminar trabalho manual repetitivo. Projetos pontuais para transformar rotinas operacionais em soluções autônomas.',
+    linkDedicado: {
+      url: '/servicos/automacao-e-ia',
+      texto: 'Ver detalhes do pilar carro-chefe →',
+    },
+    servicosIds: ['bot-monitor-portal', 'extrator-dados-relatorio', 'integracoes-ia'],
+  },
+  {
+    id: 'midia-ia',
+    titulo: 'Mídia com IA',
+    destaque: false,
+    badge: null,
+    descricao:
+      'Vídeos e imagens produzidos com inteligência artificial generativa de ponta, sempre com direção e refinamento humano em cada entrega.',
+    linkDedicado: null,
+    servicosIds: ['video-ia-curto', 'imagem-ia'],
+  },
+  {
+    id: 'web-apps',
+    titulo: 'Web & Apps',
+    destaque: false,
+    badge: null,
+    descricao:
+      'Sites, painéis web, aplicativos de desktop e apps móveis sob medida. Soluções diretas ao ponto, com código entregue e sem dependências recorrentes.',
+    linkDedicado: null,
+    servicosIds: [
+      'landing-page-rapida',
+      'web-apps-sistemas',
+      'desktop-apps',
+      'app-mobile-simples',
+    ],
+  },
+  {
+    id: 'jogos',
+    titulo: 'Jogos',
+    destaque: false,
+    badge: null,
+    descricao:
+      'Desenvolvimento de jogos casuais e visual novels com narrativas interativas. Projetos criativos fechados, construídos sob medida.',
+    linkDedicado: null,
+    servicosIds: ['jogos-casual', 'visual-novel'],
+  },
+];
+
+const pilares = pilaresConfig.map((pilar) => {
+  const servicos = pilar.servicosIds
+    .map((id) => servicosWithContent.find((s) => s.id === id))
+    .filter(Boolean);
+  return { ...pilar, servicos };
+});
+
+function getModeloPrecoBadge(modelo: string) {
+  switch (modelo) {
+    case 'pacote-fixo':
+      return { texto: 'Pacote Fixo', classe: 'badge-fixo' };
+    case 'a-partir-de':
+      return { texto: 'A Partir de', classe: 'badge-partir' };
+    case 'sob-consulta':
+      return { texto: 'Sob Consulta', classe: 'badge-consulta' };
+    default:
+      return { texto: modelo, classe: 'badge-default' };
+  }
+}
+---
+
+<Layout title="Serviços | Lonely Dev">
+  <div class="servicos-page">
+    <header class="page-header" aria-labelledby="servicos-title">
+      <p class="eyebrow">Catálogo de Soluções</p>
+      <h1 id="servicos-title">Serviços sob medida</h1>
+      <p class="lead">
+        Todos os projetos são entregues com escopo fechado, preço definido e data de entrega.
+        Sem mensalidade, sem lock-in: o que é entregue fica com você.
+      </p>
+
+      <nav class="nav-pilares" aria-label="Navegação rápida por pilar">
+        <span class="nav-label">Ir para:</span>
+        <ul class="nav-list">
+          {pilaresConfig.map((p) => (
+            <li>
+              <a href={`#${p.id}`} class="nav-chip">
+                {p.titulo}
+                {p.destaque && <span class="nav-dot" aria-hidden="true">★</span>}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href="#fora-de-escopo" class="nav-chip nav-chip--muted">
+              O que NÃO faço
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="pilares-container">
+      {pilares.map((pilar) => (
+        <section
+          id={pilar.id}
+          class:list={['pilar-section', { 'pilar-section--destaque': pilar.destaque }]}
+          aria-labelledby={`titulo-${pilar.id}`}
+        >
+          <div class="pilar-header">
+            <div class="pilar-title-group">
+              {pilar.badge && <span class="badge badge-chefe">{pilar.badge}</span>}
+              <h2 id={`titulo-${pilar.id}`} class="pilar-title">
+                {pilar.titulo}
+              </h2>
+            </div>
+            <p class="pilar-desc">{pilar.descricao}</p>
+            {pilar.linkDedicado && (
+              <p class="pilar-link-dedicado">
+                <a href={pilar.linkDedicado.url} class="link-destaque">
+                  {pilar.linkDedicado.texto}
+                </a>
+              </p>
+            )}
+          </div>
+
+          <div class="servicos-grid">
+            {pilar.servicos.map((servico) => {
+              if (!servico) return null;
+              const badgeInfo = getModeloPrecoBadge(servico.data.modelo_preco);
+              const { Content } = servico;
+              return (
+                <article
+                  id={servico.id}
+                  class:list={[
+                    'servico-card',
+                    { 'servico-card--fixo': servico.data.modelo_preco === 'pacote-fixo' },
+                  ]}
+                >
+                  <div class="card-header">
+                    <div class="card-badges">
+                      <span class:list={['badge', badgeInfo.classe]}>
+                        {badgeInfo.texto}
+                      </span>
+                    </div>
+                    <h3 class="servico-nome">{servico.data.nome}</h3>
+                    <p class="servico-resumo">{servico.data.resumo}</p>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="servico-prose">
+                      <Content />
+                    </div>
+
+                    <dl class="servico-detalhes">
+                      <div class="detalhe-item">
+                        <dt>Entregável:</dt>
+                        <dd>{servico.data.entregavel}</dd>
+                      </div>
+                      <div class="detalhe-item">
+                        <dt>Prazo típico:</dt>
+                        <dd>{servico.data.prazo_tipico}</dd>
+                      </div>
+                      <div class="detalhe-item detalhe-item--preco">
+                        <dt>Investimento:</dt>
+                        <dd>
+                          {servico.data.valor ? (
+                            <strong class="preco-valor">{servico.data.valor}</strong>
+                          ) : (
+                            <span class="preco-consulta">Sob consulta</span>
+                          )}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div class="card-footer">
+                    <a
+                      href={`/contato?servico=${servico.id}`}
+                      class="btn btn-card"
+                    >
+                      {servico.data.cta || 'Pedir orçamento'}
+                    </a>
+                    <a href={`#${servico.id}`} class="anchor-link" title="Link direto para este serviço">
+                      <span class="anchor-hash">#</span>{servico.id}
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <section id="fora-de-escopo" class="fora-escopo-section" aria-labelledby="fora-escopo-title">
+      <div class="fora-escopo-card">
+        <div class="fora-escopo-header">
+          <span class="badge badge-alerta">Escopo Negativo</span>
+          <h2 id="fora-escopo-title">O que eu NÃO faço</h2>
+          <p class="fora-escopo-intro">
+            Para garantir foco técnico, entregas rápidas e qualidade artesanal, estes serviços
+            ficam <strong>explicitamente fora de escopo</strong> no Lonely Dev:
+          </p>
+        </div>
+
+        <ul class="fora-escopo-lista">
+          {foraDeEscopoData.fora_de_escopo.map((item) => (
+            <li class="fora-escopo-item">
+              <span class="fora-icone" aria-hidden="true">✕</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <p class="fora-escopo-obs">
+          {foraDeEscopoData.observacao}
+        </p>
+      </div>
+    </section>
+
+    <section class="cta-banner" aria-labelledby="cta-banner-title">
+      <h2 id="cta-banner-title">Tem um projeto ou necessidade específica?</h2>
+      <p>
+        Conte o problema que você precisa resolver. Avalio o escopo e respondo em até 1 dia útil
+        com viabilidade, prazo e preço fechado.
+      </p>
+      <a href="/contato" class="btn btn-primary">Pedir orçamento</a>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .servicos-page {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .page-header {
+    padding: var(--spacing-lg) 0 var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .page-header h1 {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    max-width: 65ch;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .nav-pilares {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs) var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: var(--spacing-xs);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    padding: 0.35rem 0.75rem;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .nav-chip:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .nav-chip--muted {
+    color: var(--color-text-muted);
+    border-style: dashed;
+  }
+
+  .nav-dot {
+    color: var(--color-accent);
+    font-size: 0.75rem;
+  }
+
+  .pilares-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+  }
+
+  .pilar-section {
+    padding-top: var(--spacing-lg);
+    scroll-margin-top: 5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pilar-section:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .pilar-section--destaque {
+    background: linear-gradient(
+      180deg,
+      rgba(245, 166, 35, 0.04) 0%,
+      rgba(245, 166, 35, 0) 100%
+    );
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(245, 166, 35, 0.25);
+  }
+
+  .pilar-header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .pilar-title-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .pilar-title {
+    font-size: 1.75rem;
+    margin-bottom: 0;
+  }
+
+  .pilar-desc {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 65ch;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .pilar-link-dedicado {
+    margin-top: var(--spacing-xs);
+  }
+
+  .link-destaque {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .link-destaque:hover {
+    text-decoration: underline;
+  }
+
+  .servicos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .servico-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    scroll-margin-top: 6rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .servico-card:hover {
+    border-color: rgba(245, 166, 35, 0.4);
+  }
+
+  .servico-card--fixo {
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .card-header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .card-badges {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .badge-chefe {
+    background: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .badge-fixo {
+    background: rgba(245, 166, 35, 0.15);
+    color: var(--color-accent);
+    border: 1px solid rgba(245, 166, 35, 0.3);
+  }
+
+  .badge-partir {
+    background: rgba(160, 160, 160, 0.15);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .badge-consulta {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+  }
+
+  .badge-alerta {
+    background: rgba(235, 87, 87, 0.15);
+    color: #ff7b72;
+    border: 1px solid rgba(235, 87, 87, 0.3);
+  }
+
+  .servico-nome {
+    font-size: 1.35rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .servico-resumo {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .servico-prose {
+    font-size: 0.925rem;
+    color: #d0d0d5;
+    line-height: 1.55;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: var(--spacing-sm);
+  }
+
+  .servico-prose :global(p) {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .servico-prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .servico-detalhes {
+    display: grid;
+    gap: var(--spacing-xs);
+    font-size: 0.875rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-sm);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .detalhe-item dt {
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .detalhe-item dd {
+    color: var(--color-text);
+    margin-left: 0;
+  }
+
+  .detalhe-item--preco {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-xs);
+    margin-top: 0.25rem;
+  }
+
+  .preco-valor {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: 1.05rem;
+  }
+
+  .preco-consulta {
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.65rem 1.2rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    color: #1a1a1e;
+  }
+
+  .btn-card {
+    background-color: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-card:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .anchor-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .anchor-link:hover {
+    color: var(--color-accent);
+  }
+
+  .anchor-hash {
+    color: var(--color-accent);
+    margin-right: 0.1rem;
+  }
+
+  .fora-escopo-section {
+    margin-top: var(--spacing-2xl);
+    scroll-margin-top: 5rem;
+  }
+
+  .fora-escopo-card {
+    background-color: #211c1d;
+    border: 1px solid #4a2c2c;
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+  }
+
+  .fora-escopo-header {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .fora-escopo-header h2 {
+    font-size: 1.5rem;
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .fora-escopo-intro {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .fora-escopo-lista {
+    list-style: none;
+    display: grid;
+    gap: var(--spacing-xs);
+    margin: var(--spacing-md) 0;
+    padding: 0;
+  }
+
+  .fora-escopo-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: #f0c0c0;
+    padding: 0.4rem 0.6rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+  }
+
+  .fora-icone {
+    color: #ff7b72;
+    font-weight: bold;
+  }
+
+  .fora-escopo-obs {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+    border-top: 1px solid #4a2c2c;
+    padding-top: var(--spacing-sm);
+  }
+
+  .cta-banner {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .cta-banner p {
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  @media (min-width: 768px) {
+    .servicos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fora-escopo-lista {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .servicos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

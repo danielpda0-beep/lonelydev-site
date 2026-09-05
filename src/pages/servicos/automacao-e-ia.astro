@@ -1,0 +1,592 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const servicosAutomação = [
+  {
+    id: 'bot-monitor-portal',
+    nome: 'Bots & Monitoramento de Portais',
+    tag: 'Pacote Fixo',
+    tagClass: 'badge-fixo',
+    preco: 'a partir de R$ 1.500',
+    prazo: '20 dias',
+    descricao:
+      'Automação completa para vigiar portais, páginas web, diários oficiais ou sistemas com login. O bot checa periodicamente a fonte de informação e alerta imediatamente quando encontra novidades ou alterações.',
+    casos: [
+      'Monitoramento de diários oficiais, editais e publicações jurídicas (DJE, DOU, DET).',
+      'Acompanhamento de preços, estoque ou disponibilidade em sites de fornecedores.',
+      'Verificação automática de status em portais governamentais ou corporativos.',
+    ],
+    entregavel: 'Script/bot configurado + canal de alerta funcionando + documentação de execução.',
+  },
+  {
+    id: 'extrator-dados-relatorio',
+    nome: 'Extração de Dados & Relatórios Automáticos',
+    tag: 'Pacote Fixo',
+    tagClass: 'badge-fixo',
+    preco: 'a partir de R$ 900',
+    prazo: '15 dias',
+    descricao:
+      'Pipelines que leem dados de múltiplas fontes despadronizadas (arquivos PDF, planilhas bagunçadas, páginas web, relatórios brutos) e transformam tudo em tabelas limpas e consolidadas.',
+    casos: [
+      'Extração de tabelas e valores de centenas de PDFs de faturas, contratos ou demonstrativos.',
+      'Consolidação de planilhas semanais/mensais em um único relatório padronizado.',
+      'Conversão de dados não-estruturados em planilhas Excel ou bases CSV prontas para análise.',
+    ],
+    entregavel: 'Pipeline de extração configurado + template de saída personalizado + documentação.',
+  },
+  {
+    id: 'integracoes-ia',
+    nome: 'Integrações de IA (Chatbots, Agentes & RAG)',
+    tag: 'Sob Consulta',
+    tagClass: 'badge-consulta',
+    preco: 'Sob consulta',
+    prazo: '15-30 dias',
+    descricao:
+      'Sistemas inteligentes baseados em modelos de linguagem avançados (LLMs) integrados ao contexto e aos dados da sua empresa, permitindo consultas em linguagem natural e automação cognitiva.',
+    casos: [
+      'Assistentes com busca semântica em base de documentos e manuais internos (RAG).',
+      'Chatbots de triagem e atendimento pré-configurados com regras e diretrizes rígidas.',
+      'Agentes que processam textos, classificam mensagens e extraem intenções.',
+    ],
+    entregavel: 'Sistema de IA configurado + conexão com APIs/modelos + documentação técnica.',
+  },
+];
+
+const pilaresTecnicos = [
+  {
+    titulo: 'Execução local ou na sua infraestrutura',
+    descricao:
+      'As automações rodam diretamente no seu computador ou no seu servidor/nuvem. Nada fica rodando no ambiente do desenvolvedor após o projeto ser entregue.',
+  },
+  {
+    titulo: 'Tratamento de erros e resiliência',
+    descricao:
+      'Robôs e scripts construídos com tolerância a instabilidade de rede, paginação de dados, limites de requisições e alertas de falha para que você saiba sempre o estado do sistema.',
+  },
+  {
+    titulo: 'Código documentado e aberto para você',
+    descricao:
+      'Todo o código fonte, scripts e instruções de operação são entregues a você. Sem dependência de bibliotecas proprietárias secretas ou contratos de fidelidade.',
+  },
+  {
+    titulo: 'Escopo fechado e sem mensalidade',
+    descricao:
+      'Você paga pelo desenvolvimento e pela entrega. Não há cobrança de taxa de manutenção mensal obrigatória nem lock-in contratual.',
+  },
+];
+---
+
+<Layout title="Automação & IA — Carro-chefe | Lonely Dev">
+  <article class="carrochefe-page">
+    <nav class="breadcrumb" aria-label="Navegação de retorno">
+      <a href="/servicos" class="breadcrumb-link">← Voltar para todos os serviços</a>
+    </nav>
+
+    <header class="hero" aria-labelledby="carrochefe-title">
+      <span class="badge badge-chefe">Pilar Carro-chefe</span>
+      <h1 id="carrochefe-title">Automação de Processos & Inteligência Artificial</h1>
+      <p class="lead">
+        Elimine o trabalho manual e repetitivo do seu dia a dia com robôs, extratores de dados e
+        sistemas inteligentes sob medida. Entregas fechadas, código seu, sem mensalidades forçadas.
+      </p>
+      <div class="hero-actions">
+        <a href="/contato?servico=automacao-ia" class="btn btn-primary">Pedir orçamento para Automação</a>
+        <a href="#capacidades" class="btn btn-ghost">Ver soluções disponíveis</a>
+      </div>
+    </header>
+
+    <section id="capacidades" class="section" aria-labelledby="capacidades-title">
+      <div class="section-header">
+        <p class="eyebrow">Capacidades e Soluções</p>
+        <h2 id="capacidades-title">O que é possível automatizar</h2>
+        <p class="section-desc">
+          Soluções desenvolvidas para cenários reais de produtividade e ganho de tempo, sem complexidade desnecessária.
+        </p>
+      </div>
+
+      <div class="solucoes-grid">
+        {servicosAutomação.map((servico) => (
+          <div class="solucao-card" id={servico.id}>
+            <div class="solucao-header">
+              <span class:list={['badge', servico.tagClass]}>{servico.tag}</span>
+              <h3>{servico.nome}</h3>
+              <p class="solucao-desc">{servico.descricao}</p>
+            </div>
+
+            <div class="solucao-exemplos">
+              <h4>Exemplos práticos de aplicação:</h4>
+              <ul>
+                {servico.casos.map((caso) => (
+                  <li>
+                    <span class="check-icon" aria-hidden="true">✓</span>
+                    <span>{caso}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="solucao-meta">
+              <div class="meta-row">
+                <span class="meta-label">Entregável:</span>
+                <span class="meta-val">{servico.entregavel}</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-label">Prazo estimado:</span>
+                <span class="meta-val">{servico.prazo}</span>
+              </div>
+              <div class="meta-row meta-row--preco">
+                <span class="meta-label">Investimento:</span>
+                <strong class="meta-preco">{servico.preco}</strong>
+              </div>
+            </div>
+
+            <div class="solucao-cta">
+              <a href={`/contato?servico=${servico.id}`} class="btn btn-card">
+                Pedir orçamento deste serviço
+              </a>
+              <a href={`/servicos#${servico.id}`} class="link-anchor">
+                Ver no catálogo geral #{servico.id}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="diferenciais-title">
+      <div class="section-header">
+        <p class="eyebrow">Arquitetura e Princípios</p>
+        <h2 id="diferenciais-title">Como o trabalho é construído</h2>
+        <p class="section-desc">
+          Transparência técnica do primeiro ao último dia de projeto.
+        </p>
+      </div>
+
+      <div class="pilares-grid">
+        {pilaresTecnicos.map((p) => (
+          <div class="pilar-card">
+            <h3>{p.titulo}</h3>
+            <p>{p.descricao}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="processo-title">
+      <div class="section-header">
+        <p class="eyebrow">Passo a Passo</p>
+        <h2 id="processo-title">O fluxo de contratação e entrega</h2>
+      </div>
+
+      <div class="fluxo-steps">
+        <div class="fluxo-step">
+          <span class="step-num">01</span>
+          <h4>Briefing da Dor</h4>
+          <p>Você descreve o processo manual, os portais envolvidos ou a base de dados a tratar.</p>
+        </div>
+        <div class="fluxo-step">
+          <span class="step-num">02</span>
+          <h4>Proposta Fechada</h4>
+          <p>Definição técnica de entradas, saídas, formato de entrega, prazo exato e preço único.</p>
+        </div>
+        <div class="fluxo-step">
+          <span class="step-num">03</span>
+          <h4>Desenvolvimento & Testes</h4>
+          <p>Construção dos scripts, integração de APIs e validação com dados reais ou sintéticos.</p>
+        </div>
+        <div class="fluxo-step">
+          <span class="step-num">04</span>
+          <h4>Entrega & Autonomia</h4>
+          <p>Homologação conjunta, 1 rodada de ajustes inclusa e entrega do pacote documentado.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-banner" aria-labelledby="cta-title">
+      <h2 id="cta-title">Quer automatizar uma rotina da sua operação?</h2>
+      <p>
+        Envie uma mensagem descrevendo o que você faz manualmente hoje. Respondo em até 1 dia útil com uma análise de viabilidade e proposta.
+      </p>
+      <div class="cta-buttons">
+        <a href="/contato?servico=automacao-ia" class="btn btn-primary">Pedir proposta de automação</a>
+        <a href="/servicos" class="btn btn-ghost">Ver todos os 11 serviços</a>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .carrochefe-page {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .breadcrumb-link {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .hero {
+    padding: var(--spacing-md) 0 var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .badge-chefe {
+    background: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .badge-fixo {
+    background: rgba(245, 166, 35, 0.15);
+    color: var(--color-accent);
+    border: 1px solid rgba(245, 166, 35, 0.3);
+  }
+
+  .badge-consulta {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    max-width: 25ch;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 65ch;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .section {
+    padding: var(--spacing-xl) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-desc {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    max-width: 60ch;
+    margin-bottom: 0;
+  }
+
+  .solucoes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .solucao-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .solucao-header h3 {
+    font-size: 1.35rem;
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .solucao-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+
+  .solucao-exemplos {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: var(--spacing-md);
+  }
+
+  .solucao-exemplos h4 {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .solucao-exemplos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--spacing-xs);
+  }
+
+  .solucao-exemplos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #d0d0d5;
+  }
+
+  .check-icon {
+    color: var(--color-accent);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .solucao-meta {
+    display: grid;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.15);
+    padding: var(--spacing-sm);
+    border-radius: 6px;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .meta-val {
+    color: var(--color-text);
+  }
+
+  .meta-row--preco {
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.35rem;
+    margin-top: 0.2rem;
+  }
+
+  .meta-preco {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+  }
+
+  .solucao-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-xs);
+  }
+
+  .link-anchor {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+  }
+
+  .link-anchor:hover {
+    color: var(--color-accent);
+  }
+
+  .pilares-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .pilar-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .pilar-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+  }
+
+  .pilar-card p {
+    color: var(--color-text-muted);
+    font-size: 0.925rem;
+    margin-bottom: 0;
+  }
+
+  .fluxo-steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .fluxo-step {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .fluxo-step h4 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .fluxo-step p {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .cta-banner {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.6rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .cta-banner p {
+    color: var(--color-text-muted);
+    max-width: 55ch;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.7rem 1.25rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    color: #1a1a1e;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .btn-card {
+    background-color: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-card:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  @media (min-width: 768px) {
+    .pilares-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fluxo-steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .solucoes-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
