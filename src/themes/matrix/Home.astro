@@ -210,6 +210,26 @@ const pacotesFixos = servicos
     </div>
   </section>
 
+  <!-- Matriz de Temas (Vitrine Bespoke Teaser) -->
+  <section class="matrix-section" aria-labelledby="matrix-temas-title">
+    <div class="matrix-section-titlebar">
+      <span class="titlebar-marker">#05</span>
+      <div class="titlebar-textgroup">
+        <h2 id="matrix-temas-title" class="matrix-section-title">{homeContent.temasTeaser.titulo}</h2>
+        <p class="matrix-section-sub">{homeContent.temasTeaser.badge}</p>
+      </div>
+      <div class="titlebar-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="matrix-panel matrix-theme-teaser-pod">
+      <div class="panel-corners" aria-hidden="true"></div>
+      <p class="theme-teaser-text">{homeContent.temasTeaser.texto}</p>
+      <a href={homeContent.temasTeaser.linkHref} class="matrix-link-hud">
+        <span class="bracket">[</span> {homeContent.temasTeaser.linkTexto} <span class="bracket">]</span> →
+      </a>
+    </div>
+  </section>
+
   <!-- Terminal de Transmissão (CTA Final) -->
   <section class="matrix-panel matrix-transmission-console" aria-labelledby="matrix-cta-title">
     <div class="panel-corners" aria-hidden="true"></div>
@@ -862,6 +882,24 @@ const pacotesFixos = servicos
     font-size: 0.925rem;
     line-height: 1.5;
     margin: 0;
+  }
+
+  /* Theme Teaser Pod */
+  .matrix-theme-teaser-pod {
+    padding: var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    border-color: rgba(34, 211, 238, 0.3);
+  }
+
+  .theme-teaser-text {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 65ch;
   }
 
   /* Transmission Console (CTA Final) */

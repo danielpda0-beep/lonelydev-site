@@ -49,7 +49,12 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
     <MatrixCinematography />
     <header class="header">
       <div class="container header-container">
-        <a href={cleanPath === '/' ? '/' : `/`} class="wordmark">Lonely Dev</a>
+        <div class="header-brand-group">
+          <a href={cleanPath === '/' ? '/' : `/`} class="wordmark">Lonely Dev</a>
+          <nav class="header-nav" aria-label="Navegação primária">
+            <a href="/temas" class:list={['header-nav-link', { 'is-active': cleanPath === '/temas' }]}>Temas</a>
+          </nav>
+        </div>
         <div class="header-actions">
           <button id="sound-toggle" class="icon-btn" aria-label="Ligar som">
             <svg class="icon-sound-off" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
@@ -93,6 +98,7 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         <nav class="footer-nav" aria-label="Navegação do rodapé">
           <a href="/servicos">Serviços</a>
           <a href="/como-funciona">Como funciona</a>
+          <a href="/temas">Temas</a>
           <a href="/sobre">Sobre</a>
           <a href="/faq">FAQ</a>
           <a href="/contato">Contato</a>
@@ -227,6 +233,35 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
 
       .icon-btn:hover {
         color: var(--color-accent);
+        background: var(--color-bg-overlay);
+      }
+
+      .header-brand-group {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md, 1.5rem);
+      }
+
+      .header-nav {
+        display: flex;
+        align-items: center;
+      }
+
+      .header-nav-link {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        text-decoration: none;
+        padding: 0.25rem 0.65rem;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .header-nav-link:hover,
+      .header-nav-link.is-active {
+        color: var(--color-accent);
+        border-color: var(--color-border);
         background: var(--color-bg-overlay);
       }
 

@@ -10,30 +10,49 @@ interface Props {
 const { isActive = false } = Astro.props;
 ---
 
-<article class:list={['theme-card-business', { 'is-active': isActive }]}>
-  <div class="card-preview" style="background: linear-gradient(135deg, #1a1a1e 0%, #25252a 100%);">
-    <div class="preview-badge" style="background: #f5a623; color: #1a1a1e;">#04</div>
-    <div class="preview-wireframe">
-      <div class="wireframe-hero">
-        <span class="wire-dot" style="background: #f5a623;"></span>
-        <span class="wire-line" style="background: #3a3a40; width: 60%;"></span>
-      </div>
-      <div class="wireframe-grid">
-        <span class="wire-block" style="background: #25252a; border-color: #3a3a40;"></span>
-        <span class="wire-block" style="background: #25252a; border-color: #3a3a40;"></span>
-      </div>
+<article class:list={['theme-card', 'theme-card-business', { 'is-active': isActive }]}>
+  <!-- Área de Miniatura: Live iframe no desktop + screenshot estático no celular -->
+  <div class="theme-preview-container" data-theme-preview="business">
+    <!-- Desktop: Iframe vivo com scale -->
+    <div class="theme-iframe-wrap">
+      <iframe
+        data-src="/t/business"
+        title="Miniatura ao vivo do tema Business"
+        class="theme-live-iframe"
+        loading="lazy"
+        tabindex="-1"
+        aria-hidden="true"
+      ></iframe>
+    </div>
+    <!-- Mobile: Screenshot estático (zero sobrecarga de CPU/bateria) -->
+    <div class="theme-static-wrap">
+      <img
+        src="/images/themes/business.png"
+        alt="Screenshot do tema Business"
+        class="theme-static-img"
+        loading="lazy"
+      />
+    </div>
+    <div class="preview-overlay-badge">
+      <span class="swatch-dot" style="background: #f5a623;"></span>
+      <span>{meta.name}</span>
     </div>
   </div>
 
   <div class="card-body">
     <div class="card-header">
-      <h3 class="card-title">{meta.name}</h3>
-      <span class="card-tagline">{meta.tagline}</span>
+      <div class="card-title-group">
+        <h3 class="card-title">{meta.name}</h3>
+        <span class="card-tagline">{meta.tagline}</span>
+      </div>
+      {isActive && <span class="badge-active">Tema Ativo</span>}
     </div>
+
     <p class="card-desc">{meta.description}</p>
+
     <div class="card-footer">
-      <a href="/t/business" class="btn-theme-view">
-        {isActive ? 'Tema em exibição' : 'Ver o site inteiro assim →'}
+      <a href="/t/business" class="btn-theme-select">
+        {isActive ? 'Ver páginas neste tema →' : 'Ver o site inteiro assim →'}
       </a>
     </div>
   </div>
@@ -47,111 +66,150 @@ const { isActive = false } = Astro.props;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .theme-card-business:hover {
     border-color: #f5a623;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
   }
 
   .theme-card-business.is-active {
     border-color: #f5a623;
-    box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.3);
+    box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.4);
   }
 
-  .card-preview {
-    height: 140px;
+  .theme-preview-container {
+    width: 100%;
+    height: 220px;
     position: relative;
-    padding: 1rem;
+    background-color: #1a1a1e;
+    overflow: hidden;
     border-bottom: 1px solid #3a3a40;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
 
-  .preview-badge {
-    align-self: flex-start;
+  /* Desktop live iframe wrapper */
+  .theme-iframe-wrap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none; /* Previne captura de clique do iframe */
+  }
+
+  .theme-live-iframe {
+    width: 1200px;
+    height: 800px;
+    border: none;
+    transform-origin: 0 0;
+    transform: scale(0.35);
+    pointer-events: none;
+  }
+
+  /* Mobile static fallback */
+  .theme-static-wrap {
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .theme-static-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .theme-iframe-wrap {
+      display: none !important;
+    }
+    .theme-static-wrap {
+      display: block !important;
+    }
+  }
+
+  .preview-overlay-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: rgba(26, 26, 30, 0.88);
+    border: 1px solid #3a3a40;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-  }
-
-  .preview-wireframe {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .wireframe-hero {
+    color: #e8e8e8;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    z-index: 2;
   }
 
-  .wire-dot {
+  .swatch-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
   }
 
-  .wire-line {
-    height: 6px;
-    border-radius: 3px;
-  }
-
-  .wireframe-grid {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .wire-block {
-    flex: 1;
-    height: 28px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-  }
-
   .card-body {
-    padding: 1.25rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
     flex: 1;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
   .card-title {
     font-family: var(--font-mono, monospace);
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     color: #e8e8e8;
     margin: 0;
   }
 
   .card-tagline {
     font-family: var(--font-mono, monospace);
-    font-size: 0.8rem;
+    font-size: 0.825rem;
     color: #f5a623;
     display: block;
     margin-top: 0.25rem;
   }
 
+  .badge-active {
+    background: #f5a623;
+    color: #1a1a1e;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
   .card-desc {
     color: #a0a0a0;
-    font-size: 0.925rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.55;
     margin: 0;
     flex: 1;
   }
 
   .card-footer {
     margin-top: auto;
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
   }
 
-  .btn-theme-view {
+  .btn-theme-select {
     display: inline-block;
     width: 100%;
     text-align: center;
@@ -159,14 +217,15 @@ const { isActive = false } = Astro.props;
     border: 1px solid #f5a623;
     color: #f5a623;
     font-family: var(--font-mono, monospace);
-    font-size: 0.875rem;
-    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.65rem 1rem;
     border-radius: 4px;
     text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.2s ease;
   }
 
-  .btn-theme-view:hover {
+  .btn-theme-select:hover {
     background-color: #f5a623;
     color: #1a1a1e;
   }

@@ -56,6 +56,13 @@ export interface HomeContent {
     ctaTexto: string;
     ctaHref: string;
   };
+  temasTeaser: {
+    badge: string;
+    titulo: string;
+    texto: string;
+    linkTexto: string;
+    linkHref: string;
+  };
   ctaFinal: {
     titulo: string;
     texto: string;
@@ -159,6 +166,13 @@ export const homeContent: HomeContent = {
     ],
     ctaTexto: 'Ver portfólio',
     ctaHref: '/portfolio',
+  },
+  temasTeaser: {
+    badge: 'Design Bespoke',
+    titulo: '18 Temas. Uma Única Base de Conteúdo.',
+    texto: 'Cada tema reimagina a experiência visual e a cinematografia do site sem mudar uma linha de conteúdo. Experimente agora ou encomende o seu com identidade sob medida.',
+    linkTexto: 'Explorar vitrine de temas',
+    linkHref: '/temas',
   },
   ctaFinal: {
     titulo: 'Tem um problema pontual?',

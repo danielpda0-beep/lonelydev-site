@@ -168,6 +168,33 @@ function getModeloPrecoBadge(modelo: string) {
                       <Content />
                     </div>
 
+                    {servico.id === 'landing-page-rapida' && (
+                      <div class="webdesign-temas-gallery">
+                        <div class="gallery-heading-wrap">
+                          <p class="gallery-phrase">
+                            <strong>Estes 18 estilos são deste site — o seu pode ter o dele.</strong>
+                          </p>
+                          <a href="/temas" class="gallery-temas-link">
+                            Ver vitrine de temas →
+                          </a>
+                        </div>
+                        <div class="gallery-previews-grid">
+                          <a href="/t/matrix/" class="gallery-preview-card" title="Ver tema Matrix em ação">
+                            <div class="preview-img-wrap">
+                              <img src="/images/themes/matrix.png" alt="Tema Matrix" loading="lazy" />
+                            </div>
+                            <span class="preview-caption">Matrix (Terminal Hacker)</span>
+                          </a>
+                          <a href="/t/business/" class="gallery-preview-card" title="Ver tema Business em ação">
+                            <div class="preview-img-wrap">
+                              <img src="/images/themes/business.png" alt="Tema Business" loading="lazy" />
+                            </div>
+                            <span class="preview-caption">Business (Minimalista Executivo)</span>
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
                     <dl class="servico-detalhes">
                       <div class="detalhe-item">
                         <dt>Entregável:</dt>
@@ -696,6 +723,85 @@ function getModeloPrecoBadge(modelo: string) {
     color: var(--color-text-muted);
     max-width: 50ch;
     margin: 0 auto var(--spacing-md);
+  }
+
+  /* Temas Gallery Showcase dentro de landing-page-rapida */
+  .webdesign-temas-gallery {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-sm);
+    background: var(--color-bg-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: 6px;
+  }
+
+  .gallery-heading-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .gallery-phrase {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  .gallery-temas-link {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .gallery-temas-link:hover {
+    text-decoration: underline;
+  }
+
+  .gallery-previews-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
+  }
+
+  .gallery-preview-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-bg);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .gallery-preview-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+  }
+
+  .preview-img-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .preview-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preview-caption {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   @media (min-width: 768px) {
