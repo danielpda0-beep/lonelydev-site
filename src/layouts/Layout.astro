@@ -1,0 +1,112 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Lonely Dev' } = Astro.props;
+const currentYear = new Date().getFullYear();
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <a href="/" class="wordmark">Lonely Dev</a>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="copyright">
+          © {currentYear} Lonely Dev
+        </p>
+        <p class="transparency">
+          Feito por um dev que usa IA em todo o processo — veja mais na página Sobre
+        </p>
+      </div>
+    </footer>
+
+    <style>
+      .header {
+        background-color: var(--color-bg-secondary);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--spacing-md) 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .wordmark {
+        font-family: var(--font-mono);
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--color-text);
+        text-decoration: none;
+      }
+
+      .wordmark:hover {
+        color: var(--color-accent);
+      }
+
+      .main {
+        flex: 1;
+        padding: var(--spacing-xl) 0;
+      }
+
+      .footer {
+        background-color: var(--color-bg-secondary);
+        border-top: 1px solid var(--color-border);
+        padding: var(--spacing-lg) 0;
+        margin-top: auto;
+      }
+
+      .copyright {
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        color: var(--color-text);
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .transparency {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 var(--spacing-sm);
+        }
+
+        .wordmark {
+          font-size: 1.25rem;
+        }
+
+        .main {
+          padding: var(--spacing-lg) 0;
+        }
+      }
+    </style>
+  </body>
+</html>
