@@ -1,0 +1,11 @@
+{
+  "id": "matrix",
+  "name": "Matrix / Minority Report",
+  "tagline": "Terminal DOS, chuva de código e painéis holográficos",
+  "description": "Sequência de boot cinematográfica verde-fósforo com transição para ciano holográfico. Painéis de vidro flutuantes translúcidos sobre chuva de código lenta permanente.",
+  "palette": {
+    "primary": "#22d3ee",
+    "background": "#0a1420",
+    "text": "#e0f4ff"
+  }
+}

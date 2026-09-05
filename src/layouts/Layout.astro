@@ -29,14 +29,17 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
     <script is:inline>
       (function() {
         try {
+          const m = window.location.pathname.match(/^\/t\/([^\/]+)/);
+          if (m && m[1]) {
+            document.documentElement.setAttribute('data-theme', m[1]);
+            localStorage.setItem('ld-tema', m[1]);
+            return;
+          }
           const t = localStorage.getItem('ld-tema');
           if (t) {
             document.documentElement.setAttribute('data-theme', t);
           } else {
-            const path = window.location.pathname;
-            if (!path.startsWith('/t/business')) {
-              document.documentElement.setAttribute('data-theme', 'matrix');
-            }
+            document.documentElement.setAttribute('data-theme', 'matrix');
           }
         } catch (e) {}
       })();

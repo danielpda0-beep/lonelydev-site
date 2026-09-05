@@ -1,0 +1,11 @@
+{
+  "id": "business",
+  "name": "Business",
+  "tagline": "Sobriedade, foco e clareza comercial",
+  "description": "Estética executiva e editorial em grafite escuro e âmbar quente. Sem distrações ou animações pesadas, priorizando leitura imediata para clientes conservadores.",
+  "palette": {
+    "primary": "#f5a623",
+    "background": "#1a1a1e",
+    "text": "#e8e8e8"
+  }
+}

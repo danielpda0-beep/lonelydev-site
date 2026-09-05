@@ -1,0 +1,485 @@
+---
+// src/themes/business/Home.astro
+// Layout Bespoke do Tema Business (Sóbrio / Executivo)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getCollection('servicos')
+import { getCollection } from 'astro:content';
+import { homeContent } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'business' } = Astro.props;
+
+const servicos = await getCollection('servicos');
+const pacotesFixos = servicos
+  .filter((s) => s.data.modelo_preco === 'pacote-fixo')
+  .sort((a, b) => homeContent.pacotesInfo.ordem.indexOf(a.id) - homeContent.pacotesInfo.ordem.indexOf(b.id));
+---
+
+<div class="theme-business-home" data-bespoke-layout="business">
+  <!-- Hero Section: Sóbrio e Direto -->
+  <section class="biz-hero" aria-labelledby="biz-hero-tagline">
+    <div class="biz-hero-content">
+      <p class="biz-eyebrow">{homeContent.hero.eyebrow}</p>
+      <h1 id="biz-hero-tagline" class="biz-title">{homeContent.hero.tagline}</h1>
+      <p class="biz-lead">{homeContent.hero.lead}</p>
+      <div class="biz-hero-actions">
+        <a class="biz-btn biz-btn-primary" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pilares de Atuação: Grid 2x2 Executiva -->
+  <section class="biz-section" aria-labelledby="biz-pilares-title">
+    <h2 id="biz-pilares-title" class="biz-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="biz-pilares-grid">
+      {homeContent.pilares.map((pilar) => (
+        <a
+          class:list={['biz-pilar-card', { 'biz-pilar-chefe': pilar.destaque }]}
+          href={pilar.link}
+        >
+          {pilar.badge && <span class="biz-badge">{pilar.badge}</span>}
+          <h3 class="biz-pilar-name">{pilar.titulo}</h3>
+          <p class="biz-pilar-desc">{pilar.resumo}</p>
+          <span class="biz-link-arrow">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Como Funciona: 3 Passos Lineares -->
+  <section class="biz-section" aria-labelledby="biz-passos-title">
+    <h2 id="biz-passos-title" class="biz-section-title">{homeContent.passosTitulo}</h2>
+    <div class="biz-passos-list">
+      {homeContent.passos.map((passo) => (
+        <div class="biz-passo-item">
+          <div class="biz-passo-num">{passo.n}</div>
+          <div class="biz-passo-info">
+            <h3 class="biz-passo-heading">{passo.titulo}</h3>
+            <p class="biz-passo-text">{passo.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="biz-section-more">
+      <a href={homeContent.passosLinkHref} class="biz-link-more">{homeContent.passosLinkTexto} →</a>
+    </div>
+  </section>
+
+  <!-- Pacotes de Preço Fixo -->
+  <section class="biz-section" aria-labelledby="biz-pacotes-title">
+    <div class="biz-section-header">
+      <h2 id="biz-pacotes-title" class="biz-section-title">{homeContent.pacotesInfo.titulo}</h2>
+      <p class="biz-section-subtitle">{homeContent.pacotesInfo.intro}</p>
+    </div>
+    <div class="biz-cards-grid">
+      {pacotesFixos.map((pacote) => (
+        <article class="biz-package-card">
+          <h3 class="biz-package-name">{pacote.data.nome}</h3>
+          <p class="biz-package-desc">{pacote.data.resumo}</p>
+          <div class="biz-package-meta">
+            <span class="biz-package-price">{pacote.data.valor}</span>
+            <span class="biz-meta-dot">·</span>
+            <span class="biz-package-time">{pacote.data.prazo_tipico}</span>
+          </div>
+          <a class="biz-btn biz-btn-outline" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Portfólio Teaser -->
+  <section class="biz-section" aria-labelledby="biz-portfolio-title">
+    <h2 id="biz-portfolio-title" class="biz-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="biz-teaser-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="biz-teaser-card">
+          <span class="biz-teaser-badge">🧩 {item.status}</span>
+          <h3 class="biz-teaser-name">{item.titulo}</h3>
+          <p class="biz-teaser-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <div class="biz-section-more">
+      <a href={homeContent.portfolio.ctaHref} class="biz-link-more">{homeContent.portfolio.ctaTexto} →</a>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="biz-cta-box" aria-labelledby="biz-cta-title">
+    <h2 id="biz-cta-title" class="biz-cta-heading">{homeContent.ctaFinal.titulo}</h2>
+    <p class="biz-cta-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="biz-btn biz-btn-primary biz-btn-lg" href={homeContent.ctaFinal.ctaHref}>
+      {homeContent.ctaFinal.ctaTexto}
+    </a>
+  </section>
+</div>
+
+<style>
+  .theme-business-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl, 3rem);
+  }
+
+  /* Hero */
+  .biz-hero {
+    padding: var(--spacing-xl, 3rem) 0 var(--spacing-lg, 2rem);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .biz-hero-content {
+    max-width: 800px;
+  }
+
+  .biz-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs, 0.5rem);
+  }
+
+  .biz-title {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  .biz-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg, 2rem);
+    max-width: 46ch;
+  }
+
+  .biz-btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .biz-btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .biz-btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
+
+  .biz-btn-outline {
+    background: transparent;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .biz-btn-outline:hover {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .biz-btn-lg {
+    padding: 0.85rem 2rem;
+    font-size: 1.1rem;
+  }
+
+  /* Sections */
+  .biz-section {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-xl, 3rem);
+  }
+
+  .biz-section-title {
+    font-size: 1.5rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  .biz-section-subtitle {
+    color: var(--color-text-muted);
+    margin-top: calc(var(--spacing-xs, 0.5rem) * -1);
+    margin-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  /* Pilares */
+  .biz-pilares-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .biz-pilares-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .biz-pilar-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg, 2rem);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 0.5rem);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .biz-pilar-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .biz-pilar-chefe {
+    border-color: var(--color-accent);
+    background-color: var(--color-bg-alt);
+  }
+
+  @media (min-width: 768px) {
+    .biz-pilar-chefe {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .biz-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: var(--spacing-xs, 0.5rem);
+  }
+
+  .biz-pilar-name {
+    font-size: 1.35rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .biz-pilar-desc {
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .biz-link-arrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+    margin-top: var(--spacing-xs, 0.5rem);
+    font-weight: 600;
+  }
+
+  /* Passos */
+  .biz-passos-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .biz-passos-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .biz-passo-item {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 0.5rem);
+  }
+
+  .biz-passo-num {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .biz-passo-heading {
+    font-size: 1.15rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .biz-passo-text {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .biz-section-more {
+    margin-top: var(--spacing-md, 1.5rem);
+  }
+
+  .biz-link-more {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-decoration: none;
+    font-size: 0.925rem;
+    font-weight: 600;
+  }
+
+  .biz-link-more:hover {
+    text-decoration: underline;
+  }
+
+  /* Pacotes Grid */
+  .biz-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .biz-cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .biz-cards-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .biz-package-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 0.5rem);
+  }
+
+  .biz-package-name {
+    font-size: 1.2rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .biz-package-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .biz-package-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    margin: var(--spacing-xs, 0.5rem) 0;
+  }
+
+  .biz-package-price {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .biz-meta-dot {
+    color: var(--color-text-muted);
+  }
+
+  .biz-package-time {
+    color: var(--color-text-muted);
+  }
+
+  /* Teaser Portfolio */
+  .biz-teaser-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .biz-teaser-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .biz-teaser-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md, 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 0.5rem);
+  }
+
+  .biz-teaser-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background-color: var(--color-border);
+    color: var(--color-text);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .biz-teaser-name {
+    font-size: 1.15rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .biz-teaser-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* CTA Box */
+  .biz-cta-box {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .biz-cta-heading {
+    font-size: 1.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .biz-cta-lead {
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    font-size: 1.05rem;
+  }
+</style>

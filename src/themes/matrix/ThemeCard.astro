@@ -1,0 +1,202 @@
+---
+// src/themes/matrix/ThemeCard.astro
+// Cartão do tema Matrix para a vitrine /temas (M17)
+import meta from './theme.json';
+
+interface Props {
+  isActive?: boolean;
+}
+
+const { isActive = false } = Astro.props;
+---
+
+<article class:list={['theme-card-matrix', { 'is-active': isActive }]}>
+  <div class="card-preview">
+    <div class="matrix-rain-hint" aria-hidden="true">0101010101010101</div>
+    <div class="preview-badge">#01 // BASE</div>
+    <div class="preview-wireframe">
+      <div class="wireframe-hero">
+        <span class="wire-dot"></span>
+        <span class="wire-line"></span>
+      </div>
+      <div class="wireframe-grid">
+        <span class="wire-block"></span>
+        <span class="wire-block"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-header">
+      <h3 class="card-title">{meta.name}</h3>
+      <span class="card-tagline">{meta.tagline}</span>
+    </div>
+    <p class="card-desc">{meta.description}</p>
+    <div class="card-footer">
+      <a href="/t/matrix" class="btn-theme-view">
+        {isActive ? 'Tema em exibição' : 'Ver o site inteiro assim →'}
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .theme-card-matrix {
+    background: rgba(10, 20, 32, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px rgba(34, 211, 238, 0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .theme-card-matrix:hover {
+    border-color: #22d3ee;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(34, 211, 238, 0.2);
+  }
+
+  .theme-card-matrix.is-active {
+    border-color: #22d3ee;
+    box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.4), 0 0 20px rgba(34, 211, 238, 0.2);
+  }
+
+  .card-preview {
+    height: 140px;
+    position: relative;
+    padding: 1rem;
+    background: linear-gradient(180deg, rgba(5, 7, 10, 0.95) 0%, rgba(10, 20, 32, 0.9) 100%);
+    border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .matrix-rain-hint {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    color: rgba(34, 211, 238, 0.25);
+    letter-spacing: 0.2em;
+    user-select: none;
+  }
+
+  .preview-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(34, 211, 238, 0.15);
+    border: 1px solid #22d3ee;
+    color: #22d3ee;
+    text-shadow: 0 0 6px rgba(34, 211, 238, 0.5);
+  }
+
+  .preview-wireframe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wireframe-hero {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wire-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 8px #22d3ee;
+  }
+
+  .wire-line {
+    height: 6px;
+    width: 60%;
+    border-radius: 3px;
+    background: rgba(34, 211, 238, 0.3);
+  }
+
+  .wireframe-grid {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .wire-block {
+    flex: 1;
+    height: 28px;
+    background: rgba(15, 30, 46, 0.8);
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    border-radius: 4px;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.25rem;
+    color: #e0f4ff;
+    margin: 0;
+  }
+
+  .card-tagline {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8rem;
+    color: #22d3ee;
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .card-desc {
+    color: #7ab8d4;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+  }
+
+  .btn-theme-view {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid #22d3ee;
+    color: #22d3ee;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+  }
+
+  .btn-theme-view:hover {
+    background-color: #22d3ee;
+    color: #0a1420;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+  }
+</style>

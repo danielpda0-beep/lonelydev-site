@@ -1,0 +1,912 @@
+---
+// src/themes/matrix/Home.astro
+// Layout Bespoke do Tema Matrix / Minority Report (Cockpit Holográfico)
+// Decisões 10.1, 10.5, 10.9, 10.21
+// Regra 10.9: Todo o conteúdo vem de homeContent e getCollection('servicos')
+import { getCollection } from 'astro:content';
+import { homeContent } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'matrix' } = Astro.props;
+
+const servicos = await getCollection('servicos');
+const pacotesFixos = servicos
+  .filter((s) => s.data.modelo_preco === 'pacote-fixo')
+  .sort((a, b) => homeContent.pacotesInfo.ordem.indexOf(a.id) - homeContent.pacotesInfo.ordem.indexOf(b.id));
+---
+
+<div class="theme-matrix-home" data-bespoke-layout="matrix">
+  <!-- Top HUD Status Bar -->
+  <div class="hud-status-strip" aria-hidden="true">
+    <span class="hud-tag"><span class="hud-pulse"></span>SYS.OPERATIONAL</span>
+    <span class="hud-tag hud-coord">LOC: 0x7F · TERM: CIANO</span>
+    <span class="hud-tag hud-mode">LAYOUT: MINORITY_REPORT_HUD</span>
+  </div>
+
+  <!-- Hero HUD: Asymmetric Cockpit Interface -->
+  <section class="matrix-hud-hero" aria-labelledby="matrix-hero-tagline">
+    <div class="matrix-cockpit-grid">
+      <!-- Painel Principal de Comando -->
+      <div class="matrix-panel matrix-hero-main">
+        <div class="panel-corners" aria-hidden="true"></div>
+        <div class="hud-eyebrow">
+          <span class="prompt-symbol">&gt;&gt;</span>
+          <span>{homeContent.hero.eyebrow}</span>
+        </div>
+        <h1 id="matrix-hero-tagline" class="matrix-glitch-text">{homeContent.hero.tagline}</h1>
+        <p class="matrix-lead">{homeContent.hero.lead}</p>
+        <div class="matrix-hero-actions">
+          <a class="matrix-btn matrix-btn-neon" href={homeContent.hero.ctaHref}>
+            <span class="btn-bracket">[</span>
+            {homeContent.hero.ctaTexto}
+            <span class="btn-bracket">]</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Telemetry Spec Pod (Painel Lateral de Especificação) -->
+      <aside class="matrix-panel matrix-telemetry-pod" aria-label="Telemetria do Modelo de Trabalho">
+        <div class="panel-corners" aria-hidden="true"></div>
+        <div class="pod-header">
+          <span class="pod-title">// PROTOCOLO_LONELY_DEV</span>
+          <span class="pod-version">v2.4</span>
+        </div>
+        <ul class="telemetry-tree">
+          <li class="telemetry-node">
+            <span class="tree-bullet">├──</span>
+            <span class="tree-label">{homeContent.telemetria.escopo}</span>
+          </li>
+          <li class="telemetry-node">
+            <span class="tree-bullet">├──</span>
+            <span class="tree-label">{homeContent.telemetria.preco}</span>
+          </li>
+          <li class="telemetry-node">
+            <span class="tree-bullet">├──</span>
+            <span class="tree-label">{homeContent.telemetria.prazo}</span>
+          </li>
+          <li class="telemetry-node">
+            <span class="tree-bullet">├──</span>
+            <span class="tree-label">{homeContent.telemetria.semMensalidade}</span>
+          </li>
+          <li class="telemetry-node">
+            <span class="tree-bullet">└──</span>
+            <span class="tree-label">{homeContent.telemetria.semLockin}</span>
+          </li>
+        </ul>
+        <div class="pod-footer">
+          <span class="pod-status-text">STATUS: ZERO_LOCKIN // VERIFICADO</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Matriz de Sistemas (Pilares) -->
+  <section class="matrix-section" aria-labelledby="matrix-pilares-title">
+    <div class="matrix-section-titlebar">
+      <span class="titlebar-marker">#01</span>
+      <h2 id="matrix-pilares-title" class="matrix-section-title">{homeContent.pilaresTitulo}</h2>
+      <div class="titlebar-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="matrix-systems-array">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a
+          class:list={['matrix-panel', 'matrix-module-panel', { 'matrix-module-master': pilar.destaque }]}
+          href={pilar.link}
+        >
+          <div class="panel-corners" aria-hidden="true"></div>
+          <div class="module-header">
+            <span class="module-code">MOD_0{idx + 1}</span>
+            {pilar.badge && <span class="module-badge"><span class="badge-dot"></span>{pilar.badge}</span>}
+          </div>
+          <h3 class="module-title">{pilar.titulo}</h3>
+          <p class="module-desc">{pilar.resumo}</p>
+          <div class="module-action">
+            <span class="module-link">{homeContent.pilaresCta} <span class="arrow-glow">→</span></span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pipeline de Protocolo (Como Funciona) -->
+  <section class="matrix-section" aria-labelledby="matrix-pipeline-title">
+    <div class="matrix-section-titlebar">
+      <span class="titlebar-marker">#02</span>
+      <h2 id="matrix-pipeline-title" class="matrix-section-title">{homeContent.passosTitulo}</h2>
+      <div class="titlebar-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="matrix-pipeline-track">
+      {homeContent.passos.map((passo, idx) => (
+        <div class="matrix-panel matrix-node-card">
+          <div class="panel-corners" aria-hidden="true"></div>
+          <div class="node-stage-bar">
+            <span class="node-badge">FASE_{passo.n}</span>
+            <span class="node-dot"></span>
+          </div>
+          <h3 class="node-title">{passo.titulo}</h3>
+          <p class="node-desc">{passo.texto}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="matrix-pipeline-footer">
+      <a href={homeContent.passosLinkHref} class="matrix-link-hud">
+        <span class="bracket">[</span> {homeContent.passosLinkTexto} <span class="bracket">]</span> →
+      </a>
+    </div>
+  </section>
+
+  <!-- Matriz de Implementação (Pacotes de Preço Fixo) -->
+  <section class="matrix-section" aria-labelledby="matrix-spec-title">
+    <div class="matrix-section-titlebar">
+      <span class="titlebar-marker">#03</span>
+      <div class="titlebar-textgroup">
+        <h2 id="matrix-spec-title" class="matrix-section-title">{homeContent.pacotesInfo.titulo}</h2>
+        <p class="matrix-section-sub">{homeContent.pacotesInfo.intro}</p>
+      </div>
+      <div class="titlebar-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="matrix-packages-matrix">
+      {pacotesFixos.map((pacote, idx) => (
+        <article class="matrix-panel matrix-package-cell">
+          <div class="panel-corners" aria-hidden="true"></div>
+          <div class="cell-head">
+            <span class="cell-slot">SLOT_0{idx + 1}</span>
+            <span class="cell-type">FIXED_UNIT</span>
+          </div>
+          <h3 class="cell-name">{pacote.data.nome}</h3>
+          <p class="cell-desc">{pacote.data.resumo}</p>
+          
+          <div class="cell-telemetry">
+            <div class="digital-price">
+              <span class="price-val">{pacote.data.valor}</span>
+            </div>
+            <div class="time-badge">
+              <span class="time-label">PRAZO:</span>
+              <span class="time-val">{pacote.data.prazo_tipico}</span>
+            </div>
+          </div>
+
+          <a class="matrix-btn matrix-btn-ghost" href="/contato">
+            {pacote.data.cta}
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Arquivo Holográfico (Portfólio Teaser) -->
+  <section class="matrix-section" aria-labelledby="matrix-portfolio-title">
+    <div class="matrix-section-titlebar">
+      <span class="titlebar-marker">#04</span>
+      <h2 id="matrix-portfolio-title" class="matrix-section-title">{homeContent.portfolio.titulo}</h2>
+      <div class="titlebar-line" aria-hidden="true"></div>
+    </div>
+
+    <div class="matrix-archive-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="matrix-panel matrix-archive-pod">
+          <div class="panel-corners" aria-hidden="true"></div>
+          <div class="archive-header">
+            <span class="archive-tag">ARQUIVO_EM_PRODUCAO</span>
+            <span class="archive-status">🧩 {item.status}</span>
+          </div>
+          <h3 class="archive-title">{item.titulo}</h3>
+          <p class="archive-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="matrix-pipeline-footer">
+      <a href={homeContent.portfolio.ctaHref} class="matrix-link-hud">
+        <span class="bracket">[</span> {homeContent.portfolio.ctaTexto} <span class="bracket">]</span> →
+      </a>
+    </div>
+  </section>
+
+  <!-- Terminal de Transmissão (CTA Final) -->
+  <section class="matrix-panel matrix-transmission-console" aria-labelledby="matrix-cta-title">
+    <div class="panel-corners" aria-hidden="true"></div>
+    <div class="console-header">
+      <span class="console-beacon"></span>
+      <span class="console-tag">CANAL_ABERTO // DIRETO AO DEV</span>
+    </div>
+    <h2 id="matrix-cta-title" class="console-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="console-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="matrix-btn matrix-btn-neon matrix-btn-lg" href={homeContent.ctaFinal.ctaHref}>
+      <span class="btn-bracket">&lt;</span>
+      {homeContent.ctaFinal.ctaTexto}
+      <span class="btn-bracket">&gt;</span>
+    </a>
+  </section>
+</div>
+
+<style>
+  .theme-matrix-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Status Bar */
+  .hud-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.4rem 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.725rem;
+    color: rgba(34, 211, 238, 0.7);
+    border-bottom: 1px dashed rgba(34, 211, 238, 0.2);
+    margin-bottom: calc(var(--spacing-md, 1.5rem) * -1);
+  }
+
+  .hud-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .hud-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 8px #22d3ee;
+    animation: hudPulse 2s infinite;
+  }
+
+  @keyframes hudPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+  }
+
+  @media (max-width: 768px) {
+    .hud-coord, .hud-mode {
+      display: none;
+    }
+  }
+
+  /* Painéis Translúcidos Minority Report (Decisão 10.21) */
+  .matrix-panel {
+    background-color: rgba(10, 20, 32, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(34, 211, 238, 0.28);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(34, 211, 238, 0.04), 0 0 20px rgba(34, 211, 238, 0.08);
+    border-radius: 6px;
+    position: relative;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  @supports not (backdrop-filter: blur(12px)) {
+    .matrix-panel {
+      background-color: rgba(10, 20, 32, 0.94);
+    }
+  }
+
+  /* Cantoneiras holográficas */
+  .panel-corners::before,
+  .panel-corners::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: #22d3ee;
+    pointer-events: none;
+  }
+
+  .panel-corners::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid #22d3ee;
+    border-left: 2px solid #22d3ee;
+  }
+
+  .panel-corners::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 2px solid #22d3ee;
+    border-right: 2px solid #22d3ee;
+  }
+
+  /* Hero Section */
+  .matrix-cockpit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg, 2rem);
+  }
+
+  @media (min-width: 900px) {
+    .matrix-cockpit-grid {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+
+  .matrix-hero-main {
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hud-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #22d3ee;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: var(--spacing-sm, 1rem);
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+  }
+
+  .prompt-symbol {
+    color: #22d3ee;
+    font-weight: 700;
+  }
+
+  .matrix-glitch-text {
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #e0f4ff;
+    margin-bottom: var(--spacing-md, 1.5rem);
+    text-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
+  }
+
+  .matrix-lead {
+    font-size: 1.15rem;
+    color: #7ab8d4;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg, 2rem);
+    max-width: 44ch;
+  }
+
+  /* Telemetry Spec Pod */
+  .matrix-telemetry-pod {
+    padding: var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: rgba(10, 20, 32, 0.72);
+  }
+
+  .pod-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .pod-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #22d3ee;
+    letter-spacing: 0.05em;
+  }
+
+  .pod-version {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(34, 211, 238, 0.6);
+  }
+
+  .telemetry-tree {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .telemetry-node {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .tree-bullet {
+    color: #22d3ee;
+    opacity: 0.7;
+  }
+
+  .tree-label {
+    color: #e0f4ff;
+  }
+
+  .pod-footer {
+    border-top: 1px dashed rgba(34, 211, 238, 0.2);
+    padding-top: 0.75rem;
+  }
+
+  .pod-status-text {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #22d3ee;
+    letter-spacing: 0.05em;
+    opacity: 0.85;
+  }
+
+  /* Buttons */
+  .matrix-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .matrix-btn-neon {
+    background: rgba(34, 211, 238, 0.15);
+    border: 1px solid #22d3ee;
+    color: #22d3ee;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.35);
+  }
+
+  .matrix-btn-neon:hover {
+    background: #22d3ee;
+    color: #0a1420;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
+  }
+
+  .matrix-btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    color: #22d3ee;
+  }
+
+  .matrix-btn-ghost:hover {
+    background: rgba(34, 211, 238, 0.2);
+    border-color: #22d3ee;
+    color: #e0f4ff;
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+  }
+
+  .matrix-btn-lg {
+    padding: 1rem 2.25rem;
+    font-size: 1.1rem;
+  }
+
+  .btn-bracket {
+    opacity: 0.7;
+    font-weight: 700;
+  }
+
+  /* Sections */
+  .matrix-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg, 2rem);
+  }
+
+  .matrix-section-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .titlebar-marker {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: #22d3ee;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+  }
+
+  .matrix-section-title {
+    font-size: 1.65rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .titlebar-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.4) 0%, transparent 100%);
+  }
+
+  .matrix-section-sub {
+    color: #7ab8d4;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+  }
+
+  /* Systems Array (Pilares) */
+  .matrix-systems-array {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .matrix-systems-array {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .matrix-module-panel {
+    padding: var(--spacing-lg, 2rem);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .matrix-module-panel:hover {
+    border-color: #22d3ee;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(34, 211, 238, 0.2);
+  }
+
+  .matrix-module-master {
+    border-color: rgba(34, 211, 238, 0.5);
+    background: rgba(10, 20, 32, 0.78);
+  }
+
+  @media (min-width: 768px) {
+    .matrix-module-master {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .module-code {
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  .module-badge {
+    background: rgba(34, 211, 238, 0.2);
+    border: 1px solid #22d3ee;
+    color: #22d3ee;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 6px #22d3ee;
+  }
+
+  .module-title {
+    font-size: 1.35rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+  }
+
+  .module-desc {
+    color: #7ab8d4;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin: 0;
+    flex: 1;
+  }
+
+  .module-link {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: #22d3ee;
+    font-weight: 600;
+  }
+
+  .arrow-glow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .matrix-module-panel:hover .arrow-glow {
+    transform: translateX(4px);
+  }
+
+  /* Pipeline Track (Como Funciona) */
+  .matrix-pipeline-track {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .matrix-pipeline-track {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .matrix-node-card {
+    padding: var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .node-stage-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .node-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #22d3ee;
+    background: rgba(34, 211, 238, 0.12);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .node-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+  }
+
+  .node-title {
+    font-size: 1.25rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+  }
+
+  .node-desc {
+    color: #7ab8d4;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .matrix-pipeline-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .matrix-link-hud {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: #22d3ee;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .matrix-link-hud:hover {
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+  }
+
+  /* Packages Matrix */
+  .matrix-packages-matrix {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .matrix-packages-matrix {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .matrix-packages-matrix {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .matrix-package-cell {
+    padding: var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .matrix-package-cell:hover {
+    border-color: #22d3ee;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(34, 211, 238, 0.15);
+  }
+
+  .cell-head {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(34, 211, 238, 0.7);
+  }
+
+  .cell-name {
+    font-size: 1.25rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+  }
+
+  .cell-desc {
+    color: #7ab8d4;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+  }
+
+  .cell-telemetry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem;
+    background: rgba(5, 12, 20, 0.6);
+    border: 1px solid rgba(34, 211, 238, 0.15);
+    border-radius: 4px;
+    margin: 0.25rem 0;
+  }
+
+  .digital-price {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #22d3ee;
+    text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+  }
+
+  .time-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+  }
+
+  .time-label {
+    color: rgba(34, 211, 238, 0.6);
+  }
+
+  .time-val {
+    color: #e0f4ff;
+  }
+
+  /* Archive Teaser */
+  .matrix-archive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .matrix-archive-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .matrix-archive-pod {
+    padding: var(--spacing-lg, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-style: dashed;
+  }
+
+  .archive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .archive-tag {
+    color: rgba(34, 211, 238, 0.6);
+  }
+
+  .archive-status {
+    color: #22d3ee;
+    background: rgba(34, 211, 238, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(34, 211, 238, 0.25);
+  }
+
+  .archive-title {
+    font-size: 1.2rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+  }
+
+  .archive-desc {
+    color: #7ab8d4;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Transmission Console (CTA Final) */
+  .matrix-transmission-console {
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    border-color: rgba(34, 211, 238, 0.45);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(34, 211, 238, 0.15);
+  }
+
+  .console-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #22d3ee;
+    letter-spacing: 0.1em;
+  }
+
+  .console-beacon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 10px #22d3ee;
+    animation: hudPulse 1.5s infinite;
+  }
+
+  .console-title {
+    font-size: 2rem;
+    font-family: var(--font-mono);
+    color: #e0f4ff;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+  }
+
+  .console-lead {
+    color: #7ab8d4;
+    max-width: 50ch;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+</style>

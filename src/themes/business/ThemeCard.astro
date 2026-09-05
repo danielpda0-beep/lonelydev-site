@@ -1,0 +1,173 @@
+---
+// src/themes/business/ThemeCard.astro
+// Cartão do tema Business para a vitrine /temas (M17)
+import meta from './theme.json';
+
+interface Props {
+  isActive?: boolean;
+}
+
+const { isActive = false } = Astro.props;
+---
+
+<article class:list={['theme-card-business', { 'is-active': isActive }]}>
+  <div class="card-preview" style="background: linear-gradient(135deg, #1a1a1e 0%, #25252a 100%);">
+    <div class="preview-badge" style="background: #f5a623; color: #1a1a1e;">#04</div>
+    <div class="preview-wireframe">
+      <div class="wireframe-hero">
+        <span class="wire-dot" style="background: #f5a623;"></span>
+        <span class="wire-line" style="background: #3a3a40; width: 60%;"></span>
+      </div>
+      <div class="wireframe-grid">
+        <span class="wire-block" style="background: #25252a; border-color: #3a3a40;"></span>
+        <span class="wire-block" style="background: #25252a; border-color: #3a3a40;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="card-header">
+      <h3 class="card-title">{meta.name}</h3>
+      <span class="card-tagline">{meta.tagline}</span>
+    </div>
+    <p class="card-desc">{meta.description}</p>
+    <div class="card-footer">
+      <a href="/t/business" class="btn-theme-view">
+        {isActive ? 'Tema em exibição' : 'Ver o site inteiro assim →'}
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .theme-card-business {
+    background-color: #25252a;
+    border: 1px solid #3a3a40;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .theme-card-business:hover {
+    border-color: #f5a623;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .theme-card-business.is-active {
+    border-color: #f5a623;
+    box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.3);
+  }
+
+  .card-preview {
+    height: 140px;
+    position: relative;
+    padding: 1rem;
+    border-bottom: 1px solid #3a3a40;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .preview-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .preview-wireframe {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wireframe-hero {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wire-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .wire-line {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .wireframe-grid {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .wire-block {
+    flex: 1;
+    height: 28px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.25rem;
+    color: #e8e8e8;
+    margin: 0;
+  }
+
+  .card-tagline {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8rem;
+    color: #f5a623;
+    display: block;
+    margin-top: 0.25rem;
+  }
+
+  .card-desc {
+    color: #a0a0a0;
+    font-size: 0.925rem;
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+  }
+
+  .btn-theme-view {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: transparent;
+    border: 1px solid #f5a623;
+    color: #f5a623;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .btn-theme-view:hover {
+    background-color: #f5a623;
+    color: #1a1a1e;
+  }
+</style>

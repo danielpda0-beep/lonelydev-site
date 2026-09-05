@@ -163,18 +163,36 @@ a:hover {
   h3 { font-size: 1.25rem; }
 }
 
-/* ── Painéis Translúcidos Matrix / Minority Report (Decisão 10.21) ── */
+/* ── Painéis Translúcidos Matrix / Minority Report (Decisões 10.13 e 10.21) ── */
 [data-theme="matrix"] .card,
 [data-theme="matrix"] .pilar,
+[data-theme="matrix"] .pilar-card,
 [data-theme="matrix"] .passo,
+[data-theme="matrix"] .passo-card,
 [data-theme="matrix"] .hero,
 [data-theme="matrix"] .cta-final,
 [data-theme="matrix"] .section,
-[data-theme="matrix"] .glass-panel {
-  background-color: rgba(10, 20, 32, 0.72);
+[data-theme="matrix"] .glass-panel,
+[data-theme="matrix"] .bio-card,
+[data-theme="matrix"] .canal-card,
+[data-theme="matrix"] .fora-escopo-card,
+[data-theme="matrix"] .form-card,
+[data-theme="matrix"] .info-card,
+[data-theme="matrix"] .principio-card,
+[data-theme="matrix"] .solucao-card,
+[data-theme="matrix"] .transparencia-card,
+[data-theme="matrix"] .destaque-box,
+[data-theme="matrix"] .expectativa-box,
+[data-theme="matrix"] .contact-box,
+[data-theme="matrix"] .cta-banner,
+[data-theme="matrix"] .sla-banner,
+[data-theme="matrix"] .faq-item,
+[data-theme="matrix"] .fluxo-step,
+[data-theme="matrix"] .legal-section {
+  background-color: rgba(10, 20, 32, 0.72) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(34, 211, 238, 0.2);
+  border: 1px solid rgba(34, 211, 238, 0.22) !important;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 0 15px rgba(34, 211, 238, 0.05);
   border-radius: 6px;
   position: relative;
@@ -182,20 +200,43 @@ a:hover {
 }
 
 [data-theme="matrix"] .card:hover,
-[data-theme="matrix"] .pilar:hover {
-  border-color: rgba(34, 211, 238, 0.45);
+[data-theme="matrix"] .pilar:hover,
+[data-theme="matrix"] .pilar-card:hover,
+[data-theme="matrix"] .solucao-card:hover,
+[data-theme="matrix"] .canal-card:hover,
+[data-theme="matrix"] .info-card:hover,
+[data-theme="matrix"] .principio-card:hover {
+  border-color: rgba(34, 211, 238, 0.45) !important;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.12);
 }
 
 @supports not (backdrop-filter: blur(10px)) {
   [data-theme="matrix"] .card,
   [data-theme="matrix"] .pilar,
+  [data-theme="matrix"] .pilar-card,
   [data-theme="matrix"] .passo,
+  [data-theme="matrix"] .passo-card,
   [data-theme="matrix"] .hero,
   [data-theme="matrix"] .cta-final,
   [data-theme="matrix"] .section,
-  [data-theme="matrix"] .glass-panel {
-    background-color: rgba(10, 20, 32, 0.94);
+  [data-theme="matrix"] .glass-panel,
+  [data-theme="matrix"] .bio-card,
+  [data-theme="matrix"] .canal-card,
+  [data-theme="matrix"] .fora-escopo-card,
+  [data-theme="matrix"] .form-card,
+  [data-theme="matrix"] .info-card,
+  [data-theme="matrix"] .principio-card,
+  [data-theme="matrix"] .solucao-card,
+  [data-theme="matrix"] .transparencia-card,
+  [data-theme="matrix"] .destaque-box,
+  [data-theme="matrix"] .expectativa-box,
+  [data-theme="matrix"] .contact-box,
+  [data-theme="matrix"] .cta-banner,
+  [data-theme="matrix"] .sla-banner,
+  [data-theme="matrix"] .faq-item,
+  [data-theme="matrix"] .fluxo-step,
+  [data-theme="matrix"] .legal-section {
+    background-color: rgba(10, 20, 32, 0.94) !important;
   }
 }
 
