@@ -1,6 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const servicos = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content' }),
   schema: z.object({
     nome: z.string(),
     pilar: z.enum(['automacao-ia', 'midia-ia', 'web-apps', 'jogos', 'modelagem-3d']),

@@ -1,16 +1,398 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+
+const servicos = await getCollection('servicos');
+
+const PACOTE_ORDEM = [
+  'landing-page-rapida',
+  'video-ia-curto',
+  'bot-monitor-portal',
+  'extrator-dados-relatorio',
+  'app-mobile-simples',
+];
+
+const pacotesFixos = servicos
+  .filter((s) => s.data.modelo_preco === 'pacote-fixo')
+  .sort((a, b) => PACOTE_ORDEM.indexOf(a.id) - PACOTE_ORDEM.indexOf(b.id));
+
+const pilares = [
+  {
+    id: 'automacao-ia',
+    titulo: 'Automação & IA',
+    destaque: true,
+    resumo: 'Bots, monitores de portal, extração de dados e integrações com IA. O trabalho que hoje consome horas vira um projeto pontual, com entrega e fim.',
+  },
+  {
+    id: 'midia-ia',
+    titulo: 'Mídia com IA',
+    destaque: false,
+    resumo: 'Vídeo institucional curto e imagens sob medida, produzidos com IA e revisados por um humano.',
+  },
+  {
+    id: 'web-apps',
+    titulo: 'Web & Apps',
+    destaque: false,
+    resumo: 'Landing pages, sistemas no navegador e apps simples de celular — um entregável, um preço, uma data.',
+  },
+  {
+    id: 'jogos',
+    titulo: 'Jogos',
+    destaque: false,
+    resumo: 'Jogos casual sob medida e visual novel de roteiro. Sempre projeto fechado, nunca produto na prateleira.',
+  },
+];
+
+const passos = [
+  {
+    n: '01',
+    titulo: 'Briefing',
+    texto: 'Você conta o problema. Eu devolvo o que dá pra fazer — e o que não dá.',
+  },
+  {
+    n: '02',
+    titulo: 'Orçamento fechado',
+    texto: 'Preço único, prazo definido, escopo por escrito. Sem mensalidade e sem lock-in.',
+  },
+  {
+    n: '03',
+    titulo: 'Entrega',
+    texto: 'Você recebe o projeto funcionando. Nada fica rodando no meu computador depois.',
+  },
+];
+
+const teaserPortfolio = [
+  {
+    titulo: 'Vídeo com IA',
+    status: 'Em breve',
+    texto: 'Peças originais em vídeo (institucional, narrativa, comercial fictício). Produção em andamento.',
+  },
+  {
+    titulo: 'Imagem com IA',
+    status: 'Em breve',
+    texto: 'Amostras de ilustração e mockup geradas com IA, pra mostrar o tipo de resultado — sem case de cliente.',
+  },
+];
 ---
 
-<Layout title="Lonely Dev - Teste">
-  <h1>Título de Seção</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
-  
-  <h2>Subtítulo de Seção</h2>
-  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  
-  <h3>Terceiro Nível</h3>
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <a href="#">Link de exemplo com cor de destaque</a>
+<Layout title="Lonely Dev">
+  <section class="hero" aria-labelledby="hero-tagline">
+    <p class="eyebrow">Lonely Dev</p>
+    <h1 id="hero-tagline">Você traz o problema, eu trago a solução.</h1>
+    <p class="lead">
+      Projeto com começo, meio e fim: escopo fechado, preço único, data de entrega.
+      Sem mensalidade, sem lock-in.
+    </p>
+    <a class="btn btn-primary" href="/contato">Pedir orçamento</a>
+  </section>
+
+  <section class="section" aria-labelledby="pilares-titulo">
+    <h2 id="pilares-titulo" class="section-title">O que eu faço</h2>
+    <div class="pilares">
+      {pilares.map((pilar) => (
+        <a
+          class:list={['pilar', { 'pilar--chefe': pilar.destaque }]}
+          href={`/servicos#${pilar.id}`}
+        >
+          {pilar.destaque && <span class="badge">Carro-chefe</span>}
+          <h3>{pilar.titulo}</h3>
+          <p>{pilar.resumo}</p>
+          <span class="pilar-cta">Ver serviços</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="como-titulo">
+    <h2 id="como-titulo" class="section-title">Como funciona</h2>
+    <ol class="passos">
+      {passos.map((passo) => (
+        <li class="passo">
+          <span class="passo-n" aria-hidden="true">{passo.n}</span>
+          <h3>{passo.titulo}</h3>
+          <p>{passo.texto}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="section-link">
+      <a href="/como-funciona">Ver o processo completo</a>
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="pacotes-titulo">
+    <h2 id="pacotes-titulo" class="section-title">Pacotes de preço fixo</h2>
+    <p class="section-intro">Cinco entregas produtizadas. Uma rodada de ajuste inclusa em cada uma.</p>
+    <div class="cards">
+      {pacotesFixos.map((pacote) => (
+        <article class="card">
+          <h3>{pacote.data.nome}</h3>
+          <p>{pacote.data.resumo}</p>
+          <p class="meta">
+            <span>{pacote.data.valor}</span>
+            <span aria-hidden="true"> · </span>
+            <span>prazo {pacote.data.prazo_tipico}</span>
+          </p>
+          <a class="btn btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="portfolio-titulo">
+    <h2 id="portfolio-titulo" class="section-title">Portfólio</h2>
+    <div class="cards cards--teaser">
+      {teaserPortfolio.map((item) => (
+        <article class="card card--placeholder">
+          <p class="badge badge--muted">🧩 {item.status}</p>
+          <h3>{item.titulo}</h3>
+          <p>{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <p class="section-link">
+      <a href="/portfolio">Ver portfólio</a>
+    </p>
+  </section>
+
+  <section class="cta-final" aria-labelledby="cta-titulo">
+    <h2 id="cta-titulo">Tem um problema pontual?</h2>
+    <p>Conta o que você precisa. Eu respondo em até 1 dia útil com o que dá pra fazer.</p>
+    <a class="btn btn-primary" href="/contato">Entrar em contato</a>
+  </section>
 </Layout>
+
+<style>
+  .hero {
+    padding: var(--spacing-xl) 0 var(--spacing-2xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .hero h1 {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    max-width: 18ch;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .lead {
+    max-width: 42ch;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    color: #1a1a1e;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  .section {
+    padding: var(--spacing-2xl) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .section-intro {
+    color: var(--color-text-muted);
+    margin-top: calc(var(--spacing-sm) * -1);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .section-link {
+    margin: var(--spacing-lg) 0 0;
+  }
+
+  .pilares {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .pilar {
+    display: block;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .pilar:hover {
+    border-color: var(--color-accent);
+    color: inherit;
+  }
+
+  .pilar h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .pilar p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .pilar-cta {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .pilar--chefe {
+    padding: var(--spacing-lg);
+    border-color: var(--color-accent);
+    grid-column: 1 / -1;
+  }
+
+  .pilar--chefe h3 {
+    font-size: 1.75rem;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #1a1a1e;
+    background: var(--color-accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .badge--muted {
+    background: var(--color-border);
+    color: var(--color-text);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .passos {
+    list-style: none;
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .passo {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .passo-n {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: 0.875rem;
+  }
+
+  .cards {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .card p {
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text) !important;
+  }
+
+  .card .btn {
+    align-self: flex-start;
+    margin-top: var(--spacing-sm);
+  }
+
+  .cta-final {
+    padding: var(--spacing-2xl) 0;
+    text-align: center;
+  }
+
+  .cta-final p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  @media (min-width: 768px) {
+    .pilares {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pilar--chefe {
+      grid-column: 1 / -1;
+    }
+
+    .passos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cards--teaser {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
