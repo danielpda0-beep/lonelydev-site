@@ -1,4 +1,4 @@
-import http from 'node:http';
+﻿import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -114,7 +114,7 @@ server.listen(4321, async () => {
       }
     }
 
-    // Negative check: ensure NO mention of Banco do Brasil, CESUP, or employment
+    // Negative check on /sobre: ensure NO mention of Banco do Brasil, CESUP, or employment
     const forbiddenTerms = ['banco do brasil', 'cesup'];
     for (const term of forbiddenTerms) {
       const found = sobreHtmlLower.includes(term);
@@ -124,7 +124,42 @@ server.listen(4321, async () => {
       }
     }
 
-    // 5. Screenshots with Edge
+    // 5. Validate /contato page content
+    console.log('\n--- Verificando conteúdo da página /contato (M8) ---');
+    const contatoHtml = fs.readFileSync(path.join(distDir, 'contato', 'index.html'), 'utf-8');
+    const requiredContatoItems = [
+      'https://wa.me/5541997577116',
+      '5541997577116',
+      'lonelydevdev@gmail.com',
+      'Respondo em até 1 dia útil',
+      'name="nome"',
+      'name="contato"',
+      'name="mensagem"',
+      'name="prazo"',
+      'name="orcamento"',
+      'https://api.web3forms.com/submit',
+      'access_key',
+    ];
+    const contatoHtmlLower = contatoHtml.toLowerCase();
+    for (const item of requiredContatoItems) {
+      const exists = contatoHtml.includes(item) || contatoHtmlLower.includes(item.toLowerCase());
+      console.log(`Verificação /contato '${item}': ${exists ? 'OK' : 'FAIL'}`);
+      if (!exists) {
+        throw new Error(`Item obrigatório '${item}' ausente em /contato.`);
+      }
+    }
+
+    // Negative check on /contato: ensure NO mention of Calendly or Banco do Brasil
+    const forbiddenContatoTerms = ['banco do brasil', 'cesup', 'calendly'];
+    for (const term of forbiddenContatoTerms) {
+      const found = contatoHtmlLower.includes(term);
+      console.log(`Verificação negativa /contato (sem '${term}'): ${!found ? 'OK (não presente)' : 'FAIL (presente!)'}`);
+      if (found) {
+        throw new Error(`Termo proibido '${term}' encontrado em /contato.`);
+      }
+    }
+
+    // 6. Screenshots with Edge
     const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
     const screenshotsDir = path.resolve('docs', 'screenshots');
     if (!fs.existsSync(screenshotsDir)) {
@@ -201,6 +236,20 @@ server.listen(4321, async () => {
         width: 375,
         height: 812,
         label: 'Sobre Mobile (375px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/contato',
+        out: path.join(screenshotsDir, 'm8-contato-desktop.png'),
+        width: 1440,
+        height: 900,
+        label: 'Contato Desktop (1440px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/contato',
+        out: path.join(screenshotsDir, 'm8-contato-mobile.png'),
+        width: 375,
+        height: 812,
+        label: 'Contato Mobile (375px)'
       },
     ];
 
