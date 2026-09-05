@@ -162,3 +162,62 @@ a:hover {
   h2 { font-size: 1.75rem; }
   h3 { font-size: 1.25rem; }
 }
+
+/* ── Painéis Translúcidos Matrix / Minority Report (Decisão 10.21) ── */
+[data-theme="matrix"] .card,
+[data-theme="matrix"] .pilar,
+[data-theme="matrix"] .passo,
+[data-theme="matrix"] .hero,
+[data-theme="matrix"] .cta-final,
+[data-theme="matrix"] .section,
+[data-theme="matrix"] .glass-panel {
+  background-color: rgba(10, 20, 32, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 0 15px rgba(34, 211, 238, 0.05);
+  border-radius: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="matrix"] .card:hover,
+[data-theme="matrix"] .pilar:hover {
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.12);
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  [data-theme="matrix"] .card,
+  [data-theme="matrix"] .pilar,
+  [data-theme="matrix"] .passo,
+  [data-theme="matrix"] .hero,
+  [data-theme="matrix"] .cta-final,
+  [data-theme="matrix"] .section,
+  [data-theme="matrix"] .glass-panel {
+    background-color: rgba(10, 20, 32, 0.94);
+  }
+}
+
+/* ── Glitch Permanente Sutil (Decisão 10.11) ─────────────────── */
+.matrix-glitch-active {
+  animation: matrixAmbientGlitch 120ms steps(2, start) forwards !important;
+}
+
+@keyframes matrixAmbientGlitch {
+  0% {
+    opacity: 1;
+    text-shadow: none;
+    filter: none;
+  }
+  50% {
+    opacity: 0.4;
+    text-shadow: -1px 0 #ff00ff, 1px 0 #22d3ee;
+    filter: drop-shadow(-1px 0 #ff00ff) drop-shadow(1px 0 #22d3ee);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: none;
+    filter: none;
+  }
+}

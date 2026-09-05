@@ -1,13 +1,14 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import MatrixCinematography from '../components/MatrixCinematography.astro';
 
 interface Props {
   title?: string;
   theme?: string;
 }
 
-const { title = 'Lonely Dev', theme = 'business' } = Astro.props;
+const { title = 'Lonely Dev', theme = 'matrix' } = Astro.props;
 const currentYear = new Date().getFullYear();
 const currentPath = Astro.url.pathname;
 
@@ -29,12 +30,20 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
       (function() {
         try {
           const t = localStorage.getItem('ld-tema');
-          if (t) document.documentElement.setAttribute('data-theme', t);
+          if (t) {
+            document.documentElement.setAttribute('data-theme', t);
+          } else {
+            const path = window.location.pathname;
+            if (!path.startsWith('/t/business')) {
+              document.documentElement.setAttribute('data-theme', 'matrix');
+            }
+          }
         } catch (e) {}
       })();
     </script>
   </head>
   <body>
+    <MatrixCinematography />
     <header class="header">
       <div class="container header-container">
         <a href={cleanPath === '/' ? '/' : `/`} class="wordmark">Lonely Dev</a>
@@ -90,6 +99,10 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
           <p class="copyright">
             © {currentYear} Lonely Dev
           </p>
+          <button id="rever-intro-btn" class="rever-intro-btn" type="button" aria-label="Rever introdução cinematográfica">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            rever intro
+          </button>
           <p class="transparency">
             Feito por um dev que usa IA em todo o processo — veja mais na <a href="/sobre">página Sobre</a>
           </p>
@@ -366,6 +379,32 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         font-size: 0.875rem;
         color: var(--color-text-muted);
         margin-bottom: 0;
+      }
+
+      .rever-intro-btn {
+        display: none;
+        background: transparent;
+        border: 1px solid var(--color-border);
+        color: var(--color-text-muted);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      :global([data-theme="matrix"]) .rever-intro-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .rever-intro-btn:hover {
+        color: var(--color-accent);
+        border-color: var(--color-accent);
+        background: var(--color-bg-overlay);
+        box-shadow: 0 0 10px rgba(34, 211, 238, 0.25);
       }
 
       .container {

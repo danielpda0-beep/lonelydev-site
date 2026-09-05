@@ -1,0 +1,540 @@
+---
+// src/components/MatrixCinematography.astro
+// M15: Cinematografia do tema base (Matrix / Minority Report)
+// Decisões 10.1, 10.3, 10.11, 10.12, 10.17, 10.21
+---
+
+<div id="matrix-cinematography-root">
+  <!-- Canvas permanente de fundo (atrás dos painéis translúcidos, regime permanente) -->
+  <canvas id="matrix-bg-canvas" class="matrix-bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Overlay da sequência de boot cinematográfica -->
+  <div id="matrix-boot-overlay" class="matrix-boot-overlay" aria-hidden="true">
+    <canvas id="matrix-boot-canvas" class="matrix-boot-canvas"></canvas>
+  </div>
+</div>
+
+<style>
+  /* Por padrão (inclusive no-JS e crawler), o overlay é oculto. */
+  .matrix-boot-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background-color: #05070a;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .matrix-boot-overlay.is-active {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .matrix-boot-overlay.is-fading {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .matrix-boot-canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    image-rendering: pixelated;
+  }
+
+  /* Canvas de fundo persistente: visível apenas quando o tema ativo for matrix */
+  .matrix-bg-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  :global([data-theme="matrix"]) .matrix-bg-canvas {
+    display: block;
+    opacity: 0.65;
+  }
+
+  /* Kill-switch absoluto para prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .matrix-boot-overlay,
+    .matrix-bg-canvas {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Script de Cinematografia do Tema Matrix
+  (function () {
+    const GLYPHS = '0123456789ABCDEFｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ[]{}<>/\\$*+=#~_';
+    const COMMAND_STR = 'lonelydev@nave:~$ ./site --start';
+
+    let bgAnimationId: number | null = null;
+    let bootAnimationId: number | null = null;
+    let glitchTimeoutId: any = null;
+
+    // Estado compartilhado
+    let bgDrops: number[] = [];
+    let bgColCount = 0;
+
+    function isMatrixTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'matrix';
+    }
+
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    // ── 1. REGIME PERMANENTE: Canvas de fundo atrás dos painéis (Decisão 10.21) ──
+    function initBgCanvas() {
+      const canvas = document.getElementById('matrix-bg-canvas') as HTMLCanvasElement | null;
+      if (!canvas) return;
+
+      if (!isMatrixTheme() || isReducedMotion()) {
+        if (bgAnimationId) cancelAnimationFrame(bgAnimationId);
+        bgAnimationId = null;
+        canvas.style.display = 'none';
+        return;
+      }
+
+      canvas.style.display = 'block';
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const fontSize = window.innerWidth <= 768 ? 16 : 14;
+      bgColCount = Math.floor(width / fontSize);
+      bgDrops = new Array(bgColCount).fill(0).map(() => Math.floor(Math.random() * -100));
+
+      let lastFrame = performance.now();
+
+      function drawBg(now: number) {
+        if (!isMatrixTheme() || isReducedMotion()) {
+          canvas.style.display = 'none';
+          return;
+        }
+
+        // Limita a taxa de queda para ficar suave e não distrair
+        if (now - lastFrame >= 45) {
+          lastFrame = now;
+
+          // Trail suave com cor azul-noite do tema Matrix
+          ctx.fillStyle = 'rgba(10, 20, 32, 0.1)';
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+          ctx.textAlign = 'left';
+
+          for (let i = 0; i < bgDrops.length; i++) {
+            const char = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+            const x = i * fontSize;
+            const y = bgDrops[i] * fontSize;
+
+            // Ponta da gota levemente mais clara em ciano
+            ctx.fillStyle = 'rgba(56, 232, 255, 0.45)';
+            ctx.fillText(char, x, y);
+
+            // Corpo esmaecido
+            ctx.fillStyle = 'rgba(34, 211, 238, 0.18)';
+            ctx.fillText(char, x, y - fontSize);
+
+            if (y > height && Math.random() > 0.985) {
+              bgDrops[i] = 0;
+            }
+            bgDrops[i]++;
+          }
+        }
+
+        bgAnimationId = requestAnimationFrame(drawBg);
+      }
+
+      if (bgAnimationId) cancelAnimationFrame(bgAnimationId);
+      bgAnimationId = requestAnimationFrame(drawBg);
+    }
+
+    // ── 2. BEAT SHEET COMPLETO DA SEQUÊNCIA DE BOOT (Decisões 10.1, 10.17, 10.12) ──
+    function runBootSequence(forceFull = false) {
+      const overlay = document.getElementById('matrix-boot-overlay');
+      const canvas = document.getElementById('matrix-boot-canvas') as HTMLCanvasElement | null;
+      if (!overlay || !canvas) return;
+
+      if (!isMatrixTheme() || isReducedMotion()) {
+        overlay.classList.remove('is-active', 'is-fading');
+        initBgCanvas();
+        return;
+      }
+
+      const isMobile = window.innerWidth <= 768;
+      const hasSeenIntro = localStorage.getItem('ld-intro-vista') === 'true';
+
+      // Modos:
+      // - Full Desktop: ~5500ms
+      // - Full Mobile: ~2500ms (Decisão 10.12)
+      // - Comprimida (segunda visita): ~1000ms (Decisão 10.3)
+      let mode: 'full-desktop' | 'full-mobile' | 'compressed' = 'full-desktop';
+      if (!forceFull && hasSeenIntro) {
+        mode = 'compressed';
+      } else if (isMobile) {
+        mode = 'full-mobile';
+      } else {
+        mode = 'full-desktop';
+      }
+
+      const duration = mode === 'full-desktop' ? 5500 : mode === 'full-mobile' ? 2500 : 1000;
+
+      // Ativa o overlay
+      overlay.classList.remove('is-fading');
+      overlay.classList.add('is-active');
+
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+
+      // Colunas de chuva do boot
+      const fontSize = isMobile ? 18 : 14;
+      const colWidth = fontSize + (isMobile ? 8 : 4);
+      const colCount = Math.floor(width / colWidth);
+      const drops: number[] = new Array(colCount).fill(0).map(() => Math.floor(Math.random() * -40));
+      const speeds: number[] = new Array(colCount).fill(0).map(() => 1 + Math.random() * 1.5);
+
+      // Coleta bounding boxes dos painéis reais do site para o dobramento (beat 3,2s)
+      const panelElements = Array.from(
+        document.querySelectorAll(
+          '.hero, .section, .card, .pilar, .passo, .cta-final, .header-container'
+        )
+      );
+      const panelRects = panelElements
+        .map((el) => {
+          const r = el.getBoundingClientRect();
+          return {
+            x: r.left,
+            y: r.top,
+            w: r.width,
+            h: r.height,
+          };
+        })
+        .filter((r) => r.w > 20 && r.h > 20 && r.y < height + 100 && r.y + r.h > -100);
+
+      const startTime = performance.now();
+
+      function renderBoot(now: number) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1.0);
+
+        // Limpa o frame com a cor correspondente ao ato
+        let bgR = 5;
+        let bgG = 7;
+        let bgB = 10; // #05070a
+
+        // Transição de paleta para #0a1420 no beat de dobramento (3,2s a 4,5s no desktop)
+        const morphStart = mode === 'full-desktop' ? 3200 : mode === 'full-mobile' ? 1600 : 400;
+        const morphEnd = mode === 'full-desktop' ? 4500 : mode === 'full-mobile' ? 2200 : 800;
+
+        if (elapsed >= morphStart) {
+          const colorFactor = Math.min((elapsed - morphStart) / (morphEnd - morphStart), 1.0);
+          bgR = Math.round(5 + (10 - 5) * colorFactor);
+          bgG = Math.round(7 + (20 - 7) * colorFactor);
+          bgB = Math.round(10 + (32 - 10) * colorFactor);
+        }
+
+        ctx.fillStyle = `rgb(${bgR}, ${bgG}, ${bgB})`;
+        ctx.fillRect(0, 0, width, height);
+
+        // ── ESTÁGIO 1: TERMINAL DOS (0.0s – 1.2s no desktop / 0.0s – 0.6s no mobile) ──
+        const typeStart = 0;
+        const typeEnd = mode === 'full-desktop' ? 1200 : mode === 'full-mobile' ? 600 : 0;
+
+        if (mode !== 'compressed' && elapsed <= typeEnd + 400) {
+          const charProgress = Math.min(Math.max((elapsed - 200) / (typeEnd - 300), 0), 1);
+          const charsTyped = Math.floor(charProgress * COMMAND_STR.length);
+          const currentTyped = COMMAND_STR.slice(0, charsTyped);
+
+          ctx.font = `600 ${isMobile ? 15 : 18}px 'JetBrains Mono', Consolas, monospace`;
+          ctx.fillStyle = '#00ff41'; // Verde-fósforo puro
+
+          const posX = isMobile ? 24 : 48;
+          const posY = isMobile ? 80 : 100;
+
+          ctx.fillText(currentTyped, posX, posY);
+
+          // Cursor piscando █
+          const isCursorBlink = Math.floor(elapsed / 250) % 2 === 0;
+          if (isCursorBlink && elapsed < typeEnd + 300) {
+            const textWidth = ctx.measureText(currentTyped).width;
+            ctx.fillText('█', posX + textWidth + 4, posY);
+          }
+
+          if (elapsed > typeEnd - 100) {
+            ctx.fillStyle = '#38e8ff';
+            ctx.font = `500 ${isMobile ? 12 : 14}px 'JetBrains Mono', Consolas, monospace`;
+            ctx.fillText('[SYSTEM BOOT: NAVE ONLINE]', posX, posY + 28);
+          }
+        }
+
+        // ── ESTÁGIO 2 & 3: CHUVA MATRIX E GLITCH "LONELY DEV" (1.2s – 3.2s) ──
+        const rainStart = mode === 'full-desktop' ? 1200 : mode === 'full-mobile' ? 600 : 0;
+        if (elapsed >= rainStart) {
+          ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+
+          // Transição de verde para ciano
+          let rainR = 0;
+          let rainG = 255;
+          let rainB = 65; // #00ff41
+
+          if (elapsed >= morphStart) {
+            const cf = Math.min((elapsed - morphStart) / (morphEnd - morphStart), 1.0);
+            rainR = Math.round(0 + (34 - 0) * cf);
+            rainG = Math.round(255 + (211 - 255) * cf);
+            rainB = Math.round(65 + (238 - 65) * cf);
+          }
+
+          // Se estiver na fase de dobramento, as colunas desaceleram e curvam para os painéis
+          const isMorphing = elapsed >= morphStart && elapsed <= morphEnd;
+          const morphFactor = isMorphing ? (elapsed - morphStart) / (morphEnd - morphStart) : 0;
+
+          for (let i = 0; i < drops.length; i++) {
+            let x = i * colWidth;
+            let y = drops[i] * fontSize;
+
+            // Dobramento das colunas: atrai levemente os caracteres para as bordas dos painéis
+            if (isMorphing && panelRects.length > 0) {
+              const nearestPanel = panelRects[i % panelRects.length];
+              const targetX = nearestPanel.x + (i % 2 === 0 ? 0 : nearestPanel.w);
+              x = x + (targetX - x) * (morphFactor * 0.55);
+            }
+
+            const char = GLYPHS[(i + Math.floor(elapsed / 80)) % GLYPHS.length];
+
+            // Cabeça da gota (brilho branco/verde)
+            ctx.fillStyle = isMorphing ? `rgb(224, 244, 255)` : `rgb(255, 255, 255)`;
+            ctx.fillText(char, x, y);
+
+            // Rastro da gota
+            ctx.fillStyle = `rgba(${rainR}, ${rainG}, ${rainB}, ${isMorphing ? 0.4 : 0.8})`;
+            ctx.fillText(char, x, y - fontSize);
+
+            if (y > height && Math.random() > 0.95) {
+              drops[i] = 0;
+            }
+
+            // Desaceleração durante o dobramento
+            const speedMultiplier = isMorphing ? Math.max(1 - morphFactor, 0.15) : 1;
+            drops[i] += speeds[i] * speedMultiplier;
+          }
+
+          // Letreiro "LONELY DEV" piscando em 3 pontos formado pela chuva (2.0s – 3.2s)
+          const flashStart = mode === 'full-desktop' ? 2000 : mode === 'full-mobile' ? 1100 : 200;
+          const flashEnd = mode === 'full-desktop' ? 3200 : mode === 'full-mobile' ? 1600 : 400;
+
+          if (elapsed >= flashStart && elapsed <= flashEnd) {
+            const flashLocations = [
+              { x: width * 0.15, y: height * 0.35, text: 'LONELY DEV', size: isMobile ? 22 : 32 },
+              { x: width * 0.55, y: height * 0.65, text: 'LONELY DEV', size: isMobile ? 20 : 28 },
+              { x: width * 0.5 - (isMobile ? 110 : 160), y: height * 0.5, text: 'LONELY DEV', size: isMobile ? 32 : 48 },
+            ];
+
+            const currentLocIndex = Math.floor(((elapsed - flashStart) / (flashEnd - flashStart)) * 3) % 3;
+            const loc = flashLocations[currentLocIndex];
+
+            // Renderiza com caracteres que parecem glifos da chuva
+            ctx.font = `800 ${loc.size}px 'JetBrains Mono', monospace`;
+            ctx.fillStyle = Math.random() > 0.3 ? '#ffffff' : '#00ff41';
+            ctx.shadowColor = '#00ff41';
+            ctx.shadowBlur = 12;
+            ctx.fillText(loc.text, loc.x, loc.y);
+            ctx.shadowBlur = 0;
+          }
+        }
+
+        // ── ESTÁGIO 4: DOBRAMENTO DAS COLUNAS EM RETÂNGULOS DE VIDRO (3.2s – 4.5s) ──
+        if (elapsed >= morphStart) {
+          const foldProgress = Math.min((elapsed - morphStart) / (morphEnd - morphStart), 1.0);
+
+          panelRects.forEach((rect) => {
+            ctx.save();
+            ctx.strokeStyle = `rgba(34, 211, 238, ${0.4 + foldProgress * 0.55})`;
+            ctx.lineWidth = 1.5;
+            ctx.shadowColor = 'rgba(34, 211, 238, 0.6)';
+            ctx.shadowBlur = 8 * foldProgress;
+
+            // Fundo translúcido de vidro Minority Report se materializando
+            ctx.fillStyle = `rgba(10, 20, 32, ${foldProgress * 0.65})`;
+            ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+
+            // Borda retangular traçada
+            ctx.beginPath();
+            ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+            ctx.restore();
+
+            // Pequenos cantos luminosos futuristas (HUD / Minority Report)
+            const cornerSize = 10;
+            ctx.strokeStyle = '#38e8ff';
+            ctx.lineWidth = 2;
+            // Top-left
+            ctx.beginPath();
+            ctx.moveTo(rect.x, rect.y + cornerSize);
+            ctx.lineTo(rect.x, rect.y);
+            ctx.lineTo(rect.x + cornerSize, rect.y);
+            ctx.stroke();
+            // Bottom-right
+            ctx.beginPath();
+            ctx.moveTo(rect.x + rect.w, rect.y + rect.h - cornerSize);
+            ctx.lineTo(rect.x + rect.w, rect.y + rect.h);
+            ctx.lineTo(rect.x + rect.w - cornerSize, rect.y + rect.h);
+            ctx.stroke();
+          });
+        }
+
+        // ── ESTÁGIO 5: PREENCHIMENTO DO CONTEÚDO REAL E FADE-OUT (4.5s – 5.5s) ──
+        const contentRevealStart = morphEnd;
+        if (elapsed >= contentRevealStart) {
+          const fadeProgress = (elapsed - contentRevealStart) / (duration - contentRevealStart);
+
+          // Efeito de glitch horizontal nos últimos frames
+          if (fadeProgress < 0.6 && Math.random() > 0.7) {
+            const sliceY = Math.random() * height;
+            const sliceH = 4 + Math.random() * 12;
+            const offset = (Math.random() - 0.5) * 8;
+            ctx.fillStyle = 'rgba(34, 211, 238, 0.15)';
+            ctx.fillRect(offset, sliceY, width, sliceH);
+          }
+
+          // Fade suave do overlay
+          overlay.style.opacity = `${Math.max(1 - fadeProgress, 0)}`;
+        }
+
+        if (elapsed < duration) {
+          bootAnimationId = requestAnimationFrame(renderBoot);
+        } else {
+          // Final da sequência de boot
+          overlay.classList.remove('is-active');
+          overlay.classList.add('is-fading');
+          overlay.style.opacity = '0';
+          setTimeout(() => {
+            overlay.style.display = 'none';
+          }, 500);
+
+          localStorage.setItem('ld-intro-vista', 'true');
+          initBgCanvas();
+          startAmbientGlitch();
+        }
+      }
+
+      if (bootAnimationId) cancelAnimationFrame(bootAnimationId);
+      bootAnimationId = requestAnimationFrame(renderBoot);
+    }
+
+    // ── 3. GLITCH AMBIENTE PERMANENTE (Decisão 10.11) ───────────────────────────
+    function startAmbientGlitch() {
+      if (glitchTimeoutId) clearTimeout(glitchTimeoutId);
+      if (!isMatrixTheme() || isReducedMotion()) return;
+
+      // Intervalo randômico entre 8s e 15s (8000ms a 15000ms)
+      const nextInterval = 8000 + Math.random() * 7000;
+
+      glitchTimeoutId = setTimeout(() => {
+        if (!isMatrixTheme() || isReducedMotion()) return;
+
+        // Escolhe exatamente UM elemento visível no DOM
+        const candidates = Array.from(
+          document.querySelectorAll<HTMLElement>(
+            '.wordmark, .btn-primary, .card h3, .pilar h3, .passo h3, .section-title, .badge, .footer-nav a'
+          )
+        ).filter((el) => {
+          const rect = el.getBoundingClientRect();
+          return rect.top >= 0 && rect.bottom <= window.innerHeight;
+        });
+
+        if (candidates.length > 0) {
+          const target = candidates[Math.floor(Math.random() * candidates.length)];
+          target.classList.add('matrix-glitch-active');
+
+          // Duração exata de ~120ms (sem reflow)
+          setTimeout(() => {
+            target.classList.remove('matrix-glitch-active');
+          }, 120);
+        }
+
+        // Continua o loop permanente
+        startAmbientGlitch();
+      }, nextInterval);
+    }
+
+    // ── 4. BOTÃO "REVER INTRO" (Decisão 10.3) ───────────────────────────────────
+    function setupReplayButton() {
+      const btn = document.getElementById('rever-intro-btn');
+      if (!btn) return;
+
+      // Remove listener antigo caso exista
+      btn.replaceWith(btn.cloneNode(true));
+      const freshBtn = document.getElementById('rever-intro-btn');
+      freshBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        runBootSequence(true); // Força execução da versão completa
+      });
+    }
+
+    // ── 5. CICLO DE VIDA E VISIBILITY CHANGE ──────────────────────────────────
+    function init() {
+      if (isMatrixTheme()) {
+        runBootSequence(false);
+      } else {
+        const overlay = document.getElementById('matrix-boot-overlay');
+        if (overlay) overlay.style.display = 'none';
+        const bgCanvas = document.getElementById('matrix-bg-canvas');
+        if (bgCanvas) bgCanvas.style.display = 'none';
+      }
+
+      setupReplayButton();
+    }
+
+    // Pausa animações quando a aba perde foco para economizar CPU/bateria
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (bgAnimationId) cancelAnimationFrame(bgAnimationId);
+        if (bootAnimationId) cancelAnimationFrame(bootAnimationId);
+        if (glitchTimeoutId) clearTimeout(glitchTimeoutId);
+      } else {
+        if (isMatrixTheme() && !isReducedMotion()) {
+          initBgCanvas();
+          startAmbientGlitch();
+        }
+      }
+    });
+
+    // Suporte a Astro View Transitions (re-inicializa ao navegar)
+    document.addEventListener('astro:page-load', () => {
+      init();
+    });
+
+    // Execução inicial
+    init();
+  })();
+</script>
