@@ -75,6 +75,20 @@ server.listen(4321, async () => {
 
     const screenshotsToTake = [
       {
+        url: 'http://127.0.0.1:4321/',
+        out: path.join(screenshotsDir, 'm3-home-desktop.png'),
+        width: 1440,
+        height: 900,
+        label: 'Home Desktop (1440px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/',
+        out: path.join(screenshotsDir, 'm3-home-mobile.png'),
+        width: 375,
+        height: 812,
+        label: 'Home Mobile (375px)'
+      },
+      {
         url: 'http://127.0.0.1:4321/servicos',
         out: path.join(screenshotsDir, 'm4-servicos-desktop.png'),
         width: 1440,
