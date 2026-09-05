@@ -91,7 +91,40 @@ server.listen(4321, async () => {
       }
     }
 
-    // 4. Screenshots with Edge
+    // 4. Validate /sobre page content
+    console.log('\n--- Verificando conteúdo da página /sobre ---');
+    const sobreHtml = fs.readFileSync(path.join(distDir, 'sobre', 'index.html'), 'utf-8');
+    const requiredSobreItems = [
+      'Feito por Daniel Piacentini',
+      'Lonely Dev',
+      'DP',
+      'Transparência técnica',
+      'Uso de Inteligência Artificial no processo',
+      'ferramentas de inteligência artificial',
+      'Direto ao ponto',
+      'Escopo e preço fixos',
+      'Desvencilhamento real',
+    ];
+    const sobreHtmlLower = sobreHtml.toLowerCase();
+    for (const item of requiredSobreItems) {
+      const exists = sobreHtmlLower.includes(item.toLowerCase());
+      console.log(`Verificação '${item}': ${exists ? 'OK' : 'FAIL'}`);
+      if (!exists) {
+        throw new Error(`Item obrigatório '${item}' ausente em /sobre.`);
+      }
+    }
+
+    // Negative check: ensure NO mention of Banco do Brasil, CESUP, or employment
+    const forbiddenTerms = ['banco do brasil', 'cesup'];
+    for (const term of forbiddenTerms) {
+      const found = sobreHtmlLower.includes(term);
+      console.log(`Verificação negativa (sem '${term}'): ${!found ? 'OK (não presente)' : 'FAIL (presente!)'}`);
+      if (found) {
+        throw new Error(`Termo proibido '${term}' encontrado em /sobre.`);
+      }
+    }
+
+    // 5. Screenshots with Edge
     const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
     const screenshotsDir = path.resolve('docs', 'screenshots');
     if (!fs.existsSync(screenshotsDir)) {
@@ -154,6 +187,20 @@ server.listen(4321, async () => {
         width: 375,
         height: 812,
         label: 'Como Funciona Mobile (375px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/sobre',
+        out: path.join(screenshotsDir, 'm7-sobre-desktop.png'),
+        width: 1440,
+        height: 900,
+        label: 'Sobre Desktop (1440px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/sobre',
+        out: path.join(screenshotsDir, 'm7-sobre-mobile.png'),
+        width: 375,
+        height: 812,
+        label: 'Sobre Mobile (375px)'
       },
     ];
 

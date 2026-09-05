@@ -1,0 +1,443 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sobre | Lonely Dev">
+  <div class="sobre-page">
+    <header class="page-header" aria-labelledby="page-title">
+      <nav class="breadcrumb" aria-label="Navegação estrutural">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Sobre</span>
+      </nav>
+
+      <p class="eyebrow">Identidade & Prática</p>
+      <h1 id="page-title">Sobre o Lonely Dev</h1>
+      <p class="lead">
+        Uma prática independente de desenvolvimento de software, automação e mídia digital,
+        construída para resolver problemas pontuais de forma ágil, com escopo fechado e desvencilhamento total.
+      </p>
+    </header>
+
+    <!-- QUEM FAZ / BIO -->
+    <section class="section" aria-labelledby="quem-faz-title">
+      <div class="section-heading">
+        <p class="section-tag">Responsável</p>
+        <h2 id="quem-faz-title">Quem está por trás</h2>
+      </div>
+
+      <div class="bio-card">
+        <div class="bio-header">
+          <span class="bio-badge" aria-hidden="true">DP</span>
+          <div class="bio-meta">
+            <h3 class="bio-name">Feito por Daniel Piacentini</h3>
+            <span class="bio-role">Desenvolvedor & Criador do Lonely Dev</span>
+          </div>
+        </div>
+
+        <div class="bio-body">
+          <p>
+            O <strong>Lonely Dev</strong> é o meu espaço de atuação para projetos sob demanda. Trabalho diretamente
+            com pequenos empresários, profissionais liberais e empreendedores que precisam de uma solução digital sob medida
+            — seja uma automação para eliminar tarefas manuais repetitivas, um web app objetivo, uma landing page rápida,
+            uma integração inteligente ou materiais visuais e audiovisuais.
+          </p>
+          <p>
+            Ao contrário do modelo convencional de agências ou contratações mensais com escopo aberto, aqui cada entrega
+            funciona como uma empreitada com início, meio e fim. O objetivo é sempre o mesmo: entregar exatamente o que foi
+            acordado, com acabamento técnico sólido e autonomia total para quem contrata.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRINCÍPIOS DA PRÁTICA -->
+    <section class="section" aria-labelledby="visao-title">
+      <div class="section-heading">
+        <p class="section-tag">Como encaro cada projeto</p>
+        <h2 id="visao-title">Pilares de atuação</h2>
+        <p class="section-desc">
+          Critérios práticos que guiam a condução de qualquer demanda que assumo.
+        </p>
+      </div>
+
+      <div class="pilares-grid">
+        <article class="pilar-card">
+          <span class="pilar-num">01</span>
+          <h3>Direto ao ponto</h3>
+          <p>
+            Sem reuniões diárias intermináveis ou camadas intermediárias de atendimento. A comunicação é direta,
+            clara e focada no problema a ser resolvido.
+          </p>
+        </article>
+
+        <article class="pilar-card">
+          <span class="pilar-num">02</span>
+          <h3>Escopo e preço fixos</h3>
+          <p>
+            Você sabe exatamente quanto vai investir e quando vai receber. O orçamento é fechado por entregável,
+            sem cobrança por hora em aberto ou custos surpresa.
+          </p>
+        </article>
+
+        <article class="pilar-card">
+          <span class="pilar-num">03</span>
+          <h3>Desvencilhamento real</h3>
+          <p>
+            Após a entrega testada e homologada, o código e os artefatos pertencem a você. Nada fica hospedado
+            ou dependente do meu ambiente para funcionar.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TRANSPARÊNCIA SOBRE IA -->
+    <section class="section" aria-labelledby="ia-title">
+      <div class="section-heading">
+        <p class="section-tag">Processo & Ferramentas</p>
+        <h2 id="ia-title">Transparência técnica</h2>
+      </div>
+
+      <div class="transparencia-card">
+        <h3>Uso de Inteligência Artificial no processo</h3>
+        <p>
+          Todo o desenvolvimento, imagens e vídeos deste site e dos projetos que entrego passam por ferramentas
+          de inteligência artificial. Utilizo modelos generativos e assistentes avançados como aceleradores
+          em todas as etapas do fluxo de trabalho — desde a prototipação e estruturação de código até a geração
+          de mídias e testes automatizados.
+        </p>
+        <p>
+          A tecnologia amplia a velocidade e a capacidade de entrega, mas cada decisão arquitetural, regra de negócio,
+          refinamento de interface e validação de segurança é conduzida, revisada e homologada manualmente por mim
+          antes de qualquer entrega final.
+        </p>
+      </div>
+    </section>
+
+    <!-- NAVEGAÇÃO / CTA -->
+    <section class="cta-banner" aria-labelledby="cta-title">
+      <h2 id="cta-title">Quer entender mais sobre o trabalho?</h2>
+      <p>
+        Conheça detalhadamente as etapas de contratação ou confira todas as modalidades de serviços disponíveis.
+      </p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="/contato">Pedir orçamento</a>
+        <a class="btn btn-secondary" href="/como-funciona">Como funciona o processo</a>
+        <a class="btn btn-secondary" href="/servicos">Catálogo de serviços</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .sobre-page {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .page-header {
+    padding: var(--spacing-lg) 0 var(--spacing-2xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb span[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.65rem, 6vw, 2.75rem);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 68ch;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: var(--spacing-2xl) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-heading {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-desc {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 60ch;
+  }
+
+  /* BIO CARD */
+  .bio-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+  }
+
+  .bio-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .bio-badge {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1e;
+    background: var(--color-accent);
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .bio-meta {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .bio-name {
+    font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+    color: var(--color-text);
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .bio-role {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    line-height: 1.4;
+  }
+
+  .bio-body p {
+    color: var(--color-text);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .bio-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .bio-body strong {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  /* PILARES GRID */
+  .pilares-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .pilar-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .pilar-num {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .pilar-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .pilar-card p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+    line-height: 1.55;
+  }
+
+  /* TRANSPARÊNCIA CARD */
+  .transparencia-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+  }
+
+  .transparencia-card h3 {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .transparencia-card p {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .transparencia-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* CTA FINAL */
+  .cta-banner {
+    padding: var(--spacing-2xl) 0 0;
+    text-align: center;
+  }
+
+  .cta-banner h2 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .cta-banner p {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    max-width: 55ch;
+    margin: 0 auto var(--spacing-lg);
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+    border: 1px solid var(--color-accent);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #1a1a1e;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  @media (max-width: 600px) {
+    .bio-card,
+    .transparencia-card {
+      padding: var(--spacing-md);
+    }
+
+    .bio-header {
+      gap: var(--spacing-sm);
+    }
+
+    .bio-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .bio-name {
+      font-size: 1.125rem;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pilares-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
