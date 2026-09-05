@@ -40,7 +40,7 @@ server.listen(4321, async () => {
   console.log('Static preview server running on http://127.0.0.1:4321');
 
   try {
-    // 2. Validate HTML anchors
+    // 2. Validate HTML anchors in /servicos
     const servicosHtml = fs.readFileSync(path.join(distDir, 'servicos', 'index.html'), 'utf-8');
     const requiredAnchors = [
       'bot-monitor-portal',
@@ -66,7 +66,32 @@ server.listen(4321, async () => {
       }
     }
 
-    // 3. Screenshots with Edge
+    // 3. Validate /como-funciona page content
+    console.log('\n--- Verificando conteúdo da página /como-funciona ---');
+    const comoHtml = fs.readFileSync(path.join(distDir, 'como-funciona', 'index.html'), 'utf-8');
+    const requiredComoItems = [
+      'passo-01',
+      'passo-02',
+      'passo-03',
+      'passo-04',
+      'Briefing',
+      'Orçamento Fechado',
+      'Execução',
+      'Desvencilhamento',
+      'Relatório de Execução',
+      'Sem mensalidade',
+      'lock-in',
+    ];
+    const comoHtmlLower = comoHtml.toLowerCase();
+    for (const item of requiredComoItems) {
+      const exists = comoHtmlLower.includes(item.toLowerCase());
+      console.log(`Verificação '${item}': ${exists ? 'OK' : 'FAIL'}`);
+      if (!exists) {
+        throw new Error(`Item obrigatório '${item}' ausente em /como-funciona.`);
+      }
+    }
+
+    // 4. Screenshots with Edge
     const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
     const screenshotsDir = path.resolve('docs', 'screenshots');
     if (!fs.existsSync(screenshotsDir)) {
@@ -115,6 +140,20 @@ server.listen(4321, async () => {
         width: 375,
         height: 812,
         label: 'Automação & IA Mobile (375px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/como-funciona',
+        out: path.join(screenshotsDir, 'm5-como-funciona-desktop.png'),
+        width: 1440,
+        height: 900,
+        label: 'Como Funciona Desktop (1440px)'
+      },
+      {
+        url: 'http://127.0.0.1:4321/como-funciona',
+        out: path.join(screenshotsDir, 'm5-como-funciona-mobile.png'),
+        width: 375,
+        height: 812,
+        label: 'Como Funciona Mobile (375px)'
       },
     ];
 

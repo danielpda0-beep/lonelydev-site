@@ -1,0 +1,851 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const passos = [
+  {
+    numero: '01',
+    fase: 'Briefing & Alinhamento',
+    titulo: 'Você traz o problema ou a ideia',
+    resumo:
+      'Você me conta o que precisa resolver, automatizar ou construir — pelo formulário, WhatsApp ou e-mail. Sem enrolação e sem jargões desnecessários.',
+    detalhes: [
+      'Análise de viabilidade técnica rápida e honesta: avalio o problema e respondo em até 1 dia útil.',
+      'Clareza sobre o que dá pra fazer e com a mesma franqueza o que NÃO dá pra fazer — sem falsas promessas de escopo.',
+      'Definição dos objetivos centrais e dos requisitos essenciais da solução antes de qualquer compromisso financeiro.',
+    ],
+    destaque: 'Resposta em até 1 dia útil com diagnóstico preliminar',
+  },
+  {
+    numero: '02',
+    fase: 'Orçamento Fechado',
+    titulo: 'Proposta clara com preço, prazo e escopo definidos',
+    resumo:
+      'Você recebe uma proposta formal e transparente por escrito. Tudo o que será entregue fica preto no branco, sem letras miúdas.',
+    detalhes: [
+      'Preço único e fechado: sem cobrança por hora em aberto, sem surpresas de custos adicionais no final do projeto.',
+      'Data de entrega garantida: prazo realista e compromissado desde o primeiro dia.',
+      'Escopo delimitado: descrição exata dos entregáveis, funcionalidades e limites técnicos.',
+      '1 rodada de ajustes inclusa para refinamentos finos após a entrega inicial.',
+      'Condições transparentes: parcelamento em 3x sem juros ou 5% de desconto para pagamento à vista.',
+    ],
+    destaque: 'Escopo fechado · Preço único · Data de entrega garantida',
+  },
+  {
+    numero: '03',
+    fase: 'Execução & Construção',
+    titulo: 'Desenvolvimento focado e testes práticos',
+    resumo:
+      'Eu construo a solução com foco total no entregável acordado, combinando engenharia de software sólida com aceleração por inteligência artificial.',
+    detalhes: [
+      'Sem reuniões diárias ou cerimônias burocráticas que tomam o seu tempo: o trabalho acontece de forma direta e eficiente.',
+      'Testes rigorosos e validação em cenários reais para garantir estabilidade e resiliência a falhas.',
+      'Avisos e checkpoints diretos caso haja alguma decisão pontual que dependa do seu direcionamento de negócio.',
+    ],
+    destaque: 'Engenharia focada + validação rigorosa de ponta a ponta',
+  },
+  {
+    numero: '04',
+    fase: 'Entrega & Desvencilhamento',
+    titulo: 'Relatório final, tutorial e autonomia total para você',
+    resumo:
+      'O projeto é entregue 100% pronto para uso. O código, os arquivos e o controle pertencem integralmente a você.',
+    detalhes: [
+      'Relatório de Execução da Entrega: documento claro que mapeia cada entregável contra o escopo vendido no orçamento para você conferir "pedi X, recebi X".',
+      'Tutorial passo a passo: guia prático explicando como rodar, operar ou hospedar a ferramenta com facilidade.',
+      'Desvencilhamento total: nada fica rodando no meu computador depois da entrega. A solução roda na sua máquina, no seu servidor ou na nuvem que você escolher.',
+      'Zero lock-in e sem mensalidade obrigatória: sem contratos de manutenção perpétua ou dependência forçada do desenvolvedor.',
+    ],
+    destaque: 'Nada roda no meu computador após a entrega · Zero lock-in',
+  },
+];
+
+const pilaresModelo = [
+  {
+    titulo: 'Escopo Fechado',
+    descricao:
+      'Você sabe exatamente o que está comprando. Sem cobrança por hora que se estende indefinidamente.',
+  },
+  {
+    titulo: 'Preço Único',
+    descricao:
+      'O valor combinado na proposta é o valor final. Sem taxas ocultas, surpresas ou cobranças extras sem aviso.',
+  },
+  {
+    titulo: 'Prazo Definido',
+    descricao:
+      'Uma data limite realista de entrega fixada no orçamento. Seu projeto concluído quando você precisa.',
+  },
+  {
+    titulo: 'Sem Mensalidade',
+    descricao:
+      'Você não paga assinatura para continuar usando o que comprou. O trabalho é pontual e a propriedade é sua.',
+  },
+  {
+    titulo: 'Sem Lock-in',
+    descricao:
+      'Código limpo, documentado e livre. Nada fica preso a servidores próprios do dev ou plataformas proprietárias.',
+  },
+];
+
+const comparativos = [
+  {
+    aspecto: 'Orçamento & Cobrança',
+    tradicional: 'Cobrança por hora aberta com estimativas que frequentemente estouram o teto.',
+    lonelydev: 'Preço único e fechado por entregável, sem risco de surpresa na fatura.',
+  },
+  {
+    aspecto: 'Prazo & Cronograma',
+    tradicional: 'Prazos flexíveis que se arrastam com reuniões infinitas e burocracia.',
+    lonelydev: 'Data de entrega combinada por escrito no orçamento e cumprida à risca.',
+  },
+  {
+    aspecto: 'Dependência Pós-Entrega',
+    tradicional: 'Mensalidades obrigatórias de suporte ou retenção de código para gerar dependência.',
+    lonelydev: 'Relatório completo, tutorial e desvencilhamento total: a solução é 100% sua.',
+  },
+  {
+    aspecto: 'Onde Roda o Sistema',
+    tradicional: 'Geralmente preso à infraestrutura do fornecedor para forçar pagamento contínuo.',
+    lonelydev: 'Roda no seu ambiente, na sua máquina ou na nuvem da sua preferência.',
+  },
+];
+
+const faqs = [
+  {
+    pergunta: 'E se eu precisar de pequenas alterações depois que o projeto for entregue?',
+    resposta:
+      'Todo orçamento inclui 1 rodada de ajustes finos para garantir que tudo funcione exatamente como o especificado. Se depois disso você quiser novas funcionalidades ou melhorias futuras, basta solicitar um novo orçamento pontual — sem amarras contratuais.',
+  },
+  {
+    pergunta: 'Preciso ter conhecimento técnico para usar o que for entregue?',
+    resposta:
+      'Não. Cada projeto entregue que necessite de operação vem acompanhado de um tutorial passo a passo claro, em linguagem simples, mostrando exatamente como executar e utilizar a ferramenta no dia a dia.',
+  },
+  {
+    pergunta: 'O que significa "nada roda no meu computador depois da entrega"?',
+    resposta:
+      'Significa que eu não mantenho servidores próprios nem guardo partes essenciais da sua ferramenta dependentes da minha máquina para funcionar. A entrega transfere todo o funcionamento para o seu controle (no seu computador, no seu servidor ou em serviços de nuvem de sua propriedade).',
+  },
+];
+---
+
+<Layout title="Como Funciona | Lonely Dev">
+  <div class="como-page">
+    <header class="page-header" aria-labelledby="page-title">
+      <nav class="breadcrumb" aria-label="Navegação estrutural">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Como funciona</span>
+      </nav>
+
+      <p class="eyebrow">Metodologia & Transparência</p>
+      <h1 id="page-title">Como funciona o processo</h1>
+      <p class="lead">
+        Projetos com começo, meio e fim. Do primeiro contato até a entrega definitiva,
+        cada etapa é desenhada para dar previsibilidade, rapidez e independência total a você.
+      </p>
+
+      <div class="hero-badges">
+        <span class="pill">Escopo Fechado</span>
+        <span class="pill">Preço Único</span>
+        <span class="pill">Prazo Definido</span>
+        <span class="pill">Sem Mensalidade</span>
+        <span class="pill">Zero Lock-in</span>
+      </div>
+    </header>
+
+    <!-- OS 4 PASSOS -->
+    <section class="section" aria-labelledby="passos-title">
+      <div class="section-heading">
+        <p class="section-tag">Passo a Passo</p>
+        <h2 id="passos-title">Os 4 passos de cada projeto</h2>
+        <p class="section-desc">
+          Um fluxo direto e sem burocracia desnecessária. Você sabe exatamente o que esperar em cada fase.
+        </p>
+      </div>
+
+      <div class="fluxo-passos">
+        {passos.map((passo) => (
+          <article class="passo-card" id={`passo-${passo.numero}`}>
+            <div class="passo-header">
+              <span class="passo-badge" aria-label={`Passo ${passo.numero}`}>
+                {passo.numero}
+              </span>
+              <div class="passo-meta">
+                <span class="passo-fase">{passo.fase}</span>
+                <h3 class="passo-titulo">{passo.titulo}</h3>
+              </div>
+            </div>
+
+            <p class="passo-resumo">{passo.resumo}</p>
+
+            <div class="passo-detalhes">
+              <h4 class="detalhes-label">O que acontece nesta etapa:</h4>
+              <ul class="detalhes-list">
+                {passo.detalhes.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <footer class="passo-footer">
+              <span class="highlight-tag">
+                <span class="tag-icon" aria-hidden="true">⚡</span>
+                {passo.destaque}
+              </span>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- MANIFESTO / PRINCÍPIOS -->
+    <section class="section section-principios" aria-labelledby="principios-title">
+      <div class="section-heading">
+        <p class="section-tag">Compromisso</p>
+        <h2 id="principios-title">Os 5 princípios do modelo Lonely Dev</h2>
+        <p class="section-desc">
+          Construído para quem precisa resolver um problema real sem ficar refém de fornecedores ou custos recorrentes.
+        </p>
+      </div>
+
+      <div class="principios-grid">
+        {pilaresModelo.map((pilar, index) => (
+          <div class="principio-card">
+            <span class="principio-num">0{index + 1}</span>
+            <h3>{pilar.titulo}</h3>
+            <p>{pilar.descricao}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- COMPARATIVO -->
+    <section class="section" aria-labelledby="comparativo-title">
+      <div class="section-heading">
+        <p class="section-tag">Diferencial</p>
+        <h2 id="comparativo-title">Modelo tradicional vs. Lonely Dev</h2>
+        <p class="section-desc">
+          Entenda a diferença entre o modelo comum de agências/consultorias e o formato de entrega pontual.
+        </p>
+      </div>
+
+      <div class="tabela-container">
+        <table class="tabela-comparativa">
+          <thead>
+            <tr>
+              <th scope="col" class="col-aspecto">Aspecto</th>
+              <th scope="col" class="col-tradicional">Desenvolvimento Tradicional</th>
+              <th scope="col" class="col-lonely">Modelo Lonely Dev</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparativos.map((row) => (
+              <tr>
+                <td class="cell-aspecto">{row.aspecto}</td>
+                <td class="cell-tradicional">{row.tradicional}</td>
+                <td class="cell-lonely">
+                  <span class="check-icon" aria-hidden="true">✓</span>
+                  {row.lonelydev}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- RELATÓRIO DE EXECUÇÃO & TUTORIAIS -->
+    <section class="section section-destaque" aria-labelledby="entrega-title">
+      <div class="destaque-box">
+        <div class="destaque-content">
+          <span class="destaque-badge">Transparência Total</span>
+          <h2 id="entrega-title">Relatório de Execução & Entrega Real</h2>
+          <p>
+            Ao final de cada projeto, você não recebe apenas arquivos soltos. Você recebe um 
+            <strong>Relatório de Execução da Entrega</strong> formal que audita ponto a ponto o que foi construído contra o orçamento acordado.
+          </p>
+          <ul class="destaque-checklist">
+            <li>
+              <strong>Auditoria de Escopo:</strong> Você confere claramente cada item contratado e entregue.
+            </li>
+            <li>
+              <strong>Manual de Uso:</strong> Passo a passo prático para você ou sua equipe operarem a solução com facilidade.
+            </li>
+            <li>
+              <strong>Código e Propriedade 100% Seus:</strong> Sem licenças proprietárias ocultas ou retenção de código.
+            </li>
+            <li>
+              <strong>Oportunidades Futuras (Opcionais):</strong> Ideias e melhorias que possam fazer sentido no futuro ficam registradas, sem nenhuma obrigação de contratação.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ RÁPIDA -->
+    <section class="section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <p class="section-tag">Dúvidas Frequentes</p>
+        <h2 id="faq-title">Perguntas comuns sobre o formato</h2>
+      </div>
+
+      <div class="faq-grid">
+        {faqs.map((faq) => (
+          <div class="faq-item">
+            <h3>{faq.pergunta}</h3>
+            <p>{faq.resposta}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-banner" aria-labelledby="cta-title">
+      <h2 id="cta-title">Tem um problema pontual para resolver?</h2>
+      <p>
+        Envie uma mensagem descrevendo o que você precisa. Respondo em até 1 dia útil com uma análise honesta e sem compromisso.
+      </p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="/contato">Pedir orçamento</a>
+        <a class="btn btn-secondary" href="/servicos">Ver catálogo de serviços</a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .como-page {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .page-header {
+    padding: var(--spacing-lg) 0 var(--spacing-2xl);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb span[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.65rem, 6vw, 2.75rem);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.25;
+    word-break: break-word;
+  }
+
+  .lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 68ch;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: var(--spacing-2xl) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-heading {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-heading h2 {
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-desc {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 60ch;
+  }
+
+  /* FLUXO DOS 4 PASSOS */
+  .fluxo-passos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .passo-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    transition: border-color 0.2s ease;
+  }
+
+  .passo-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .passo-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .passo-badge {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1e;
+    background: var(--color-accent);
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .passo-meta {
+    flex: 1;
+  }
+
+  .passo-fase {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .passo-titulo {
+    font-size: 1.35rem;
+    color: var(--color-text);
+    margin-bottom: 0;
+  }
+
+  .passo-resumo {
+    color: var(--color-text);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .passo-detalhes {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .detalhes-label {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .detalhes-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detalhes-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .detalhes-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+  }
+
+  .passo-footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .highlight-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-accent);
+    background: rgba(245, 166, 35, 0.1);
+    border: 1px solid rgba(245, 166, 35, 0.25);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* PRINCÍPIOS GRID */
+  .principios-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .principio-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .principio-num {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .principio-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .principio-card p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+
+  /* TABELA COMPARATIVA */
+  .tabela-container {
+    overflow-x: auto;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .tabela-comparativa {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    min-width: 600px;
+  }
+
+  .tabela-comparativa th,
+  .tabela-comparativa td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+
+  .tabela-comparativa tr:last-child td {
+    border-bottom: none;
+  }
+
+  .tabela-comparativa th {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--color-text);
+  }
+
+  .col-aspecto {
+    width: 25%;
+  }
+
+  .col-tradicional {
+    width: 37.5%;
+    color: var(--color-text-muted);
+  }
+
+  .col-lonely {
+    width: 37.5%;
+    color: var(--color-accent);
+  }
+
+  .cell-aspecto {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .cell-tradicional {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .cell-lonely {
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    background: rgba(245, 166, 35, 0.03);
+  }
+
+  .check-icon {
+    color: var(--color-accent);
+    font-weight: bold;
+    margin-right: 0.35rem;
+    font-family: var(--font-mono);
+  }
+
+  /* DESTAQUE RELATÓRIO */
+  .destaque-box {
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, #1e1e24 100%);
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    padding: var(--spacing-xl);
+  }
+
+  .destaque-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: var(--color-accent);
+    color: #1a1a1e;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+  }
+
+  .destaque-content h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .destaque-content > p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 65ch;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .destaque-checklist {
+    list-style: none;
+    display: grid;
+    gap: var(--spacing-sm);
+  }
+
+  .destaque-checklist li {
+    position: relative;
+    padding-left: 1.75rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .destaque-checklist li strong {
+    color: var(--color-text);
+  }
+
+  .destaque-checklist li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-weight: bold;
+  }
+
+  /* FAQ */
+  .faq-grid {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .faq-item {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+  }
+
+  .faq-item h3 {
+    font-size: 1.15rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .faq-item p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* CTA FINAL */
+  .cta-banner {
+    padding: var(--spacing-2xl) 0 0;
+    text-align: center;
+  }
+
+  .cta-banner h2 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .cta-banner p {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    max-width: 50ch;
+    margin: 0 auto var(--spacing-lg);
+  }
+
+  .cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+    border: 1px solid var(--color-accent);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #1a1a1e;
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: #1a1a1e;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .page-header h1 {
+      font-size: 1.65rem;
+    }
+
+    .passo-card {
+      padding: var(--spacing-md);
+    }
+
+    .passo-header {
+      gap: var(--spacing-sm);
+    }
+
+    .passo-badge {
+      width: 2.25rem;
+      height: 2.25rem;
+      font-size: 1rem;
+    }
+
+    .passo-titulo {
+      font-size: 1.15rem;
+    }
+
+    .destaque-box {
+      padding: var(--spacing-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .principios-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .destaque-checklist {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .faq-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .principios-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .principio-card:last-child {
+      grid-column: span 2;
+    }
+  }
+</style>
