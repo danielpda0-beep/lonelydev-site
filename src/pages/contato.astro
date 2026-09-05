@@ -1,6 +1,8 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
 
+const { theme = Astro.params.theme || 'business' } = Astro.props;
+
 const web3formsAccessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || 'SUA_CHAVE_WEB3FORMS_AQUI';
 const whatsappNumber = '5541997577116';
 const whatsappFormatted = '(41) 99757-7116';
@@ -8,7 +10,7 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 const emailContato = 'lonelydevdev@gmail.com';
 ---
 
-<Layout title="Contato | Lonely Dev">
+<Layout title="Contato | Lonely Dev" theme={theme}>
   <div class="contato-page">
     <header class="page-header" aria-labelledby="page-title">
       <nav class="breadcrumb" aria-label="Navegação estrutural">
@@ -336,7 +338,7 @@ const emailContato = 'lonelydevdev@gmail.com';
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    background: rgba(245, 166, 35, 0.1);
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
     border: 1px solid rgba(245, 166, 35, 0.35);
     padding: 0.5rem 0.85rem;
     border-radius: 6px;
@@ -405,11 +407,11 @@ const emailContato = 'lonelydevdev@gmail.com';
   }
 
   .canal-card:hover {
-    border-color: rgba(245, 166, 35, 0.4);
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
   }
 
   .canal-card--whatsapp {
-    border-left: 3px solid #25d366;
+    border-left: 3px solid var(--color-whatsapp-bg);
   }
 
   .canal-card--email {
@@ -449,7 +451,7 @@ const emailContato = 'lonelydevdev@gmail.com';
 
   /* EXPECTATIVA BOX */
   .expectativa-box {
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--color-bg-overlay);
     border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: var(--spacing-lg);
@@ -503,9 +505,9 @@ const emailContato = 'lonelydevdev@gmail.com';
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    background: rgba(245, 166, 35, 0.15);
+    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
     color: var(--color-accent);
-    border: 1px solid rgba(245, 166, 35, 0.3);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     margin-bottom: var(--spacing-xs);
@@ -552,7 +554,7 @@ const emailContato = 'lonelydevdev@gmail.com';
   .form-textarea {
     width: 100%;
     box-sizing: border-box;
-    background-color: #1a1a1e;
+    background-color: var(--color-on-accent);
     border: 1px solid var(--color-border);
     border-radius: 6px;
     padding: 0.75rem 0.9rem;
@@ -598,14 +600,14 @@ const emailContato = 'lonelydevdev@gmail.com';
 
   .btn-primary {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
     border-color: var(--color-accent);
   }
 
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-primary:disabled {
@@ -614,15 +616,15 @@ const emailContato = 'lonelydevdev@gmail.com';
   }
 
   .btn-whatsapp {
-    background-color: #25d366;
-    color: #112a1a;
-    border-color: #25d366;
+    background-color: var(--color-whatsapp-bg);
+    color: var(--color-whatsapp-text);
+    border-color: var(--color-whatsapp-bg);
     font-weight: 700;
   }
 
   .btn-whatsapp:hover {
-    background-color: #2ee672;
-    color: #0d2215;
+    background-color: var(--color-whatsapp-bg-hover);
+    color: var(--color-whatsapp-text-hover);
   }
 
   .btn-ghost {
@@ -660,15 +662,15 @@ const emailContato = 'lonelydevdev@gmail.com';
   }
 
   .form-status--success {
-    background: rgba(37, 211, 102, 0.12);
-    border: 1px solid rgba(37, 211, 102, 0.4);
-    color: #72f09d;
+    background: color-mix(in srgb, var(--color-success) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-success) 40%, transparent);
+    color: var(--color-success-text);
   }
 
   .form-status--error {
-    background: rgba(235, 87, 87, 0.12);
-    border: 1px solid rgba(235, 87, 87, 0.4);
-    color: #ff9e99;
+    background: color-mix(in srgb, var(--color-error) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-error) 40%, transparent);
+    color: var(--color-error-text);
   }
 
   .form-status a {

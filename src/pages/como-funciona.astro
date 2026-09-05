@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+const { theme = Astro.params.theme || 'business' } = Astro.props;
+
 const passos = [
   {
     numero: '01',
@@ -129,7 +131,7 @@ const faqs = [
 ];
 ---
 
-<Layout title="Como Funciona | Lonely Dev">
+<Layout title="Como Funciona | Lonely Dev" theme={theme}>
   <div class="como-page">
     <header class="page-header" aria-labelledby="page-title">
       <nav class="breadcrumb" aria-label="Navegação estrutural">
@@ -447,7 +449,7 @@ const faqs = [
     font-family: var(--font-mono);
     font-size: 1.25rem;
     font-weight: 700;
-    color: #1a1a1e;
+    color: var(--color-on-accent);
     background: var(--color-accent);
     width: 2.75rem;
     height: 2.75rem;
@@ -486,8 +488,8 @@ const faqs = [
   }
 
   .passo-detalhes {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-overlay);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-md);
@@ -532,8 +534,8 @@ const faqs = [
     font-family: var(--font-mono);
     font-size: 0.8125rem;
     color: var(--color-accent);
-    background: rgba(245, 166, 35, 0.1);
-    border: 1px solid rgba(245, 166, 35, 0.25);
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
     padding: 0.35rem 0.75rem;
     border-radius: 4px;
     display: inline-flex;
@@ -605,7 +607,7 @@ const faqs = [
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--color-bg-overlay);
     color: var(--color-text);
   }
 
@@ -640,7 +642,7 @@ const faqs = [
     color: var(--color-text);
     font-size: 0.95rem;
     line-height: 1.5;
-    background: rgba(245, 166, 35, 0.03);
+    background: color-mix(in srgb, var(--color-accent) 3%, transparent);
   }
 
   .check-icon {
@@ -652,7 +654,7 @@ const faqs = [
 
   /* DESTAQUE RELATÓRIO */
   .destaque-box {
-    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, #1e1e24 100%);
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, var(--color-bg-alt) 100%);
     border: 1px solid var(--color-accent);
     border-radius: 8px;
     padding: var(--spacing-xl);
@@ -664,7 +666,7 @@ const faqs = [
     text-transform: uppercase;
     letter-spacing: 0.06em;
     background: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     display: inline-block;
@@ -775,14 +777,14 @@ const faqs = [
 
   .btn-primary {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
     border: 1px solid var(--color-accent);
   }
 
   .btn-primary:hover {
     background-color: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-secondary {
@@ -793,7 +795,7 @@ const faqs = [
 
   .btn-secondary:hover {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   /* RESPONSIVE */

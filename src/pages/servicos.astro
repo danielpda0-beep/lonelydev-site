@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+
+const { theme = Astro.params.theme || 'business' } = Astro.props;
 import foraDeEscopoData from '../content/fora-de-escopo.json';
 
 const allServicos = await getCollection('servicos');
@@ -84,7 +86,7 @@ function getModeloPrecoBadge(modelo: string) {
 }
 ---
 
-<Layout title="Serviços | Lonely Dev">
+<Layout title="Serviços | Lonely Dev" theme={theme}>
   <div class="servicos-page">
     <header class="page-header" aria-labelledby="servicos-title">
       <p class="eyebrow">Catálogo de Soluções</p>
@@ -349,12 +351,12 @@ function getModeloPrecoBadge(modelo: string) {
   .pilar-section--destaque {
     background: linear-gradient(
       180deg,
-      rgba(245, 166, 35, 0.04) 0%,
-      rgba(245, 166, 35, 0) 100%
+      color-mix(in srgb, var(--color-accent) 4%, transparent) 0%,
+      transparent 100%
     );
     border-radius: 12px;
     padding: var(--spacing-lg);
-    border: 1px solid rgba(245, 166, 35, 0.25);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
   }
 
   .pilar-header {
@@ -418,7 +420,7 @@ function getModeloPrecoBadge(modelo: string) {
   }
 
   .servico-card:hover {
-    border-color: rgba(245, 166, 35, 0.4);
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
   }
 
   .servico-card--fixo {
@@ -446,17 +448,17 @@ function getModeloPrecoBadge(modelo: string) {
 
   .badge-chefe {
     background: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .badge-fixo {
-    background: rgba(245, 166, 35, 0.15);
+    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
     color: var(--color-accent);
-    border: 1px solid rgba(245, 166, 35, 0.3);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 
   .badge-partir {
-    background: rgba(160, 160, 160, 0.15);
+    background: color-mix(in srgb, var(--color-text-muted) 15%, transparent);
     color: var(--color-text);
     border: 1px solid var(--color-border);
   }
@@ -468,9 +470,9 @@ function getModeloPrecoBadge(modelo: string) {
   }
 
   .badge-alerta {
-    background: rgba(235, 87, 87, 0.15);
-    color: #ff7b72;
-    border: 1px solid rgba(235, 87, 87, 0.3);
+    background: color-mix(in srgb, var(--color-error) 15%, transparent);
+    color: var(--color-error-danger);
+    border: 1px solid color-mix(in srgb, var(--color-error) 30%, transparent);
   }
 
   .servico-nome {
@@ -493,9 +495,9 @@ function getModeloPrecoBadge(modelo: string) {
 
   .servico-prose {
     font-size: 0.925rem;
-    color: #d0d0d5;
+    color: var(--color-text-secondary);
     line-height: 1.55;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--color-border-subtle);
     padding-top: var(--spacing-sm);
   }
 
@@ -511,10 +513,10 @@ function getModeloPrecoBadge(modelo: string) {
     display: grid;
     gap: var(--spacing-xs);
     font-size: 0.875rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--color-bg-overlay);
     padding: var(--spacing-sm);
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border-subtle);
   }
 
   .detalhe-item {
@@ -578,12 +580,12 @@ function getModeloPrecoBadge(modelo: string) {
 
   .btn-primary {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-primary:hover {
     background-color: var(--color-accent-hover);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-card {
@@ -594,7 +596,7 @@ function getModeloPrecoBadge(modelo: string) {
 
   .btn-card:hover {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .anchor-link {
@@ -622,8 +624,8 @@ function getModeloPrecoBadge(modelo: string) {
   }
 
   .fora-escopo-card {
-    background-color: #211c1d;
-    border: 1px solid #4a2c2c;
+    background-color: var(--color-danger-bg);
+    border: 1px solid var(--color-danger-border);
     border-radius: 8px;
     padding: var(--spacing-lg);
   }
@@ -657,14 +659,14 @@ function getModeloPrecoBadge(modelo: string) {
     gap: var(--spacing-xs);
     font-family: var(--font-mono);
     font-size: 0.9375rem;
-    color: #f0c0c0;
+    color: var(--color-danger-text);
     padding: 0.4rem 0.6rem;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--color-bg-overlay);
     border-radius: 4px;
   }
 
   .fora-icone {
-    color: #ff7b72;
+    color: var(--color-error-danger);
     font-weight: bold;
   }
 
@@ -672,7 +674,7 @@ function getModeloPrecoBadge(modelo: string) {
     font-size: 0.875rem;
     color: var(--color-text-muted);
     margin-bottom: 0;
-    border-top: 1px solid #4a2c2c;
+    border-top: 1px solid var(--color-danger-border);
     padding-top: var(--spacing-sm);
   }
 

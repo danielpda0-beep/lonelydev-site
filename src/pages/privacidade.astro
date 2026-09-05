@@ -1,8 +1,10 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+
+const { theme = Astro.params.theme || 'business' } = Astro.props;
 ---
 
-<Layout title="Política de Privacidade | Lonely Dev">
+<Layout title="Política de Privacidade | Lonely Dev" theme={theme}>
   <div class="privacidade-page">
     <header class="page-header" aria-labelledby="page-title">
       <nav class="breadcrumb" aria-label="Navegação estrutural">
@@ -309,8 +311,8 @@ import Layout from '../layouts/Layout.astro';
   .info-card {
     display: flex;
     gap: var(--spacing-sm);
-    background-color: rgba(245, 166, 35, 0.05);
-    border: 1px solid rgba(245, 166, 35, 0.25);
+    background-color: color-mix(in srgb, var(--color-accent) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
     border-radius: 6px;
     padding: var(--spacing-md);
     margin-top: var(--spacing-sm);

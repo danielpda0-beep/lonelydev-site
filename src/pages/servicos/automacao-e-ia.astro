@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
+const { theme = Astro.params.theme || 'business' } = Astro.props;
+
 const servicosAutomação = [
   {
     id: 'bot-monitor-portal',
@@ -76,7 +78,7 @@ const pilaresTecnicos = [
 ];
 ---
 
-<Layout title="Automação & IA — Carro-chefe | Lonely Dev">
+<Layout title="Automação & IA — Carro-chefe | Lonely Dev" theme={theme}>
   <article class="carrochefe-page">
     <nav class="breadcrumb" aria-label="Navegação de retorno">
       <a href="/servicos" class="breadcrumb-link">← Voltar para todos os serviços</a>
@@ -258,13 +260,13 @@ const pilaresTecnicos = [
 
   .badge-chefe {
     background: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .badge-fixo {
-    background: rgba(245, 166, 35, 0.15);
+    background: color-mix(in srgb, var(--color-accent) 15%, transparent);
     color: var(--color-accent);
-    border: 1px solid rgba(245, 166, 35, 0.3);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 
   .badge-consulta {
@@ -353,8 +355,8 @@ const pilaresTecnicos = [
   }
 
   .solucao-exemplos {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-overlay);
+    border: 1px solid var(--color-border-subtle);
     border-radius: 6px;
     padding: var(--spacing-md);
   }
@@ -379,7 +381,7 @@ const pilaresTecnicos = [
     align-items: flex-start;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: #d0d0d5;
+    color: var(--color-text-secondary);
   }
 
   .check-icon {
@@ -544,12 +546,12 @@ const pilaresTecnicos = [
 
   .btn-primary {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-primary:hover {
     background-color: var(--color-accent-hover);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-ghost {
@@ -560,7 +562,7 @@ const pilaresTecnicos = [
 
   .btn-ghost:hover {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   .btn-card {
@@ -571,7 +573,7 @@ const pilaresTecnicos = [
 
   .btn-card:hover {
     background-color: var(--color-accent);
-    color: #1a1a1e;
+    color: var(--color-on-accent);
   }
 
   @media (min-width: 768px) {
