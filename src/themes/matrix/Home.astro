@@ -194,8 +194,8 @@ const pacotesFixos = servicos
         <article class="matrix-panel matrix-archive-pod">
           <div class="panel-corners" aria-hidden="true"></div>
           <div class="archive-header">
-            <span class="archive-tag">ARQUIVO_EM_PRODUCAO</span>
-            <span class="archive-status">🧩 {item.status}</span>
+            <span class="archive-tag">{item.status === 'Disponível' ? 'ARQUIVO_DISPONIVEL' : 'ARQUIVO_EM_PRODUCAO'}</span>
+            <span class="archive-status">{item.status === 'Disponível' ? '✅' : '🧩'} {item.status}</span>
           </div>
           <h3 class="archive-title">{item.titulo}</h3>
           <p class="archive-desc">{item.texto}</p>

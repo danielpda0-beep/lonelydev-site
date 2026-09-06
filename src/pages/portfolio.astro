@@ -1,0 +1,575 @@
+---
+// src/pages/portfolio.astro
+// M6: showcase de capacidade — vídeos com IA, imagens com IA, cases anonimizados e apps próprios.
+import Layout from '../layouts/Layout.astro';
+
+const { theme = Astro.params.theme || 'matrix' } = Astro.props;
+
+const videos = [
+  {
+    id: 'materializa',
+    titulo: '"Materializa"',
+    formato: '16:9 · metamorfose em loop',
+    descricao:
+      'Peça-herói do portfólio: uma transição contínua entre cenas, encadeada até fechar em loop. Encena literalmente a proposta do site — resolver e materializar.',
+    src: '/videos/portfolio/video-1-materializa.mp4',
+    poster: '/images/portfolio/imagem-ia-1-materializa.png',
+    orientacao: 'paisagem',
+  },
+  {
+    id: 'chronos-01',
+    titulo: '"Chronos-01"',
+    formato: '9:16 · comercial de produto fictício',
+    descricao:
+      'Peça publicitária vertical para um produto que não existe, com o mesmo objeto mantido consistente cena a cena — o tipo de disciplina que um comercial real exige.',
+    src: '/videos/portfolio/video-2-chronos01.mp4',
+    poster: '/images/portfolio/imagem-ia-2-chronos.png',
+    orientacao: 'retrato',
+  },
+  {
+    id: 'tem-alguem-ai',
+    titulo: '"Tem alguém aí?"',
+    formato: '16:9 · narrativa com lip-sync',
+    descricao:
+      'A peça mais arriscada do lote: personagem consistente do início ao fim, com fala sincronizada de verdade — não só um clipe bonito, um clipe que fala.',
+    src: '/videos/portfolio/video-3-tem-alguem-ai.mp4',
+    poster: '/images/portfolio/imagem-ia-3-elena.png',
+    orientacao: 'paisagem',
+  },
+  {
+    id: 'pulso-da-cidade',
+    titulo: '"O Pulso da Cidade"',
+    formato: '9:16 · claymation',
+    descricao:
+      'Peça artística em direção de arte estilizada (argila), cortada no ritmo de uma trilha original — prova de que a produção não fica presa a um único estilo visual.',
+    src: '/videos/portfolio/video-4-pulso-da-cidade.mp4',
+    poster: '/images/portfolio/imagem-ia-4-pulso.png',
+    orientacao: 'retrato',
+  },
+];
+
+const imagens = [
+  { src: '/images/portfolio/imagem-ia-1-materializa.png', legenda: 'Still — "Materializa"' },
+  { src: '/images/portfolio/imagem-ia-2-chronos.png', legenda: 'Still — "Chronos-01"' },
+  { src: '/images/portfolio/imagem-ia-3-elena.png', legenda: 'Character design — "Tem alguém aí?"' },
+  { src: '/images/portfolio/imagem-ia-4-pulso.png', legenda: 'Still — "O Pulso da Cidade"' },
+];
+
+const cases = [
+  {
+    pilar: 'Automação & IA',
+    titulo: 'Monitor automático de processos judiciais e trabalhistas',
+    texto:
+      'Sistema que acompanha múltiplos CNPJs junto às plataformas oficiais de comunicação processual, integrado via API institucional (OAuth2), e avisa por WhatsApp em linguagem simples sempre que surge uma citação, intimação ou processo novo — sem o cliente precisar entrar em nenhum portal.',
+  },
+  {
+    pilar: 'Web & Redes',
+    titulo: 'Loja integrada (sacolinha) do Instagram para comércio local',
+    texto:
+      'Configuração completa da venda direto pelo Instagram para um pequeno comércio: conta comercial, catálogo sincronizado automaticamente com o site e checkout — do zero até a primeira marcação de produto testada e confirmada em publicação real.',
+  },
+];
+
+interface AppCard {
+  nome: string;
+  categoria: string;
+  descricao: string;
+  publicado: boolean;
+  url?: string;
+}
+
+const apps: AppCard[] = [
+  {
+    nome: 'Hora do Remédio',
+    categoria: 'App Android — controle de remédios',
+    descricao:
+      'App nativo para lembrar horários de medicação e manter uma ficha de saúde simples, 100% local no aparelho.',
+    publicado: false,
+  },
+  {
+    nome: 'Mylock',
+    categoria: 'App — gerenciador de senhas',
+    descricao:
+      'Gerenciador de senhas com criptografia de ponta a ponta e zero acesso do desenvolvedor aos dados guardados.',
+    publicado: false,
+  },
+];
+---
+
+<Layout title="Portfólio | Lonely Dev" theme={theme}>
+  <div class="portfolio-page">
+    <header class="page-header" aria-labelledby="page-title">
+      <nav class="breadcrumb" aria-label="Navegação estrutural">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Portfólio</span>
+      </nav>
+
+      <p class="eyebrow">Prova de Capacidade</p>
+      <h1 id="page-title">Portfólio</h1>
+      <p class="lead">
+        Nenhum cliente real aparece aqui por nome. O que você vê abaixo mostra o tipo de resultado que
+        sai do processo: vídeos e imagens originais produzidos com IA, e casos reais de comission
+        descritos de forma anonimizada.
+      </p>
+    </header>
+
+    <section class="portfolio-section" aria-labelledby="videos-title">
+      <h2 id="videos-title" class="section-title">Vídeos com IA</h2>
+      <p class="section-desc">
+        Quatro peças originais e autorais, sem marca ou cliente real envolvido, cada uma provando uma
+        capacidade técnica diferente.
+      </p>
+      <div class="videos-grid">
+        {videos.map((v) => (
+          <article class="video-card" id={v.id}>
+            <div class:list={['video-wrap', `video-wrap--${v.orientacao}`]}>
+              <video controls preload="none" poster={v.poster}>
+                <source src={v.src} type="video/mp4" />
+              </video>
+            </div>
+            <div class="video-info">
+              <div class="video-info-head">
+                <h3 class="video-titulo">{v.titulo}</h3>
+                <span class="video-formato">{v.formato}</span>
+              </div>
+              <p class="video-desc">{v.descricao}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="portfolio-section" aria-labelledby="imagens-title">
+      <h2 id="imagens-title" class="section-title">Imagens com IA</h2>
+      <p class="section-desc">
+        Amostras de imagem geradas com IA que serviram de base para as peças de vídeo acima.
+      </p>
+      <div class="imagens-grid">
+        {imagens.map((img) => (
+          <figure class="imagem-card">
+            <img src={img.src} alt={img.legenda} loading="lazy" />
+            <figcaption>{img.legenda}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="portfolio-section" aria-labelledby="cases-title">
+      <h2 id="cases-title" class="section-title">Cases de comission</h2>
+      <p class="section-desc">
+        Descritos sem nome de cliente nem dado sensível — o que importa aqui é o problema resolvido, não
+        quem pediu.
+      </p>
+      <div class="cases-grid">
+        {cases.map((c) => (
+          <article class="case-card">
+            <span class="case-pilar">{c.pilar}</span>
+            <h3 class="case-titulo">{c.titulo}</h3>
+            <p class="case-texto">{c.texto}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="portfolio-section" aria-labelledby="apps-title">
+      <h2 id="apps-title" class="section-title">Apps próprios</h2>
+      <p class="section-desc">
+        Produtos construídos, mantidos e publicados pelo próprio Lonely Dev — prova de capacidade em
+        produto de ponta a ponta, não só projeto sob encomenda.
+      </p>
+      <div class="apps-grid">
+        {apps.map((app) => (
+          <article class="app-card">
+            <div class="app-card-head">
+              <h3 class="app-nome">{app.nome}</h3>
+              {app.publicado ? (
+                <span class="app-status app-status--live">Publicado</span>
+              ) : (
+                <span class="app-status app-status--placeholder">🧩 Em breve</span>
+              )}
+            </div>
+            <p class="app-categoria">{app.categoria}</p>
+            <p class="app-desc">{app.descricao}</p>
+            {app.publicado && app.url ? (
+              <a href={app.url} class="btn btn-card" target="_blank" rel="noopener noreferrer">
+                Ver na loja →
+              </a>
+            ) : (
+              <span class="app-link-placeholder">Link chega quando publicar</span>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="cta-banner" aria-labelledby="cta-banner-title">
+      <h2 id="cta-banner-title">Gostou do que viu?</h2>
+      <p>
+        Conte o problema que você precisa resolver. Avalio o escopo e respondo em até 1 dia útil com
+        viabilidade, prazo e preço fechado.
+      </p>
+      <a href="/contato" class="btn btn-primary">Pedir orçamento</a>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .portfolio-page {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .page-header {
+    padding: var(--spacing-lg) 0 var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb [aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .page-header h1 {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    max-width: 65ch;
+    margin-bottom: 0;
+  }
+
+  .portfolio-section {
+    padding-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .portfolio-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .section-desc {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 65ch;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  /* Vídeos */
+  .videos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .video-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .video-wrap {
+    width: 100%;
+    background: #000;
+  }
+
+  .video-wrap--paisagem {
+    aspect-ratio: 16 / 9;
+  }
+
+  .video-wrap--retrato {
+    aspect-ratio: 9 / 16;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .video-wrap video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  .video-info {
+    padding: var(--spacing-md);
+  }
+
+  .video-info-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .video-titulo {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+  }
+
+  .video-formato {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .video-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  /* Imagens */
+  .imagens-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .imagem-card {
+    margin: 0;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .imagem-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .imagem-card figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Cases */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .case-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+  }
+
+  .case-pilar {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .case-titulo {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .case-texto {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  /* Apps */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .app-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .app-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+  }
+
+  .app-nome {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+  }
+
+  .app-status {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .app-status--live {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .app-status--placeholder {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+  }
+
+  .app-categoria {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+  }
+
+  .app-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  .app-link-placeholder {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.65rem 1.2rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-align: center;
+    align-self: flex-start;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    color: var(--color-on-accent);
+  }
+
+  .btn-card {
+    background-color: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .btn-card:hover {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .cta-banner {
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .cta-banner p {
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  @media (min-width: 768px) {
+    .videos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .imagens-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .cases-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .apps-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

@@ -155,13 +155,13 @@ export const homeContent: HomeContent = {
     itens: [
       {
         titulo: 'Vídeo com IA',
-        status: 'Em breve',
-        texto: 'Peças originais em vídeo (institucional, narrativa, comercial fictício). Produção em andamento.',
+        status: 'Disponível',
+        texto: 'Quatro peças originais em vídeo (metamorfose, narrativa com lip-sync, comercial fictício, claymation).',
       },
       {
         titulo: 'Imagem com IA',
-        status: 'Em breve',
-        texto: 'Amostras de ilustração e mockup geradas com IA, pra mostrar o tipo de resultado — sem case de cliente.',
+        status: 'Disponível',
+        texto: 'Amostras de imagem geradas com IA, extraídas da produção dos vídeos acima.',
       },
     ],
     ctaTexto: 'Ver portfólio',

@@ -1,0 +1,11 @@
+---
+import Page from '../../portfolio.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { theme: 'business' } },
+    { params: { theme: 'matrix' } }
+  ];
+}
+---
+<Page theme={Astro.params.theme} />

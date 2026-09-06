@@ -95,7 +95,7 @@ const pacotesFixos = servicos
     <div class="biz-teaser-grid">
       {homeContent.portfolio.itens.map((item) => (
         <article class="biz-teaser-card">
-          <span class="biz-teaser-badge">🧩 {item.status}</span>
+          <span class="biz-teaser-badge">{item.status === 'Disponível' ? '✅' : '🧩'} {item.status}</span>
           <h3 class="biz-teaser-name">{item.titulo}</h3>
           <p class="biz-teaser-desc">{item.texto}</p>
         </article>
