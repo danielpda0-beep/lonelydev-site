@@ -3,8 +3,7 @@
 // Layout Bespoke do Tema Matrix / Minority Report (Cockpit Holográfico)
 // Decisões 10.1, 10.5, 10.9, 10.21
 // Regra 10.9: Todo o conteúdo vem de homeContent e getCollection('servicos')
-import { getCollection } from 'astro:content';
-import { homeContent } from '../../data/homeContent';
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
 
 interface Props {
   theme?: string;
@@ -12,10 +11,7 @@ interface Props {
 
 const { theme = 'matrix' } = Astro.props;
 
-const servicos = await getCollection('servicos');
-const pacotesFixos = servicos
-  .filter((s) => s.data.modelo_preco === 'pacote-fixo')
-  .sort((a, b) => homeContent.pacotesInfo.ordem.indexOf(a.id) - homeContent.pacotesInfo.ordem.indexOf(b.id));
+const pacotesFixos = await getPacotesFixos();
 ---
 
 <div class="theme-matrix-home" data-bespoke-layout="matrix">

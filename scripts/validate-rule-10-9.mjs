@@ -52,6 +52,9 @@ for (const folder of themeFolders) {
 }
 
 // 2. Varrer recursivamente src/themes/ procurando por conteúdo hardcoded
+// e por acesso direto a Content Collections (M16 complemento: data-prep é centralizado)
+const GET_COLLECTION_PATTERN = /getCollection\s*\(/;
+
 function scanDir(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   for (const entry of entries) {
@@ -77,6 +80,12 @@ function scanDir(dir) {
             console.error(`  > Linha: ${trimmed}`);
             hasErrors = true;
           }
+        }
+
+        if (GET_COLLECTION_PATTERN.test(line)) {
+          console.error(`[VIOLAÇÃO REGRA 10.9] ${relativePath}:${index + 1} - Tema chama getCollection direto (data-prep deve vir de src/data/homeContent.ts)`);
+          console.error(`  > Linha: ${trimmed}`);
+          hasErrors = true;
         }
       });
     }

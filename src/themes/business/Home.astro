@@ -2,8 +2,7 @@
 // src/themes/business/Home.astro
 // Layout Bespoke do Tema Business (Sóbrio / Executivo)
 // Regra 10.9: Todo o conteúdo vem de homeContent e getCollection('servicos')
-import { getCollection } from 'astro:content';
-import { homeContent } from '../../data/homeContent';
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
 
 interface Props {
   theme?: string;
@@ -11,10 +10,7 @@ interface Props {
 
 const { theme = 'business' } = Astro.props;
 
-const servicos = await getCollection('servicos');
-const pacotesFixos = servicos
-  .filter((s) => s.data.modelo_preco === 'pacote-fixo')
-  .sort((a, b) => homeContent.pacotesInfo.ordem.indexOf(a.id) - homeContent.pacotesInfo.ordem.indexOf(b.id));
+const pacotesFixos = await getPacotesFixos();
 ---
 
 <div class="theme-business-home" data-bespoke-layout="business">

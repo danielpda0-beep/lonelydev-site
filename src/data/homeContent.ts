@@ -1,6 +1,8 @@
 // src/data/homeContent.ts
 // Regra 10.9: O conteúdo é escrito uma vez só.
 // Os temas em src/themes/ consomem estes dados sem hardcoded copy.
+// Regra 10.9 (M16 complemento): temas NUNCA chamam getCollection direto — só via helpers deste módulo.
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 export interface PilarContent {
   id: string;
@@ -181,3 +183,14 @@ export const homeContent: HomeContent = {
     ctaHref: '/contato',
   },
 };
+
+export async function getPacotesFixos(): Promise<CollectionEntry<'servicos'>[]> {
+  const servicos = await getCollection('servicos');
+  return servicos
+    .filter((s) => s.data.modelo_preco === 'pacote-fixo')
+    .sort((a, b) => homeContent.pacotesInfo.ordem.indexOf(a.id) - homeContent.pacotesInfo.ordem.indexOf(b.id));
+}
+
+export async function getHomeData() {
+  return { homeContent, pacotesFixos: await getPacotesFixos() };
+}

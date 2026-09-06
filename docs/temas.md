@@ -23,7 +23,7 @@ Ao criar uma pasta em `src/themes/<slug>/`, o desenvolvedor deve obrigatoriament
 
 1. **`Home.astro` (Layout Bespoke da Home):**
    - Estrutura visual própria e exclusiva do tema.
-   - **Obrigatório:** Consumir os dados exclusivamente das Content Collections (`getCollection('servicos')`) e do modelo compartilhado `src/data/homeContent.ts`.
+   - **Obrigatório:** Consumir os dados exclusivamente do modelo compartilhado `src/data/homeContent.ts` (ex.: `getPacotesFixos()`, `getHomeData()`). Um tema **NUNCA** chama `getCollection` diretamente — todo acesso a Content Collections passa por um helper central em `src/data/homeContent.ts` (M16 complemento). Se um dado novo for necessário, adicione um helper lá; não importe `astro:content` dentro de `src/themes/`.
 2. **`ThemeCard.astro` (Cartão de Vitrine para `/temas`):**
    - Miniatura/preview visual da estética do tema.
    - Nome, raciocínio de design e botão de navegação para `/t/<slug>/`.
@@ -54,6 +54,7 @@ A **Regra 10.9** é uma lei arquitetural de sobrevivência: **o conteúdo é esc
 - 🚫 **PROIBIDO dados de serviço, preço ou prazo hardcoded:** Valores como `R$ 900`, prazos como `7 dias` e nomes de serviço devem vir unicamente de `getCollection('servicos')`. Se um serviço novo ou alteração de preço entrar na collection, ela aparece nos 18 temas sem ninguém editar 18 arquivos.
 - 🚫 **PROIBIDO quebrar contraste AA:** Todo tema deve atingir razão mínima de contraste de 4.5:1 para texto normal e 3:1 para texto grande.
 - 🚫 **PROIBIDO bibliotecas externas ou chamadas a APIs terceiras:** O tema deve ser autossuficiente e respeitar o orçamento de performance (≤ 60KB CSS, ≤ 40KB JS por tema).
+- 🚫 **PROIBIDO chamar `getCollection` direto dentro de `src/themes/`:** Todo data-prep de Content Collections é feito uma vez só em `src/data/homeContent.ts`, exposto como helper (ex.: `getPacotesFixos()`). Isso evita que os 18 temas dupliquem filtro/ordenação e mantém a regra 10.9 (conteúdo escrito uma vez só) também no nível de código, não só de texto.
 
 ### Validação Automatizada da Regra 10.9
 O repositório conta com um linter automatizado para garantir que a regra 10.9 não seja violada:
@@ -150,7 +151,7 @@ Compartilham a mesma estrutura HTML e os mesmos componentes semânticos. Elas se
 1. Crie a pasta `src/themes/<slug>/`.
 2. Crie `theme.json` com id, nome, tagline, descrição (2-3 linhas) e paleta.
 3. Crie `ThemeCard.astro` consumindo `theme.json` e exibindo o preview do tema.
-4. Crie `Home.astro` construindo o layout bespoke do tema, consumindo `getCollection('servicos')` e `homeContent` (sem texto hardcoded!).
+4. Crie `Home.astro` construindo o layout bespoke do tema, consumindo `homeContent` e os helpers de `src/data/homeContent.ts` (ex.: `getPacotesFixos()`) — nunca `getCollection` direto (sem texto hardcoded!).
 5. Registre o tema em `src/themes/index.ts`.
 6. Adicione o bloco `[data-theme="<slug>"]` em `src/styles/global.css` com todos os tokens obrigatórios.
 7. Adicione a rota em `src/pages/t/[theme]/*` (ou no gerador de caminhos estáticos).
