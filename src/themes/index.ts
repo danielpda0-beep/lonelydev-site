@@ -26,6 +26,22 @@ import EspacoSideralHome from './espaco-sideral/Home.astro';
 import EspacoSideralCard from './espaco-sideral/ThemeCard.astro';
 import espacoSideralMeta from './espaco-sideral/theme.json';
 
+import FisicaQuanticaHome from './fisica-quantica/Home.astro';
+import FisicaQuanticaCard from './fisica-quantica/ThemeCard.astro';
+import fisicaQuanticaMeta from './fisica-quantica/theme.json';
+
+import PapelETintaHome from './papel-e-tinta/Home.astro';
+import PapelETintaCard from './papel-e-tinta/ThemeCard.astro';
+import papelETintaMeta from './papel-e-tinta/theme.json';
+
+import BlueprintHome from './blueprint/Home.astro';
+import BlueprintCard from './blueprint/ThemeCard.astro';
+import blueprintMeta from './blueprint/theme.json';
+
+import NoirHome from './noir/Home.astro';
+import NoirCard from './noir/ThemeCard.astro';
+import noirMeta from './noir/theme.json';
+
 export interface ThemeDefinition {
   id: string;
   name: string;
@@ -70,6 +86,26 @@ export const themes: Record<string, ThemeDefinition> = {
     ...espacoSideralMeta,
     Home: EspacoSideralHome,
     Card: EspacoSideralCard,
+  },
+  'fisica-quantica': {
+    ...fisicaQuanticaMeta,
+    Home: FisicaQuanticaHome,
+    Card: FisicaQuanticaCard,
+  },
+  'papel-e-tinta': {
+    ...papelETintaMeta,
+    Home: PapelETintaHome,
+    Card: PapelETintaCard,
+  },
+  blueprint: {
+    ...blueprintMeta,
+    Home: BlueprintHome,
+    Card: BlueprintCard,
+  },
+  noir: {
+    ...noirMeta,
+    Home: NoirHome,
+    Card: NoirCard,
   },
 };
 

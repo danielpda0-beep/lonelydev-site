@@ -1,0 +1,11 @@
+{
+  "id": "papel-e-tinta",
+  "name": "Papel & Tinta",
+  "tagline": "O único tema claro do catálogo — tipografia editorial, zero efeito",
+  "description": "Branco e preto puros, sem nenhum efeito visual. A Home se organiza como a página de um livro ou ensaio, onde a hierarquia tipográfica é o único recurso de design.",
+  "palette": {
+    "primary": "#2b2118",
+    "background": "#faf8f3",
+    "text": "#1a1613"
+  }
+}

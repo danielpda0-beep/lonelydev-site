@@ -6,6 +6,9 @@ import ArcadeFX from '../components/ArcadeFX.astro';
 import VintageFX from '../components/VintageFX.astro';
 import FundoDoMarFX from '../components/FundoDoMarFX.astro';
 import EspacoSideralFX from '../components/EspacoSideralFX.astro';
+import FisicaQuanticaFX from '../components/FisicaQuanticaFX.astro';
+import BlueprintFX from '../components/BlueprintFX.astro';
+import NoirFX from '../components/NoirFX.astro';
 
 interface Props {
   title?: string;
@@ -55,6 +58,9 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
     <VintageFX />
     <FundoDoMarFX />
     <EspacoSideralFX />
+    <FisicaQuanticaFX />
+    <BlueprintFX />
+    <NoirFX />
     <header class="header">
       <div class="container header-container">
         <div class="header-brand-group">
@@ -106,6 +112,22 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         <a href={`/t/espaco-sideral${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="espaco-sideral">
           <span class="theme-color" style="background: #c084fc; border-color: #05030d;"></span>
           Espaço Sideral
+        </a>
+        <a href={`/t/fisica-quantica${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="fisica-quantica">
+          <span class="theme-color" style="background: #7c6bff; border-color: #0a0a1f;"></span>
+          Física Quântica
+        </a>
+        <a href={`/t/papel-e-tinta${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="papel-e-tinta">
+          <span class="theme-color" style="background: #2b2118; border-color: #faf8f3;"></span>
+          Papel & Tinta
+        </a>
+        <a href={`/t/blueprint${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="blueprint">
+          <span class="theme-color" style="background: #4fc3f7; border-color: #0b2a4a;"></span>
+          Blueprint
+        </a>
+        <a href={`/t/noir${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="noir">
+          <span class="theme-color" style="background: #d4d4d4; border-color: #0a0a0a;"></span>
+          Noir
         </a>
       </div>
     </aside>

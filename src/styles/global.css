@@ -243,6 +243,195 @@
   font-display: swap;
 }
 
+/* ── Tema: Física Quântica (índigo/branco elétrico — M20) ────── */
+[data-theme="fisica-quantica"] {
+  --color-bg: #0a0a1f;
+  --color-bg-secondary: #12103a;
+  --color-text: #eef0ff;
+  --color-text-muted: #9a94d6;
+  --color-accent: #7c6bff;
+  --color-accent-hover: #9686ff;
+  --color-border: #2b2760;
+  --color-on-accent: #0a0a1f;
+
+  --color-success: #34d399;
+  --color-success-text: #a7f3d0;
+  --color-error: #ff4d6d;
+  --color-error-text: #ffb3c4;
+  --color-error-danger: #ff6b8a;
+
+  --color-bg-alt: #0d0c2c;
+  --color-bg-overlay: rgba(124, 107, 255, 0.08);
+  --color-border-subtle: rgba(124, 107, 255, 0.14);
+  --color-danger-bg: #1f0d14;
+  --color-danger-border: #4a2030;
+  --color-danger-text: #ffc9d6;
+  --color-text-secondary: #c3bdf0;
+
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/fisica-quantica/outfit-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/fisica-quantica/outfit-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/fisica-quantica/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Papel & Tinta (editorial branco/preto — M20) ──────── */
+/* Único tema CLARO do catálogo (Decisão 10.7). Zero efeito visual. */
+[data-theme="papel-e-tinta"] {
+  --color-bg: #faf8f3;
+  --color-bg-secondary: #f0ece2;
+  --color-text: #1a1613;
+  --color-text-muted: #5c5348;
+  --color-accent: #2b2118;
+  --color-accent-hover: #4a3c2e;
+  --color-border: #d8d2c4;
+  --color-on-accent: #faf8f3;
+
+  --color-success: #2f5233;
+  --color-success-text: #1c3320;
+  --color-error: #7a1f1f;
+  --color-error-text: #4a1212;
+  --color-error-danger: #5c1717;
+
+  --color-bg-alt: #f4f0e6;
+  --color-bg-overlay: rgba(26, 22, 19, 0.05);
+  --color-border-subtle: rgba(26, 22, 19, 0.1);
+  --color-danger-bg: #f3e6e2;
+  --color-danger-border: #d9b8ae;
+  --color-danger-text: #5c1717;
+  --color-text-secondary: #3a332c;
+
+  --font-sans: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Playfair Display', Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/papel-e-tinta/lora-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('/fonts/papel-e-tinta/playfair-display-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Blueprint (azul-planta/branco — M20) ──────────────── */
+[data-theme="blueprint"] {
+  --color-bg: #0b2a4a;
+  --color-bg-secondary: #123a63;
+  --color-text: #eaf2fb;
+  --color-text-muted: #8fb4d9;
+  --color-accent: #4fc3f7;
+  --color-accent-hover: #7ad9ff;
+  --color-border: #2c5580;
+  --color-on-accent: #0b2a4a;
+
+  --color-success: #4fd1a5;
+  --color-success-text: #b6f5dd;
+  --color-error: #ff6b6b;
+  --color-error-text: #ffc2c2;
+  --color-error-danger: #ff8a8a;
+
+  --color-bg-alt: #0e3154;
+  --color-bg-overlay: rgba(79, 195, 247, 0.08);
+  --color-border-subtle: rgba(79, 195, 247, 0.16);
+  --color-danger-bg: #2a1414;
+  --color-danger-border: #5c2b2b;
+  --color-danger-text: #ffc9c9;
+  --color-text-secondary: #bcd6ee;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/blueprint/inter-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/blueprint/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Noir (P&B alto contraste — M20) ───────────────────── */
+[data-theme="noir"] {
+  --color-bg: #0a0a0a;
+  --color-bg-secondary: #161616;
+  --color-text: #f2f2f2;
+  --color-text-muted: #9a9a9a;
+  --color-accent: #d4d4d4;
+  --color-accent-hover: #ffffff;
+  --color-border: #333333;
+  --color-on-accent: #0a0a0a;
+
+  --color-success: #8a9a8a;
+  --color-success-text: #c9d6c9;
+  --color-error: #b3261e;
+  --color-error-text: #ffb4ab;
+  --color-error-danger: #8c1d18;
+
+  --color-bg-alt: #121212;
+  --color-bg-overlay: rgba(255, 255, 255, 0.06);
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-danger-bg: #1f0e0d;
+  --color-danger-border: #4a2320;
+  --color-danger-text: #ffb4ab;
+  --color-text-secondary: #c2c2c2;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Cinzel', Georgia, serif;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/noir/inter-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cinzel';
+  src: url('/fonts/noir/cinzel-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Cursores customizados por tema (Decisão 10.24) ──────────── */
 [data-theme="arcade"],
 [data-theme="arcade"] a,
@@ -268,11 +457,52 @@
   cursor: url('/cursors/espaco-sideral-orb.svg') 14 14, auto;
 }
 
+[data-theme="fisica-quantica"],
+[data-theme="fisica-quantica"] a,
+[data-theme="fisica-quantica"] button {
+  cursor: url('/cursors/fisica-quantica-particle.svg') 14 14, auto;
+}
+
+/* Blueprint e Noir: fallback estático de cursor (sem JS / reduced-motion).
+   Com JS ativo e sem reduced-motion, BlueprintFX/NoirFX assumem `cursor: none`
+   no <html> e desenham a mira técnica / o facho de luz dinâmicos (função dupla, 10.25). */
+[data-theme="blueprint"],
+[data-theme="blueprint"] a,
+[data-theme="blueprint"] button {
+  cursor: url('/cursors/blueprint-crosshair.svg') 16 16, auto;
+}
+
+[data-theme="noir"],
+[data-theme="noir"] a,
+[data-theme="noir"] button {
+  cursor: url('/cursors/noir-light.svg') 16 16, auto;
+}
+
+html.ld-cursor-fx-active[data-theme="blueprint"],
+html.ld-cursor-fx-active[data-theme="blueprint"] a,
+html.ld-cursor-fx-active[data-theme="blueprint"] button {
+  cursor: none;
+}
+
+html.ld-cursor-fx-active[data-theme="noir"],
+html.ld-cursor-fx-active[data-theme="noir"] a,
+html.ld-cursor-fx-active[data-theme="noir"] button {
+  cursor: none;
+}
+
 @media (pointer: coarse) {
   [data-theme="arcade"],
   [data-theme="vintage"],
   [data-theme="fundo-do-mar"],
-  [data-theme="espaco-sideral"] {
+  [data-theme="espaco-sideral"],
+  [data-theme="fisica-quantica"],
+  [data-theme="blueprint"],
+  [data-theme="noir"] {
+    cursor: auto;
+  }
+
+  html.ld-cursor-fx-active[data-theme="blueprint"],
+  html.ld-cursor-fx-active[data-theme="noir"] {
     cursor: auto;
   }
 }

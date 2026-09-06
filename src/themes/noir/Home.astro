@@ -1,0 +1,483 @@
+---
+// src/themes/noir/Home.astro
+// Layout Bespoke do Tema Noir (dossiê de caso, cinematografia P&B de alto contraste)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'noir' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-nr-home" data-bespoke-layout="noir">
+  <!-- Cena 01: abertura do dossiê -->
+  <section class="nr-scene nr-scene-hero" aria-labelledby="nr-hero-tagline">
+    <p class="nr-slate">CENA 01 · {homeContent.hero.eyebrow}</p>
+    <h1 id="nr-hero-tagline" class="nr-title">{homeContent.hero.tagline}</h1>
+    <p class="nr-lead">{homeContent.hero.lead}</p>
+    <a class="nr-btn" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+  </section>
+
+  <!-- Carimbos de evidência (telemetria) -->
+  <section class="nr-stamps" aria-label="Telemetria do modelo de trabalho">
+    <span class="nr-stamp">{homeContent.telemetria.escopo}</span>
+    <span class="nr-stamp">{homeContent.telemetria.preco}</span>
+    <span class="nr-stamp">{homeContent.telemetria.prazo}</span>
+    <span class="nr-stamp">{homeContent.telemetria.semMensalidade}</span>
+    <span class="nr-stamp">{homeContent.telemetria.semLockin}</span>
+  </section>
+
+  <!-- Arquivo de casos (pilares) -->
+  <section class="nr-section" aria-labelledby="nr-cases-title">
+    <p class="nr-section-tag">CENA 02 · ARQUIVO DE CASOS</p>
+    <h2 id="nr-cases-title" class="nr-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="nr-cases-grid">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['nr-case', { 'nr-case-primary': pilar.destaque }]} href={pilar.link}>
+          <span class="nr-case-id">CASO Nº {String(idx + 1).padStart(2, '0')}</span>
+          {pilar.badge && <span class="nr-badge">{pilar.badge}</span>}
+          <h3 class="nr-case-name">{pilar.titulo}</h3>
+          <p class="nr-case-desc">{pilar.resumo}</p>
+          <span class="nr-case-link">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Linha do tempo do caso (como funciona) -->
+  <section class="nr-section" aria-labelledby="nr-timeline-title">
+    <p class="nr-section-tag">CENA 03 · LINHA DO TEMPO</p>
+    <h2 id="nr-timeline-title" class="nr-section-title">{homeContent.passosTitulo}</h2>
+    <div class="nr-timeline">
+      {homeContent.passos.map((passo) => (
+        <div class="nr-timeline-step">
+          <span class="nr-timeline-num">{passo.n}</span>
+          <div>
+            <h3 class="nr-timeline-heading">{passo.titulo}</h3>
+            <p class="nr-timeline-text">{passo.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="nr-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Cofre de evidências (pacotes) -->
+  <section class="nr-section" aria-labelledby="nr-vault-title">
+    <p class="nr-section-tag">CENA 04 · COFRE DE EVIDÊNCIAS</p>
+    <h2 id="nr-vault-title" class="nr-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="nr-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="nr-vault-grid">
+      {pacotesFixos.map((pacote, idx) => (
+        <article class="nr-file">
+          <span class="nr-file-id">EXIBIT {String.fromCharCode(65 + idx)}</span>
+          <h3 class="nr-file-name">{pacote.data.nome}</h3>
+          <p class="nr-file-desc">{pacote.data.resumo}</p>
+          <p class="nr-file-value">{pacote.data.valor} · {pacote.data.prazo_tipico}</p>
+          <a class="nr-btn nr-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Sala de exposição (portfólio) -->
+  <section class="nr-section" aria-labelledby="nr-exhibit-title">
+    <p class="nr-section-tag">CENA 05 · SALA DE EXPOSIÇÃO</p>
+    <h2 id="nr-exhibit-title" class="nr-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="nr-exhibit-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="nr-exhibit">
+          <span class="nr-exhibit-status">{item.status}</span>
+          <h3 class="nr-exhibit-title">{item.titulo}</h3>
+          <p class="nr-exhibit-text">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="nr-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="nr-section" aria-labelledby="nr-temas-title">
+    <p class="nr-section-tag">CENA 06 · OUTROS CORTES</p>
+    <h2 id="nr-temas-title" class="nr-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="nr-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="nr-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Fade to black (CTA final) -->
+  <section class="nr-fade" aria-labelledby="nr-cta-title">
+    <p class="nr-fade-tag">FADE TO BLACK</p>
+    <h2 id="nr-cta-title" class="nr-fade-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="nr-fade-text">{homeContent.ctaFinal.texto}</p>
+    <a class="nr-btn nr-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-nr-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 3;
+  }
+
+  .nr-scene-hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+    max-width: 66ch;
+    padding: var(--spacing-lg, 2rem);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .nr-slate {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .nr-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    line-height: 1.15;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .nr-lead {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .nr-btn {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    padding: 0.85rem 1.75rem;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    border: 1px solid var(--color-accent);
+    transition: all 0.2s ease;
+  }
+
+  .nr-btn:hover {
+    background: var(--color-accent-hover);
+  }
+
+  .nr-btn-ghost {
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    font-size: 0.8rem;
+    padding: 0.55rem 1.1rem;
+  }
+
+  .nr-btn-ghost:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .nr-btn-lg {
+    font-size: 1.05rem;
+    padding: 1rem 2.2rem;
+  }
+
+  .nr-stamps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nr-stamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    padding: 0.3rem 0.7rem;
+  }
+
+  .nr-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .nr-section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .nr-section-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.7rem;
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+
+  .nr-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .nr-cases-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    .nr-cases-grid { grid-template-columns: repeat(3, 1fr); }
+    .nr-case-primary { grid-column: 1 / -1; }
+  }
+
+  .nr-case {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: background 0.2s ease;
+  }
+
+  .nr-case:hover {
+    background: var(--color-bg-secondary);
+  }
+
+  .nr-case-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .nr-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .nr-case-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .nr-case-desc {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .nr-case-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .nr-timeline {
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--color-border);
+  }
+
+  .nr-timeline-step {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+    padding: var(--spacing-md, 1.5rem) 0 var(--spacing-md, 1.5rem) var(--spacing-lg, 2rem);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .nr-timeline-step:last-child {
+    border-bottom: none;
+  }
+
+  .nr-timeline-num {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    min-width: 2.5rem;
+  }
+
+  .nr-timeline-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  .nr-timeline-text {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .nr-link {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .nr-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .nr-vault-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .nr-vault-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .nr-vault-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .nr-file {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .nr-file-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  .nr-file-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .nr-file-desc {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .nr-file-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-accent);
+  }
+
+  .nr-exhibit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .nr-exhibit-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .nr-exhibit {
+    padding: var(--spacing-lg, 2rem);
+    border: 1px solid var(--color-border);
+  }
+
+  .nr-exhibit-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .nr-exhibit-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .nr-exhibit-text {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .nr-fade {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-top: 3px solid var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .nr-fade-tag {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .nr-fade-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+
+  .nr-fade-text {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

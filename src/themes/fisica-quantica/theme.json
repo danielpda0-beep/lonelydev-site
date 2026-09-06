@@ -1,0 +1,11 @@
+{
+  "id": "fisica-quantica",
+  "name": "Física Quântica",
+  "tagline": "Painéis de instrumentação em índigo e branco elétrico",
+  "description": "Índigo profundo e branco elétrico, com funções de onda desenhadas ao fundo e partículas que colapsam num ponto ao passar perto do cursor. A Home vira uma bancada de instrumentação de laboratório.",
+  "palette": {
+    "primary": "#7c6bff",
+    "background": "#0a0a1f",
+    "text": "#eef0ff"
+  }
+}

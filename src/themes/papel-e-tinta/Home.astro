@@ -1,0 +1,439 @@
+---
+// src/themes/papel-e-tinta/Home.astro
+// Layout Bespoke do Tema Papel & Tinta (página de livro/ensaio editorial)
+// Único tema claro do catálogo (Decisão 10.7) — zero efeito visual, hierarquia tipográfica pura.
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'papel-e-tinta' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<article class="theme-pt-home" data-bespoke-layout="papel-e-tinta">
+  <!-- Abertura do ensaio -->
+  <header class="pt-masthead" aria-labelledby="pt-hero-tagline">
+    <p class="pt-kicker">{homeContent.hero.eyebrow}</p>
+    <h1 id="pt-hero-tagline" class="pt-title">{homeContent.hero.tagline}</h1>
+    <p class="pt-lead">{homeContent.hero.lead}</p>
+    <a class="pt-link-cta" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto} →</a>
+  </header>
+
+  <!-- Nota de rodapé de abertura (telemetria) -->
+  <p class="pt-note">
+    {homeContent.telemetria.escopo} — {homeContent.telemetria.preco} — {homeContent.telemetria.prazo} —{' '}
+    {homeContent.telemetria.semMensalidade} — {homeContent.telemetria.semLockin}.
+  </p>
+
+  <hr class="pt-rule" />
+
+  <!-- Sumário (pilares) -->
+  <section class="pt-section" aria-labelledby="pt-pilares-title">
+    <h2 id="pt-pilares-title" class="pt-section-title">{homeContent.pilaresTitulo}</h2>
+    <ol class="pt-toc">
+      {homeContent.pilares.map((pilar, idx) => (
+        <li class="pt-toc-item">
+          <a href={pilar.link} class="pt-toc-link">
+            <span class="pt-toc-num">{String(idx + 1).padStart(2, '0')}</span>
+            <span class="pt-toc-body">
+              <span class="pt-toc-name">
+                {pilar.titulo}
+                {pilar.badge && <em class="pt-toc-badge"> — {pilar.badge}</em>}
+              </span>
+              <span class="pt-toc-desc">{pilar.resumo}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <a href="/servicos" class="pt-link-cta">{homeContent.pilaresCta} →</a>
+  </section>
+
+  <hr class="pt-rule" />
+
+  <!-- Como funciona -->
+  <section class="pt-section" aria-labelledby="pt-passos-title">
+    <h2 id="pt-passos-title" class="pt-section-title">{homeContent.passosTitulo}</h2>
+    <ol class="pt-steps">
+      {homeContent.passos.map((passo) => (
+        <li class="pt-step">
+          <span class="pt-step-num">{passo.n}</span>
+          <div>
+            <h3 class="pt-step-heading">{passo.titulo}</h3>
+            <p class="pt-step-text">{passo.texto}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <a href={homeContent.passosLinkHref} class="pt-link-cta">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <hr class="pt-rule" />
+
+  <!-- Pacotes de preço fixo -->
+  <section class="pt-section" aria-labelledby="pt-pacotes-title">
+    <h2 id="pt-pacotes-title" class="pt-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="pt-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <ul class="pt-price-list">
+      {pacotesFixos.map((pacote) => (
+        <li class="pt-price-item">
+          <div class="pt-price-head">
+            <h3 class="pt-price-name">{pacote.data.nome}</h3>
+            <span class="pt-price-value">{pacote.data.valor}</span>
+          </div>
+          <p class="pt-price-desc">{pacote.data.resumo} <span class="pt-price-time">({pacote.data.prazo_tipico})</span></p>
+          <a class="pt-link-cta pt-link-small" href="/contato">{pacote.data.cta} →</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <hr class="pt-rule" />
+
+  <!-- Portfólio -->
+  <section class="pt-section" aria-labelledby="pt-portfolio-title">
+    <h2 id="pt-portfolio-title" class="pt-section-title">{homeContent.portfolio.titulo}</h2>
+    <ul class="pt-citations">
+      {homeContent.portfolio.itens.map((item) => (
+        <li class="pt-citation">
+          <span class="pt-citation-status">{item.status}.</span>
+          <strong class="pt-citation-title">{item.titulo}.</strong>
+          <span class="pt-citation-text">{item.texto}</span>
+        </li>
+      ))}
+    </ul>
+    <a href={homeContent.portfolio.ctaHref} class="pt-link-cta">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <hr class="pt-rule" />
+
+  <!-- Vitrine de temas -->
+  <section class="pt-section" aria-labelledby="pt-temas-title">
+    <h2 id="pt-temas-title" class="pt-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="pt-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="pt-link-cta">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <hr class="pt-rule" />
+
+  <!-- Encerramento -->
+  <footer class="pt-closing" aria-labelledby="pt-cta-title">
+    <h2 id="pt-cta-title" class="pt-closing-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="pt-closing-text">{homeContent.ctaFinal.texto}</p>
+    <a class="pt-link-cta pt-link-large" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto} →</a>
+    <p class="pt-colophon">— fim —</p>
+  </footer>
+</article>
+
+<style>
+  .theme-pt-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl, 3rem);
+    max-width: 68ch;
+    margin: 0 auto;
+  }
+
+  .pt-masthead {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .pt-kicker {
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .pt-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5vw, 3.2rem);
+    line-height: 1.15;
+    color: var(--color-text);
+  }
+
+  .pt-lead {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  .pt-lead::first-letter {
+    font-family: var(--font-mono);
+    font-size: 3.2rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    padding: 0.1rem 0.5rem 0 0;
+    color: var(--color-accent);
+  }
+
+  .pt-note {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    max-width: 68ch;
+  }
+
+  .pt-rule {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 0;
+  }
+
+  .pt-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .pt-section-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--color-text);
+  }
+
+  .pt-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+  }
+
+  /* Sumário / Pilares */
+  .pt-toc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+    list-style: none;
+  }
+
+  .pt-toc-item {
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  .pt-toc-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .pt-toc-link {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .pt-toc-num {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+    min-width: 2rem;
+  }
+
+  .pt-toc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .pt-toc-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .pt-toc-name:hover {
+    text-decoration: underline;
+  }
+
+  .pt-toc-badge {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .pt-toc-desc {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .pt-link-cta {
+    align-self: flex-start;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .pt-link-cta:hover {
+    color: var(--color-accent);
+  }
+
+  .pt-link-small {
+    font-size: 0.95rem;
+  }
+
+  .pt-link-large {
+    font-size: 1.2rem;
+  }
+
+  /* Como funciona */
+  .pt-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+    list-style: none;
+  }
+
+  .pt-step {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .pt-step-num {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    min-width: 2.5rem;
+  }
+
+  .pt-step-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .pt-step-text {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* Pacotes */
+  .pt-price-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+    list-style: none;
+  }
+
+  .pt-price-item {
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  .pt-price-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .pt-price-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--spacing-sm, 1rem);
+    flex-wrap: wrap;
+  }
+
+  .pt-price-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .pt-price-value {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  .pt-price-desc {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0.35rem 0 0.6rem;
+  }
+
+  .pt-price-time {
+    font-style: italic;
+  }
+
+  /* Portfólio */
+  .pt-citations {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    list-style: none;
+  }
+
+  .pt-citation {
+    font-family: var(--font-sans);
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--color-text);
+  }
+
+  .pt-citation-status {
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+
+  .pt-citation-text {
+    color: var(--color-text-muted);
+  }
+
+  /* Encerramento */
+  .pt-closing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--spacing-md, 1.5rem);
+    padding: var(--spacing-xl, 3rem) 0;
+  }
+
+  .pt-closing-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--color-text);
+  }
+
+  .pt-closing-text {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+
+  .pt-colophon {
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+  }
+</style>

@@ -1,0 +1,541 @@
+---
+// src/themes/blueprint/Home.astro
+// Layout Bespoke do Tema Blueprint (folhas de desenho técnico)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'blueprint' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-bp-home" data-bespoke-layout="blueprint">
+  <!-- Folha 01: Visão geral -->
+  <section class="bp-sheet bp-sheet-hero" aria-labelledby="bp-hero-tagline">
+    <div class="bp-sheet-frame">
+      <p class="bp-sheet-label">FOLHA 01 / VISÃO GERAL — {homeContent.hero.eyebrow}</p>
+      <h1 id="bp-hero-tagline" class="bp-title">{homeContent.hero.tagline}</h1>
+      <p class="bp-lead">{homeContent.hero.lead}</p>
+      <a class="bp-btn" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+      <div class="bp-titleblock">
+        <span>ESC. 1:1</span>
+        <span>REV. A</span>
+        <span>PROJ. LONELY-DEV</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cotas gerais (telemetria) -->
+  <section class="bp-dims" aria-label="Telemetria do modelo de trabalho">
+    <div class="bp-dim"><span class="bp-dim-tick">⊢</span>{homeContent.telemetria.escopo}</div>
+    <div class="bp-dim"><span class="bp-dim-tick">⊢</span>{homeContent.telemetria.preco}</div>
+    <div class="bp-dim"><span class="bp-dim-tick">⊢</span>{homeContent.telemetria.prazo}</div>
+    <div class="bp-dim"><span class="bp-dim-tick">⊢</span>{homeContent.telemetria.semMensalidade}</div>
+    <div class="bp-dim"><span class="bp-dim-tick">⊢</span>{homeContent.telemetria.semLockin}</div>
+  </section>
+
+  <!-- Pranchas (pilares) -->
+  <section class="bp-section" aria-labelledby="bp-plates-title">
+    <p class="bp-section-tag">FOLHA 02 / PRANCHAS</p>
+    <h2 id="bp-plates-title" class="bp-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="bp-plates-grid">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['bp-plate', { 'bp-plate-primary': pilar.destaque }]} href={pilar.link}>
+          <span class="bp-plate-id">PRANCHA {String(idx + 1).padStart(2, '0')}</span>
+          {pilar.badge && <span class="bp-badge">{pilar.badge}</span>}
+          <h3 class="bp-plate-name">{pilar.titulo}</h3>
+          <p class="bp-plate-desc">{pilar.resumo}</p>
+          <span class="bp-plate-link">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Procedimento (como funciona) -->
+  <section class="bp-section" aria-labelledby="bp-procedure-title">
+    <p class="bp-section-tag">FOLHA 03 / PROCEDIMENTO</p>
+    <h2 id="bp-procedure-title" class="bp-section-title">{homeContent.passosTitulo}</h2>
+    <div class="bp-procedure">
+      {homeContent.passos.map((passo, idx) => (
+        <div class="bp-procedure-step">
+          <span class="bp-procedure-num">{passo.n}</span>
+          <div class="bp-procedure-body">
+            <h3 class="bp-procedure-heading">{passo.titulo}</h3>
+            <p class="bp-procedure-text">{passo.texto}</p>
+          </div>
+          {idx < homeContent.passos.length - 1 && <span class="bp-procedure-connector" aria-hidden="true"></span>}
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="bp-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Lista de materiais (pacotes) -->
+  <section class="bp-section" aria-labelledby="bp-bom-title">
+    <p class="bp-section-tag">FOLHA 04 / LISTA DE MATERIAIS</p>
+    <h2 id="bp-bom-title" class="bp-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="bp-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="bp-bom-table">
+      <div class="bp-bom-head">
+        <span>ITEM</span>
+        <span>DESCRIÇÃO</span>
+        <span>VALOR / PRAZO</span>
+        <span></span>
+      </div>
+      {pacotesFixos.map((pacote, idx) => (
+        <div class="bp-bom-row">
+          <span class="bp-bom-item">{String(idx + 1).padStart(2, '0')}</span>
+          <span class="bp-bom-desc">
+            <strong>{pacote.data.nome}</strong>
+            <span class="bp-bom-resumo">{pacote.data.resumo}</span>
+          </span>
+          <span class="bp-bom-value">{pacote.data.valor} · {pacote.data.prazo_tipico}</span>
+          <a class="bp-btn bp-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Registro as-built (portfólio) -->
+  <section class="bp-section" aria-labelledby="bp-asbuilt-title">
+    <p class="bp-section-tag">FOLHA 05 / AS-BUILT</p>
+    <h2 id="bp-asbuilt-title" class="bp-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="bp-asbuilt-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="bp-asbuilt">
+          <span class="bp-asbuilt-status">[{item.status}]</span>
+          <h3 class="bp-asbuilt-title">{item.titulo}</h3>
+          <p class="bp-asbuilt-text">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="bp-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="bp-section" aria-labelledby="bp-temas-title">
+    <p class="bp-section-tag">FOLHA 06 / VARIANTES</p>
+    <h2 id="bp-temas-title" class="bp-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="bp-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="bp-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Carimbo de aprovação (CTA final) -->
+  <section class="bp-stamp" aria-labelledby="bp-cta-title">
+    <p class="bp-stamp-tag">APROVADO PARA CONTATO</p>
+    <h2 id="bp-cta-title" class="bp-stamp-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="bp-stamp-text">{homeContent.ctaFinal.texto}</p>
+    <a class="bp-btn bp-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-bp-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .bp-sheet-frame {
+    position: relative;
+    padding: var(--spacing-lg, 2rem);
+    border: 1px solid var(--color-border);
+    max-width: 68ch;
+  }
+
+  .bp-sheet-frame::before,
+  .bp-sheet-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--color-accent);
+    border-style: solid;
+  }
+
+  .bp-sheet-frame::before {
+    top: -1px;
+    left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .bp-sheet-frame::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .bp-sheet-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .bp-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 5vw, 3.1rem);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm, 1rem);
+  }
+
+  .bp-lead {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md, 1.5rem);
+    max-width: 50ch;
+  }
+
+  .bp-btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    border: 1px solid var(--color-accent);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .bp-btn:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 0 18px rgba(79, 195, 247, 0.4);
+  }
+
+  .bp-btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .bp-btn-ghost:hover {
+    background: var(--color-bg-overlay);
+  }
+
+  .bp-btn-lg {
+    font-size: 1.05rem;
+    padding: 1rem 2rem;
+  }
+
+  .bp-titleblock {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+    margin-top: var(--spacing-lg, 2rem);
+    padding-top: var(--spacing-sm, 1rem);
+    border-top: 1px dashed var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    flex-wrap: wrap;
+  }
+
+  .bp-dims {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem 2rem;
+    padding: 1rem 0;
+    border-top: 1px dashed var(--color-border);
+    border-bottom: 1px dashed var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    .bp-dims { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .bp-dim-tick {
+    color: var(--color-accent);
+    margin-right: 0.4rem;
+  }
+
+  .bp-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .bp-section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+  }
+
+  .bp-section-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--color-text);
+  }
+
+  .bp-section-sub {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .bp-plates-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .bp-plates-grid { grid-template-columns: repeat(3, 1fr); }
+    .bp-plate-primary { grid-column: 1 / -1; }
+  }
+
+  .bp-plate {
+    position: relative;
+    padding: var(--spacing-lg, 2rem);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .bp-plate::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px dashed var(--color-border-subtle);
+    pointer-events: none;
+  }
+
+  .bp-plate:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+  }
+
+  .bp-plate-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .bp-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .bp-plate-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .bp-plate-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .bp-plate-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .bp-procedure {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bp-procedure-step {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+    position: relative;
+    padding-bottom: var(--spacing-md, 1.5rem);
+  }
+
+  .bp-procedure-connector {
+    position: absolute;
+    left: 1.15rem;
+    top: 2.2rem;
+    bottom: 0;
+    width: 0;
+    border-left: 1px dashed var(--color-border);
+  }
+
+  .bp-procedure-num {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    min-width: 2.5rem;
+  }
+
+  .bp-procedure-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .bp-procedure-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .bp-link {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .bp-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .bp-bom-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+  }
+
+  .bp-bom-head {
+    display: none;
+    padding: 0.6rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (min-width: 900px) {
+    .bp-bom-head {
+      display: grid;
+      grid-template-columns: 3rem 1fr 12rem 8rem;
+      gap: 1rem;
+    }
+  }
+
+  .bp-bom-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    align-items: center;
+  }
+
+  .bp-bom-row:last-child {
+    border-bottom: none;
+  }
+
+  @media (min-width: 900px) {
+    .bp-bom-row { grid-template-columns: 3rem 1fr 12rem 8rem; gap: 1rem; }
+  }
+
+  .bp-bom-item {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+  }
+
+  .bp-bom-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--color-text);
+  }
+
+  .bp-bom-resumo {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .bp-bom-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .bp-asbuilt-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .bp-asbuilt-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .bp-asbuilt {
+    padding: var(--spacing-lg, 2rem);
+    border: 1px solid var(--color-border);
+  }
+
+  .bp-asbuilt-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .bp-asbuilt-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .bp-asbuilt-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .bp-stamp {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    border: 2px solid var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .bp-stamp-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--color-accent);
+  }
+
+  .bp-stamp-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    color: var(--color-text);
+  }
+
+  .bp-stamp-text {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

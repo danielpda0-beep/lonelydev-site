@@ -1,0 +1,530 @@
+---
+// src/themes/fisica-quantica/Home.astro
+// Layout Bespoke do Tema Física Quântica (bancada de instrumentação de laboratório)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'fisica-quantica' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-fq-home" data-bespoke-layout="fisica-quantica">
+  <!-- Console principal -->
+  <section class="fq-console" aria-labelledby="fq-hero-tagline">
+    <p class="fq-signal">SINAL:// {homeContent.hero.eyebrow}</p>
+    <h1 id="fq-hero-tagline" class="fq-title">{homeContent.hero.tagline}</h1>
+    <p class="fq-lead">{homeContent.hero.lead}</p>
+    <a class="fq-btn" href={homeContent.hero.ctaHref}>
+      <span class="fq-btn-led" aria-hidden="true"></span>
+      {homeContent.hero.ctaTexto}
+    </a>
+  </section>
+
+  <!-- Painel de mostradores (telemetria) -->
+  <section class="fq-dials" aria-label="Telemetria do modelo de trabalho">
+    <div class="fq-dial"><span class="fq-dial-label">ESCOPO</span><span class="fq-dial-value">{homeContent.telemetria.escopo}</span></div>
+    <div class="fq-dial"><span class="fq-dial-label">PREÇO</span><span class="fq-dial-value">{homeContent.telemetria.preco}</span></div>
+    <div class="fq-dial"><span class="fq-dial-label">PRAZO</span><span class="fq-dial-value">{homeContent.telemetria.prazo}</span></div>
+    <div class="fq-dial"><span class="fq-dial-label">MENSALIDADE</span><span class="fq-dial-value">{homeContent.telemetria.semMensalidade}</span></div>
+    <div class="fq-dial"><span class="fq-dial-label">LOCK-IN</span><span class="fq-dial-value">{homeContent.telemetria.semLockin}</span></div>
+  </section>
+
+  <!-- Módulos (pilares) -->
+  <section class="fq-section" aria-labelledby="fq-modules-title">
+    <p class="fq-section-tag">BANCADA 01 · MÓDULOS</p>
+    <h2 id="fq-modules-title" class="fq-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="fq-modules-grid">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['fq-module', { 'fq-module-primary': pilar.destaque }]} href={pilar.link}>
+          <div class="fq-module-head">
+            <span class="fq-module-id">MOD_{String(idx + 1).padStart(2, '0')}</span>
+            {pilar.badge && <span class="fq-badge">{pilar.badge}</span>}
+          </div>
+          <span class="fq-waveform" aria-hidden="true"></span>
+          <h3 class="fq-module-name">{pilar.titulo}</h3>
+          <p class="fq-module-desc">{pilar.resumo}</p>
+          <span class="fq-module-link">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Protocolo de execução (como funciona) -->
+  <section class="fq-section" aria-labelledby="fq-protocol-title">
+    <p class="fq-section-tag">BANCADA 02 · PROTOCOLO</p>
+    <h2 id="fq-protocol-title" class="fq-section-title">{homeContent.passosTitulo}</h2>
+    <div class="fq-protocol">
+      {homeContent.passos.map((passo) => (
+        <div class="fq-protocol-step">
+          <span class="fq-protocol-num">{passo.n}</span>
+          <div class="fq-protocol-body">
+            <h3 class="fq-protocol-heading">{passo.titulo}</h3>
+            <p class="fq-protocol-text">{passo.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="fq-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Bancada de entrega (pacotes fixos) -->
+  <section class="fq-section" aria-labelledby="fq-bench-title">
+    <p class="fq-section-tag">BANCADA 03 · ENTREGA</p>
+    <h2 id="fq-bench-title" class="fq-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="fq-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="fq-bench-grid">
+      {pacotesFixos.map((pacote, idx) => (
+        <article class="fq-spec">
+          <span class="fq-spec-id">SPEC_0{idx + 1}</span>
+          <h3 class="fq-spec-name">{pacote.data.nome}</h3>
+          <p class="fq-spec-desc">{pacote.data.resumo}</p>
+          <p class="fq-spec-value">{pacote.data.valor} · {pacote.data.prazo_tipico}</p>
+          <a class="fq-btn fq-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Registros (portfólio) -->
+  <section class="fq-section" aria-labelledby="fq-log-title">
+    <p class="fq-section-tag">BANCADA 04 · REGISTROS</p>
+    <h2 id="fq-log-title" class="fq-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="fq-log-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="fq-log-entry">
+          <span class="fq-log-status">{item.status}</span>
+          <h3 class="fq-log-title">{item.titulo}</h3>
+          <p class="fq-log-text">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="fq-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="fq-section" aria-labelledby="fq-temas-title">
+    <p class="fq-section-tag">BANCADA 05 · VARIANTES</p>
+    <h2 id="fq-temas-title" class="fq-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="fq-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="fq-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Transmissão final -->
+  <section class="fq-transmission" aria-labelledby="fq-cta-title">
+    <p class="fq-transmission-tag">CANAL ABERTO</p>
+    <h2 id="fq-cta-title" class="fq-transmission-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="fq-transmission-text">{homeContent.ctaFinal.texto}</p>
+    <a class="fq-btn fq-btn-lg" href={homeContent.ctaFinal.ctaHref}>
+      <span class="fq-btn-led" aria-hidden="true"></span>
+      {homeContent.ctaFinal.ctaTexto}
+    </a>
+  </section>
+</div>
+
+<style>
+  .theme-fq-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .fq-console {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+    max-width: 66ch;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .fq-signal {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+  }
+
+  .fq-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 5vw, 3.1rem);
+    color: var(--color-text);
+  }
+
+  .fq-lead {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .fq-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.85rem 1.6rem;
+    border-radius: 4px;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .fq-btn:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 0 20px rgba(124, 107, 255, 0.4);
+  }
+
+  .fq-btn-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-on-accent);
+    box-shadow: 0 0 6px currentColor;
+  }
+
+  .fq-btn-ghost {
+    background: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .fq-btn-ghost .fq-btn-led { display: none; }
+
+  .fq-btn-ghost:hover {
+    background: var(--color-bg-overlay);
+  }
+
+  .fq-btn-lg {
+    font-size: 1.05rem;
+    padding: 1rem 2.1rem;
+  }
+
+  .fq-dials {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .fq-dials { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  .fq-dial {
+    background: var(--color-bg-secondary);
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .fq-dial-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+  }
+
+  .fq-dial-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .fq-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .fq-section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: var(--color-accent);
+  }
+
+  .fq-section-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--color-text);
+  }
+
+  .fq-section-sub {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .fq-modules-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .fq-modules-grid { grid-template-columns: repeat(3, 1fr); }
+    .fq-module-primary { grid-column: 1 / -1; }
+  }
+
+  .fq-module {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .fq-module:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 0 22px rgba(124, 107, 255, 0.2);
+  }
+
+  .fq-module-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .fq-module-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .fq-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .fq-waveform {
+    display: block;
+    height: 18px;
+    background: repeating-linear-gradient(
+      to right,
+      var(--color-accent) 0 2px,
+      transparent 2px 6px
+    );
+    opacity: 0.5;
+    clip-path: polygon(0 50%, 5% 20%, 10% 80%, 15% 10%, 20% 90%, 25% 40%, 30% 60%, 35% 15%, 40% 85%, 45% 45%, 50% 55%, 55% 25%, 60% 75%, 65% 35%, 70% 65%, 75% 20%, 80% 80%, 85% 40%, 90% 60%, 95% 30%, 100% 50%, 100% 100%, 0 100%);
+  }
+
+  .fq-module-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .fq-module-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .fq-module-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .fq-protocol {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 2px solid var(--color-border);
+    padding-left: var(--spacing-lg, 2rem);
+  }
+
+  .fq-protocol-step {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+    padding: var(--spacing-md, 1.5rem) 0;
+    position: relative;
+  }
+
+  .fq-protocol-step::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--spacing-lg, 2rem) - 5px);
+    top: 1.6rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-accent);
+  }
+
+  .fq-protocol-num {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    min-width: 2.5rem;
+  }
+
+  .fq-protocol-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .fq-protocol-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .fq-link {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .fq-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .fq-bench-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .fq-bench-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .fq-bench-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .fq-spec {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .fq-spec-id {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .fq-spec-name {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .fq-spec-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .fq-spec-value {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-accent);
+  }
+
+  .fq-log-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .fq-log-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .fq-log-entry {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-left: 2px solid var(--color-accent);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .fq-log-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .fq-log-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .fq-log-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .fq-transmission {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .fq-transmission-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--color-accent);
+  }
+
+  .fq-transmission-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    color: var(--color-text);
+  }
+
+  .fq-transmission-text {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

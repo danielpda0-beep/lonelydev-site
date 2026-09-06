@@ -1,8 +1,9 @@
-# Créditos de Fontes e Licenças (M19)
+# Créditos de Fontes e Licenças (M19 + M20)
 
-Este documento registra a procedência, autoria e licenças das fontes auto-hospedadas dos 4 temas
-entregues no M19 (`arcade`, `vintage`, `fundo-do-mar`, `espaco-sideral`), em cumprimento à
-**Decisão 10.18** de `Site Lonely Dev - Temas & Cinematografia.md` e à seção 2.6 de `docs/temas.md`.
+Este documento registra a procedência, autoria e licenças das fontes auto-hospedadas dos temas
+entregues no M19 (`arcade`, `vintage`, `fundo-do-mar`, `espaco-sideral`) e no M20 (`fisica-quantica`,
+`papel-e-tinta`, `blueprint`, `noir`), em cumprimento à **Decisão 10.18** de
+`Site Lonely Dev - Temas & Cinematografia.md` e à seção 2.6 de `docs/temas.md`.
 
 ## 1. Princípios
 
@@ -25,6 +26,15 @@ entregues no M19 (`arcade`, `vintage`, `fundo-do-mar`, `espaco-sideral`), em cum
 | `fundo-do-mar` | `public/fonts/fundo-do-mar/inter-latin-400-normal.woff2` | Inter | Rasmus Andersson | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo |
 | `espaco-sideral` | `public/fonts/espaco-sideral/orbitron-latin-700-normal.woff2` | Orbitron | Matt McInerney | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de destaque (headings, wordmark) |
 | `espaco-sideral` | `public/fonts/espaco-sideral/inter-latin-400-normal.woff2` | Inter | Rasmus Andersson | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo |
+| `fisica-quantica` | `public/fonts/fisica-quantica/outfit-latin-400-normal.woff2` | Outfit | Rodrigo Fuenzalida | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo |
+| `fisica-quantica` | `public/fonts/fisica-quantica/outfit-latin-700-normal.woff2` | Outfit | Rodrigo Fuenzalida | [SIL OFL 1.1](https://openfontlicense.org/) | Peso negrito (hero, botões) |
+| `fisica-quantica` | `public/fonts/fisica-quantica/ibm-plex-mono-latin-400-normal.woff2` | IBM Plex Mono | IBM / Mike Abbink, Bold Monday | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de destaque (headings, leituras técnicas/HUD) |
+| `papel-e-tinta` | `public/fonts/papel-e-tinta/lora-latin-400-normal.woff2` | Lora | Cyreal | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo (serifada, leitura longa) |
+| `papel-e-tinta` | `public/fonts/papel-e-tinta/playfair-display-latin-700-normal.woff2` | Playfair Display | Claus Eggers Sørensen | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de destaque (headings editoriais) |
+| `blueprint` | `public/fonts/blueprint/inter-latin-400-normal.woff2` | Inter | Rasmus Andersson | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo |
+| `blueprint` | `public/fonts/blueprint/jetbrains-mono-latin-400-normal.woff2` | JetBrains Mono | JetBrains | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de destaque (headings, anotações técnicas/CAD) |
+| `noir` | `public/fonts/noir/inter-latin-400-normal.woff2` | Inter | Rasmus Andersson | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de corpo |
+| `noir` | `public/fonts/noir/cinzel-latin-700-normal.woff2` | Cinzel | Natanael Gama | [SIL OFL 1.1](https://openfontlicense.org/) | Fonte de destaque (headings dramáticos, cartelas) |
 
 ## 3. Orçamento de performance (Decisão de defaults técnicos)
 
@@ -36,10 +46,14 @@ Peso combinado (não comprimido) dos `.woff2` por tema, dentro do limite de 60KB
 | `vintage` | ~53KB (única família) |
 | `fundo-do-mar` | ~37KB (13,4KB + 23,7KB) |
 | `espaco-sideral` | ~30KB (6,5KB + 23,7KB) |
+| `fisica-quantica` | ~41,8KB (Outfit 400: 13,7KB + Outfit 700: 13,7KB + IBM Plex Mono 400: 14,4KB) |
+| `papel-e-tinta` | ~43,3KB (Lora 400: 20,7KB + Playfair Display 700: 22,7KB — peso 600 da Lora cortado do plano original pra caber no orçamento) |
+| `blueprint` | ~43,8KB (Inter 400: 23,1KB + JetBrains Mono 400: 20,7KB — peso 700 do Inter cortado do plano original; negrito sintético do navegador cobre o caso) |
+| `noir` | ~37,9KB (Inter 400: 23,1KB + Cinzel 700: 14,8KB) |
 
-`Inter` é reaproveitado (mesmo arquivo `latin-400-normal`) entre `fundo-do-mar` e `espaco-sideral`, mas
-cada rota carrega apenas o arquivo do próprio diretório `public/fonts/<slug>/` — nenhum tema baixa fonte
-de outro tema.
+`Inter` é reaproveitado (mesmo arquivo `latin-400-normal`) entre `fundo-do-mar`, `espaco-sideral`,
+`blueprint` e `noir`, mas cada rota carrega apenas o arquivo do próprio diretório
+`public/fonts/<slug>/` — nenhum tema baixa fonte de outro tema.
 
 ## 4. Texto completo da licença
 

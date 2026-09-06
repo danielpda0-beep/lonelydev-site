@@ -1,0 +1,11 @@
+{
+  "id": "noir",
+  "name": "Noir",
+  "tagline": "Grão de filme, luz de veneziana e um facho de lanterna que segue o cursor",
+  "description": "Preto e branco de alto contraste, com grão de filme e sombra dura de veneziana. Um facho de luz suave segue o cursor revelando detalhe contra o fundo escuro — o próprio cursor vira a lanterna.",
+  "palette": {
+    "primary": "#d4d4d4",
+    "background": "#0a0a0a",
+    "text": "#f2f2f2"
+  }
+}

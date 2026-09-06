@@ -1,0 +1,11 @@
+{
+  "id": "blueprint",
+  "name": "Blueprint",
+  "tagline": "Grid técnico, linhas de cota e um cursor que vira ferramenta CAD",
+  "description": "Azul-planta e branco, com grid técnico e anotações de projeto. Cada seção é uma peça de desenho técnico; o cursor vira uma mira com coordenadas X/Y em tempo real, como uma ferramenta CAD.",
+  "palette": {
+    "primary": "#4fc3f7",
+    "background": "#0b2a4a",
+    "text": "#eaf2fb"
+  }
+}
