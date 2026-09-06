@@ -1,0 +1,11 @@
+{
+  "id": "arcade",
+  "name": "Arcade",
+  "tagline": "Fliperama de neon, scanlines de CRT e fonte pixel",
+  "description": "Magenta e ciano sobre preto, com curvatura de tela e scanlines de um monitor CRT de fliperama. A Home vira menu de fichas, cada serviço é uma máquina esperando a moeda.",
+  "palette": {
+    "primary": "#ff2bd6",
+    "background": "#0a0014",
+    "text": "#f5f0ff"
+  }
+}

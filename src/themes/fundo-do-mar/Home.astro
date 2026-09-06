@@ -1,0 +1,443 @@
+---
+// src/themes/fundo-do-mar/Home.astro
+// Layout Bespoke do Tema Fundo do Mar (Rolagem Imersiva de Mergulho)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+// Decisão 10.23: cardume interativo vive no canvas de fundo (FundoDoMarFX), não aqui.
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'fundo-do-mar' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-mar-home" data-bespoke-layout="fundo-do-mar">
+  <!-- Superfície -->
+  <section class="mar-surface" aria-labelledby="mar-hero-tagline">
+    <p class="mar-depth-tag">— 0m · SUPERFÍCIE —</p>
+    <h1 id="mar-hero-tagline" class="mar-title">{homeContent.hero.tagline}</h1>
+    <p class="mar-lead">{homeContent.hero.lead}</p>
+    <a class="mar-btn" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+  </section>
+
+  <!-- Ficha do mergulho -->
+  <section class="mar-dive-card" aria-label="Ficha do modelo de trabalho">
+    <ul class="mar-dive-list">
+      <li>{homeContent.telemetria.escopo}</li>
+      <li>{homeContent.telemetria.preco}</li>
+      <li>{homeContent.telemetria.prazo}</li>
+      <li>{homeContent.telemetria.semMensalidade}</li>
+      <li>{homeContent.telemetria.semLockin}</li>
+    </ul>
+  </section>
+
+  <!-- Recife de corais (pilares) -->
+  <section class="mar-zone" aria-labelledby="mar-pilares-title">
+    <p class="mar-depth-tag">— 20m · RECIFE —</p>
+    <h2 id="mar-pilares-title" class="mar-zone-title">{homeContent.pilaresTitulo}</h2>
+    <div class="mar-reef">
+      {homeContent.pilares.map((pilar) => (
+        <a class:list={['mar-coral', { 'mar-coral-featured': pilar.destaque }]} href={pilar.link}>
+          {pilar.badge && <span class="mar-badge">{pilar.badge}</span>}
+          <h3 class="mar-coral-title">{pilar.titulo}</h3>
+          <p class="mar-coral-desc">{pilar.resumo}</p>
+          <span class="mar-coral-link">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Bolhas subindo (como funciona) -->
+  <section class="mar-zone" aria-labelledby="mar-passos-title">
+    <p class="mar-depth-tag">— 40m · CORRENTE —</p>
+    <h2 id="mar-passos-title" class="mar-zone-title">{homeContent.passosTitulo}</h2>
+    <div class="mar-bubbles">
+      {homeContent.passos.map((passo) => (
+        <div class="mar-bubble">
+          <span class="mar-bubble-num">{passo.n}</span>
+          <h3 class="mar-bubble-title">{passo.titulo}</h3>
+          <p class="mar-bubble-text">{passo.texto}</p>
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="mar-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Baú do tesouro (pacotes fixos) -->
+  <section class="mar-zone" aria-labelledby="mar-pacotes-title">
+    <p class="mar-depth-tag">— 60m · NAUFRÁGIO —</p>
+    <h2 id="mar-pacotes-title" class="mar-zone-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="mar-zone-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="mar-chests">
+      {pacotesFixos.map((pacote) => (
+        <article class="mar-chest">
+          <h3 class="mar-chest-name">{pacote.data.nome}</h3>
+          <p class="mar-chest-desc">{pacote.data.resumo}</p>
+          <p class="mar-chest-price">{pacote.data.valor} · {pacote.data.prazo_tipico}</p>
+          <a class="mar-btn mar-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Exibição do naufrágio (portfólio) -->
+  <section class="mar-zone" aria-labelledby="mar-portfolio-title">
+    <p class="mar-depth-tag">— 80m · CÂMARA DE PRESSÃO —</p>
+    <h2 id="mar-portfolio-title" class="mar-zone-title">{homeContent.portfolio.titulo}</h2>
+    <div class="mar-exhibit-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="mar-exhibit">
+          <span class="mar-exhibit-status">{item.status}</span>
+          <h3 class="mar-exhibit-title">{item.titulo}</h3>
+          <p class="mar-exhibit-text">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="mar-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="mar-zone" aria-labelledby="mar-temas-title">
+    <p class="mar-depth-tag">— 100m · ABISMO —</p>
+    <h2 id="mar-temas-title" class="mar-zone-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="mar-zone-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="mar-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Mensagem na garrafa (CTA final) -->
+  <section class="mar-bottle" aria-labelledby="mar-cta-title">
+    <p class="mar-bottle-tag">MENSAGEM NA GARRAFA</p>
+    <h2 id="mar-cta-title" class="mar-bottle-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="mar-bottle-text">{homeContent.ctaFinal.texto}</p>
+    <a class="mar-btn mar-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-mar-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .mar-depth-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+  }
+
+  .mar-surface {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+    max-width: 62ch;
+  }
+
+  .mar-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.8rem, 4.5vw, 3rem);
+    color: var(--color-text);
+    text-shadow: 0 0 20px rgba(45, 212, 191, 0.25);
+  }
+
+  .mar-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .mar-btn {
+    align-self: flex-start;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.85rem 1.75rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.35);
+    transition: all 0.2s ease;
+  }
+
+  .mar-btn:hover {
+    background: var(--color-accent-hover);
+    color: var(--color-on-accent);
+    box-shadow: 0 0 28px rgba(45, 212, 191, 0.5);
+  }
+
+  .mar-btn-ghost {
+    background: transparent;
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: none;
+  }
+
+  .mar-btn-ghost:hover {
+    background: rgba(45, 212, 191, 0.15);
+    color: var(--color-accent);
+  }
+
+  .mar-btn-lg {
+    font-size: 1.05rem;
+    padding: 1rem 2.25rem;
+  }
+
+  .mar-dive-card {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+  }
+
+  .mar-dive-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  .mar-dive-list li::before {
+    content: "◦ ";
+    color: var(--color-accent);
+  }
+
+  .mar-zone {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .mar-zone-title {
+    font-family: var(--font-mono);
+    font-size: 1.6rem;
+    color: var(--color-text);
+  }
+
+  .mar-zone-sub {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .mar-reef {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .mar-reef { grid-template-columns: repeat(3, 1fr); }
+    .mar-coral-featured { grid-column: 1 / -1; }
+  }
+
+  .mar-coral {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 16px 16px 4px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .mar-coral:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+  }
+
+  .mar-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .mar-coral-title {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    color: var(--color-text);
+  }
+
+  .mar-coral-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .mar-coral-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .mar-bubbles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .mar-bubbles { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .mar-bubble {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-radius: 50% / 18%;
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .mar-bubble-num {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+  }
+
+  .mar-bubble-title {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    color: var(--color-text);
+  }
+
+  .mar-bubble-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .mar-link {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .mar-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .mar-chests {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .mar-chests { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .mar-chests { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .mar-chest {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mar-chest-name {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .mar-chest-desc {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .mar-chest-price {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-accent);
+  }
+
+  .mar-exhibit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .mar-exhibit-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .mar-exhibit {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .mar-exhibit-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .mar-exhibit-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .mar-exhibit-text {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .mar-bottle {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-accent);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .mar-bottle-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+  }
+
+  .mar-bottle-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    color: var(--color-text);
+  }
+
+  .mar-bottle-text {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

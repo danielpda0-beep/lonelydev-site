@@ -1,0 +1,198 @@
+---
+// src/components/VintageFX.astro
+// M19: Fundo + detalhe interativo do tema Vintage (Decisão 10.25)
+// (a) traço de tinta se desenha ao redor do cursor e desvanece em ~0,8s
+// (b) grão de filme/risco de projetor pisca ocasionalmente por cima da tela — SEM mariposa
+---
+
+<div id="vintage-fx-root" aria-hidden="true">
+  <div class="vintage-paper-texture"></div>
+  <canvas id="vintage-ink-canvas" class="vintage-ink-canvas"></canvas>
+  <canvas id="vintage-grain-canvas" class="vintage-grain-canvas"></canvas>
+</div>
+
+<style>
+  .vintage-paper-texture,
+  .vintage-ink-canvas,
+  .vintage-grain-canvas {
+    display: none;
+  }
+
+  :global([data-theme="vintage"]) .vintage-paper-texture {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image:
+      radial-gradient(rgba(58, 42, 26, 0.05) 1px, transparent 1px),
+      radial-gradient(rgba(58, 42, 26, 0.04) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 2px 3px;
+  }
+
+  :global([data-theme="vintage"]) .vintage-ink-canvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  :global([data-theme="vintage"]) .vintage-grain-canvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vintage-ink-canvas,
+    .vintage-grain-canvas {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__vintageFxBound) return;
+    w.__vintageFxBound = true;
+
+    function isVintageTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'vintage';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    let inkCanvas: HTMLCanvasElement | null = null;
+    let inkCtx: CanvasRenderingContext2D | null = null;
+    let grainCanvas: HTMLCanvasElement | null = null;
+    let grainCtx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvases() {
+      const ie = document.getElementById('vintage-ink-canvas') as HTMLCanvasElement | null;
+      if (ie && ie !== inkCanvas) {
+        inkCanvas = ie;
+        inkCtx = inkCanvas.getContext('2d');
+        inkCanvas.width = window.innerWidth;
+        inkCanvas.height = window.innerHeight;
+      }
+      const ge = document.getElementById('vintage-grain-canvas') as HTMLCanvasElement | null;
+      if (ge && ge !== grainCanvas) {
+        grainCanvas = ge;
+        grainCtx = grainCanvas.getContext('2d');
+        grainCanvas.width = window.innerWidth;
+        grainCanvas.height = window.innerHeight;
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (inkCanvas) { inkCanvas.width = window.innerWidth; inkCanvas.height = window.innerHeight; }
+      if (grainCanvas) { grainCanvas.width = window.innerWidth; grainCanvas.height = window.innerHeight; }
+    });
+
+    interface InkPoint { x: number; y: number; life: number; }
+    let trail: InkPoint[] = [];
+    let lastX = -9999;
+    let lastY = -9999;
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isVintageTheme() || isReducedMotion()) return;
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      if (Math.hypot(dx, dy) > 4) {
+        trail.push({ x: e.clientX, y: e.clientY, life: 1 });
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (trail.length > 200) trail.splice(0, trail.length - 200);
+      }
+    });
+
+    function scheduleGrainFlicker() {
+      const delay = 6000 + Math.random() * 8000;
+      window.setTimeout(() => {
+        if (isVintageTheme() && !isReducedMotion() && !document.hidden) {
+          triggerGrainFlicker();
+        }
+        scheduleGrainFlicker();
+      }, delay);
+    }
+    scheduleGrainFlicker();
+
+    let grainFlickerUntil = 0;
+
+    function triggerGrainFlicker() {
+      grainFlickerUntil = performance.now() + 150;
+    }
+
+    function drawGrain() {
+      if (!grainCtx || !grainCanvas) return;
+      const now = performance.now();
+      if (now > grainFlickerUntil) {
+        if (grainCanvas.style.opacity !== '0') grainCanvas.style.opacity = '0';
+        return;
+      }
+      grainCanvas.style.opacity = '0.35';
+      grainCtx.clearRect(0, 0, grainCanvas.width, grainCanvas.height);
+      const imgData = grainCtx.createImageData(grainCanvas.width, grainCanvas.height);
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        const v = Math.random() * 255;
+        imgData.data[i] = v;
+        imgData.data[i + 1] = v;
+        imgData.data[i + 2] = v;
+        imgData.data[i + 3] = Math.random() * 60;
+      }
+      grainCtx.putImageData(imgData, 0, 0);
+      const scratchX = Math.random() * grainCanvas.width;
+      grainCtx.strokeStyle = 'rgba(255,255,255,0.5)';
+      grainCtx.lineWidth = 1;
+      grainCtx.beginPath();
+      grainCtx.moveTo(scratchX, 0);
+      grainCtx.lineTo(scratchX + (Math.random() - 0.5) * 20, grainCanvas.height);
+      grainCtx.stroke();
+    }
+
+    function drawInk() {
+      if (!inkCtx || !inkCanvas) return;
+      inkCtx.clearRect(0, 0, inkCanvas.width, inkCanvas.height);
+      if (isReducedMotion()) { trail = []; return; }
+      inkCtx.lineJoin = 'round';
+      inkCtx.lineCap = 'round';
+      for (let i = trail.length - 1; i >= 0; i--) {
+        trail[i].life -= 1 / 48; // ~0.8s a 60fps
+        if (trail[i].life <= 0) trail.splice(i, 1);
+      }
+      for (let i = 1; i < trail.length; i++) {
+        const a = trail[i - 1];
+        const b = trail[i];
+        inkCtx.globalAlpha = Math.max(0, b.life) * 0.7;
+        inkCtx.strokeStyle = '#3a2a1a';
+        inkCtx.lineWidth = 1.5;
+        inkCtx.beginPath();
+        inkCtx.moveTo(a.x, a.y);
+        inkCtx.lineTo(b.x, b.y);
+        inkCtx.stroke();
+      }
+      inkCtx.globalAlpha = 1;
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isVintageTheme()) return;
+      acquireCanvases();
+      drawInk();
+      drawGrain();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>

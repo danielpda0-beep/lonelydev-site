@@ -1,0 +1,11 @@
+{
+  "id": "vintage",
+  "name": "Vintage",
+  "tagline": "Revista antiga em sépia, máquina de escrever e art déco",
+  "description": "Sépia, creme e marrom com textura de papel envelhecido e detalhes art déco. A Home lê como a capa e o índice de uma revista de decadas atrás, datilografada à máquina.",
+  "palette": {
+    "primary": "#7a2e1d",
+    "background": "#f2e8d5",
+    "text": "#3a2a1a"
+  }
+}

@@ -1,0 +1,472 @@
+---
+// src/themes/arcade/Home.astro
+// Layout Bespoke do Tema Arcade (Menu de Fliperama)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'arcade' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-arcade-home" data-bespoke-layout="arcade">
+  <!-- Attract screen: título de fliperama -->
+  <section class="arc-marquee" aria-labelledby="arc-hero-tagline">
+    <p class="arc-eyebrow">◆ {homeContent.hero.eyebrow} ARCADE ◆</p>
+    <h1 id="arc-hero-tagline" class="arc-title">{homeContent.hero.tagline}</h1>
+    <p class="arc-lead">{homeContent.hero.lead}</p>
+    <a class="arc-btn arc-btn-coin" href={homeContent.hero.ctaHref}>▶ {homeContent.hero.ctaTexto}</a>
+  </section>
+
+  <!-- Ficha técnica em HUD de placar -->
+  <section class="arc-scoreboard" aria-label="Regras do jogo">
+    <div class="arc-score-row">
+      <span>{homeContent.telemetria.escopo}</span>
+      <span>{homeContent.telemetria.preco}</span>
+      <span>{homeContent.telemetria.prazo}</span>
+      <span>{homeContent.telemetria.semMensalidade}</span>
+      <span>{homeContent.telemetria.semLockin}</span>
+    </div>
+  </section>
+
+  <!-- Pilares como gabinetes de fliperama -->
+  <section class="arc-section" aria-labelledby="arc-pilares-title">
+    <h2 id="arc-pilares-title" class="arc-section-title">// {homeContent.pilaresTitulo}</h2>
+    <div class="arc-cabinets">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['arc-cabinet', { 'arc-cabinet-master': pilar.destaque }]} href={pilar.link}>
+          <div class="arc-cabinet-screen">
+            <span class="arc-cabinet-num">P{idx + 1}</span>
+            {pilar.badge && <span class="arc-badge">{pilar.badge}</span>}
+            <h3 class="arc-cabinet-title">{pilar.titulo}</h3>
+            <p class="arc-cabinet-desc">{pilar.resumo}</p>
+          </div>
+          <span class="arc-cabinet-cta">{homeContent.pilaresCta} ▶</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Como funciona: tabela de high score -->
+  <section class="arc-section" aria-labelledby="arc-passos-title">
+    <h2 id="arc-passos-title" class="arc-section-title">// {homeContent.passosTitulo}</h2>
+    <ol class="arc-highscore">
+      {homeContent.passos.map((passo) => (
+        <li class="arc-score-item">
+          <span class="arc-score-rank">{passo.n}</span>
+          <span class="arc-score-name">{passo.titulo}</span>
+          <span class="arc-score-desc">{passo.texto}</span>
+        </li>
+      ))}
+    </ol>
+    <a href={homeContent.passosLinkHref} class="arc-link">{homeContent.passosLinkTexto} ▶</a>
+  </section>
+
+  <!-- Pacotes fixos: slots de moeda -->
+  <section class="arc-section" aria-labelledby="arc-pacotes-title">
+    <h2 id="arc-pacotes-title" class="arc-section-title">// {homeContent.pacotesInfo.titulo}</h2>
+    <p class="arc-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="arc-coinslots">
+      {pacotesFixos.map((pacote, idx) => (
+        <article class="arc-coinslot">
+          <span class="arc-slot-tag">CREDIT_0{idx + 1}</span>
+          <h3 class="arc-slot-name">{pacote.data.nome}</h3>
+          <p class="arc-slot-desc">{pacote.data.resumo}</p>
+          <div class="arc-slot-price">{pacote.data.valor}</div>
+          <div class="arc-slot-time">{pacote.data.prazo_tipico}</div>
+          <a class="arc-btn arc-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Portfolio como "continue?" -->
+  <section class="arc-section" aria-labelledby="arc-portfolio-title">
+    <h2 id="arc-portfolio-title" class="arc-section-title">// {homeContent.portfolio.titulo}</h2>
+    <div class="arc-continue-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="arc-continue-card">
+          <span class="arc-continue-status">{item.status === 'Disponível' ? '✅ READY' : '🧩 LOADING'}</span>
+          <h3 class="arc-continue-title">{item.titulo}</h3>
+          <p class="arc-continue-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="arc-link">{homeContent.portfolio.ctaTexto} ▶</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="arc-section" aria-labelledby="arc-temas-title">
+    <h2 id="arc-temas-title" class="arc-section-title">// {homeContent.temasTeaser.titulo}</h2>
+    <p class="arc-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="arc-link">{homeContent.temasTeaser.linkTexto} ▶</a>
+  </section>
+
+  <!-- Game Over / Continue -->
+  <section class="arc-gameover" aria-labelledby="arc-cta-title">
+    <p class="arc-gameover-tag">GAME OVER</p>
+    <h2 id="arc-cta-title" class="arc-gameover-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="arc-gameover-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="arc-btn arc-btn-coin arc-btn-lg" href={homeContent.ctaFinal.ctaHref}>▶ {homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-arcade-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .arc-marquee {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
+    background: var(--color-bg-secondary);
+    border: 3px solid var(--color-accent);
+    border-radius: 4px;
+    box-shadow: 0 0 25px rgba(255, 43, 214, 0.35), inset 0 0 30px rgba(0, 240, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .arc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #00f0ff;
+    letter-spacing: 0.1em;
+  }
+
+  .arc-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.1rem, 3.5vw, 1.9rem);
+    line-height: 1.6;
+    color: var(--color-text);
+    text-shadow: 2px 2px 0 var(--color-accent), -2px -2px 0 #00f0ff;
+    max-width: 26ch;
+  }
+
+  .arc-lead {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    color: var(--color-text-muted);
+    max-width: 44ch;
+  }
+
+  .arc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-decoration: none;
+    padding: 0.9rem 1.6rem;
+    border: 2px solid var(--color-accent);
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    box-shadow: 3px 3px 0 #00f0ff;
+    transition: transform 0.15s steps(2, jump-none);
+  }
+
+  .arc-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #00f0ff;
+    color: var(--color-on-accent);
+  }
+
+  .arc-btn-lg {
+    font-size: 1rem;
+    padding: 1.1rem 2rem;
+  }
+
+  .arc-btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+    box-shadow: none;
+    border-color: var(--color-border);
+  }
+
+  .arc-btn-ghost:hover {
+    border-color: var(--color-accent);
+    box-shadow: 2px 2px 0 var(--color-accent);
+  }
+
+  .arc-scoreboard {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+
+  .arc-score-row {
+    display: flex;
+    gap: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #00f0ff;
+    white-space: nowrap;
+  }
+
+  .arc-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .arc-section-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+  }
+
+  .arc-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .arc-cabinets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .arc-cabinets { grid-template-columns: repeat(3, 1fr); }
+    .arc-cabinet-master { grid-column: 1 / -1; }
+  }
+
+  .arc-cabinet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 4px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .arc-cabinet:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 6px 0 #00f0ff;
+  }
+
+  .arc-cabinet-master {
+    border-color: var(--color-accent);
+  }
+
+  .arc-cabinet-num {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+  }
+
+  .arc-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .arc-cabinet-title {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+
+  .arc-cabinet-desc {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+  }
+
+  .arc-cabinet-cta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .arc-highscore {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .arc-score-item {
+    display: grid;
+    grid-template-columns: 3rem 10rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-secondary);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .arc-score-item { grid-template-columns: 2.5rem 1fr; }
+    .arc-score-desc { grid-column: 1 / -1; }
+  }
+
+  .arc-score-rank {
+    font-family: var(--font-mono);
+    color: #00f0ff;
+  }
+
+  .arc-score-name {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .arc-score-desc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .arc-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+
+  .arc-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .arc-coinslots {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .arc-coinslots { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .arc-coinslots { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .arc-coinslot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 2px dashed var(--color-border);
+  }
+
+  .arc-slot-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+  }
+
+  .arc-slot-name {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .arc-slot-desc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .arc-slot-price {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    color: var(--color-accent);
+  }
+
+  .arc-slot-time {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #00f0ff;
+  }
+
+  .arc-continue-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .arc-continue-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .arc-continue-card {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+  }
+
+  .arc-continue-status {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-accent);
+  }
+
+  .arc-continue-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .arc-continue-desc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .arc-gameover {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 3px solid var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .arc-gameover-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #00f0ff;
+    letter-spacing: 0.2em;
+  }
+
+  .arc-gameover-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    color: var(--color-text);
+  }
+
+  .arc-gameover-lead {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

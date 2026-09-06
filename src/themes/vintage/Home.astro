@@ -1,0 +1,491 @@
+---
+// src/themes/vintage/Home.astro
+// Layout Bespoke do Tema Vintage (Página de Revista Antiga)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'vintage' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-vintage-home" data-bespoke-layout="vintage">
+  <!-- Masthead de revista -->
+  <header class="vtg-masthead">
+    <p class="vtg-issue">Edição Nº 01 · {homeContent.hero.eyebrow}</p>
+    <h1 class="vtg-masthead-title">LONELY DEV GAZETTE</h1>
+    <p class="vtg-rule" aria-hidden="true">━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+  </header>
+
+  <!-- Matéria de capa -->
+  <section class="vtg-cover-story" aria-labelledby="vtg-hero-tagline">
+    <p class="vtg-kicker">MATÉRIA DE CAPA</p>
+    <h2 id="vtg-hero-tagline" class="vtg-headline">{homeContent.hero.tagline}</h2>
+    <p class="vtg-dropcap">{homeContent.hero.lead}</p>
+    <a class="vtg-btn" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto} →</a>
+  </section>
+
+  <!-- Ficha da edição -->
+  <section class="vtg-fact-box" aria-label="Ficha do modelo de trabalho">
+    <ul class="vtg-fact-list">
+      <li>{homeContent.telemetria.escopo}</li>
+      <li>{homeContent.telemetria.preco}</li>
+      <li>{homeContent.telemetria.prazo}</li>
+      <li>{homeContent.telemetria.semMensalidade}</li>
+      <li>{homeContent.telemetria.semLockin}</li>
+    </ul>
+  </section>
+
+  <!-- Índice da edição (pilares) -->
+  <section class="vtg-section" aria-labelledby="vtg-pilares-title">
+    <h2 id="vtg-pilares-title" class="vtg-section-title">Índice desta edição — {homeContent.pilaresTitulo}</h2>
+    <div class="vtg-toc">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['vtg-toc-entry', { 'vtg-toc-featured': pilar.destaque }]} href={pilar.link}>
+          <span class="vtg-toc-num">{String(idx + 1).padStart(2, '0')}</span>
+          <span class="vtg-toc-body">
+            <span class="vtg-toc-title">{pilar.titulo}{pilar.badge && <em class="vtg-toc-badge"> — {pilar.badge}</em>}</span>
+            <span class="vtg-toc-desc">{pilar.resumo}</span>
+          </span>
+          <span class="vtg-toc-dots" aria-hidden="true"></span>
+          <span class="vtg-toc-link">{homeContent.pilaresCta}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Como funciona: coluna de "como fazer" -->
+  <section class="vtg-section" aria-labelledby="vtg-passos-title">
+    <h2 id="vtg-passos-title" class="vtg-section-title">{homeContent.passosTitulo}</h2>
+    <div class="vtg-howto-column">
+      {homeContent.passos.map((passo) => (
+        <div class="vtg-howto-step">
+          <span class="vtg-howto-num">{passo.n}</span>
+          <div>
+            <h3 class="vtg-howto-title">{passo.titulo}</h3>
+            <p class="vtg-howto-text">{passo.texto}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="vtg-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Catálogo de anúncios classificados (pacotes fixos) -->
+  <section class="vtg-section" aria-labelledby="vtg-pacotes-title">
+    <h2 id="vtg-pacotes-title" class="vtg-section-title">Classificados — {homeContent.pacotesInfo.titulo}</h2>
+    <p class="vtg-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="vtg-classifieds">
+      {pacotesFixos.map((pacote) => (
+        <article class="vtg-ad">
+          <h3 class="vtg-ad-title">{pacote.data.nome}</h3>
+          <p class="vtg-ad-desc">{pacote.data.resumo}</p>
+          <p class="vtg-ad-price">{pacote.data.valor} · {pacote.data.prazo_tipico}</p>
+          <a class="vtg-link" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Nesta edição também: portfólio -->
+  <section class="vtg-section" aria-labelledby="vtg-portfolio-title">
+    <h2 id="vtg-portfolio-title" class="vtg-section-title">Nesta edição também — {homeContent.portfolio.titulo}</h2>
+    <div class="vtg-also-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="vtg-also-card">
+          <p class="vtg-also-status">{item.status}</p>
+          <h3 class="vtg-also-title">{item.titulo}</h3>
+          <p class="vtg-also-text">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="vtg-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Anúncio de rodapé (temas) -->
+  <section class="vtg-adbox" aria-labelledby="vtg-temas-title">
+    <h2 id="vtg-temas-title" class="vtg-adbox-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="vtg-adbox-text">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="vtg-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Chamada final: telegrama -->
+  <section class="vtg-telegram" aria-labelledby="vtg-cta-title">
+    <p class="vtg-telegram-tag">TELEGRAMA</p>
+    <h2 id="vtg-cta-title" class="vtg-telegram-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="vtg-telegram-text">{homeContent.ctaFinal.texto}</p>
+    <a class="vtg-btn vtg-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto} →</a>
+  </section>
+</div>
+
+<style>
+  .theme-vintage-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .vtg-masthead {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .vtg-issue {
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .vtg-masthead-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    letter-spacing: 0.05em;
+    color: var(--color-text);
+  }
+
+  .vtg-rule {
+    color: var(--color-border);
+    letter-spacing: -0.1em;
+    font-size: 0.75rem;
+  }
+
+  .vtg-cover-story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 1rem);
+    max-width: 68ch;
+  }
+
+  .vtg-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+  }
+
+  .vtg-headline {
+    font-family: var(--font-mono);
+    font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  .vtg-dropcap {
+    font-size: 1.2rem;
+    line-height: 1.75;
+    color: var(--color-text-secondary, var(--color-text));
+  }
+
+  .vtg-dropcap::first-letter {
+    font-family: var(--font-mono);
+    font-size: 3.2rem;
+    float: left;
+    line-height: 0.8;
+    margin: 0.1rem 0.4rem 0 0;
+    color: var(--color-accent);
+  }
+
+  .vtg-btn {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--color-accent);
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  .vtg-btn:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: var(--color-on-accent);
+  }
+
+  .vtg-btn-lg {
+    font-size: 1.05rem;
+    padding: 1rem 2rem;
+  }
+
+  .vtg-fact-box {
+    border-top: 2px solid var(--color-text);
+    border-bottom: 2px solid var(--color-text);
+    padding: 0.9rem 0;
+  }
+
+  .vtg-fact-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  .vtg-fact-list li::before {
+    content: "§ ";
+    color: var(--color-accent);
+  }
+
+  .vtg-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .vtg-section-title {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+  }
+
+  .vtg-section-sub {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .vtg-toc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .vtg-toc-entry {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px dotted var(--color-border);
+  }
+
+  .vtg-toc-entry:hover {
+    background: var(--color-bg-overlay);
+  }
+
+  .vtg-toc-featured {
+    background: var(--color-bg-overlay);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .vtg-toc-num {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+  }
+
+  .vtg-toc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .vtg-toc-title {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    color: var(--color-text);
+  }
+
+  .vtg-toc-badge {
+    color: var(--color-accent);
+    font-style: normal;
+  }
+
+  .vtg-toc-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .vtg-toc-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .vtg-toc-entry { grid-template-columns: 2rem 1fr; }
+    .vtg-toc-link { grid-column: 1 / -1; }
+  }
+
+  .vtg-howto-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .vtg-howto-step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+  }
+
+  .vtg-howto-num {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    color: var(--color-accent);
+  }
+
+  .vtg-howto-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .vtg-howto-text {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+  }
+
+  .vtg-link {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .vtg-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .vtg-classifieds {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .vtg-classifieds { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .vtg-classifieds { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .vtg-ad {
+    padding: var(--spacing-lg, 2rem);
+    border: 1px solid var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: var(--color-bg-secondary);
+  }
+
+  .vtg-ad-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .vtg-ad-desc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+
+  .vtg-ad-price {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-accent);
+  }
+
+  .vtg-also-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .vtg-also-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .vtg-also-card {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .vtg-also-status {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .vtg-also-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .vtg-also-text {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .vtg-adbox {
+    text-align: center;
+    padding: var(--spacing-lg, 2rem);
+    border: 2px dashed var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .vtg-adbox-title {
+    font-family: var(--font-mono);
+    font-size: 1.3rem;
+    color: var(--color-text);
+  }
+
+  .vtg-adbox-text {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .vtg-telegram {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .vtg-telegram-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    color: var(--color-accent);
+  }
+
+  .vtg-telegram-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    color: var(--color-text);
+  }
+
+  .vtg-telegram-text {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+  }
+</style>

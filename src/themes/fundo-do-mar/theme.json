@@ -1,0 +1,11 @@
+{
+  "id": "fundo-do-mar",
+  "name": "Fundo do Mar",
+  "tagline": "Cáusticas, cardume vivo e rolagem imersiva no azul-abissal",
+  "description": "Azul-abissal e turquesa com cáusticas de luz ondulando e partículas subindo lentamente. Um pequeno cardume nada pelo fundo e se aproxima do cursor como se fosse isca, com curiosidade real de peixe.",
+  "palette": {
+    "primary": "#2dd4bf",
+    "background": "#041c2c",
+    "text": "#d9f5f5"
+  }
+}

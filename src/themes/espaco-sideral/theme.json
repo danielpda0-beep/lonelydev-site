@@ -1,0 +1,11 @@
+{
+  "id": "espaco-sideral",
+  "name": "Espaço Sideral",
+  "tagline": "Starfield com parallax, nebulosa e um cursor que atrai estrelas",
+  "description": "Preto, violeta e branco com starfield em parallax e nebulosa ao fundo. Cada seção é uma estação distante; o cursor vira um pequeno corpo gravitacional que curva a luz das estrelas próximas.",
+  "palette": {
+    "primary": "#c084fc",
+    "background": "#05030d",
+    "text": "#f2eefc"
+  }
+}

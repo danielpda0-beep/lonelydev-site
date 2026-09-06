@@ -2,6 +2,10 @@
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import MatrixCinematography from '../components/MatrixCinematography.astro';
+import ArcadeFX from '../components/ArcadeFX.astro';
+import VintageFX from '../components/VintageFX.astro';
+import FundoDoMarFX from '../components/FundoDoMarFX.astro';
+import EspacoSideralFX from '../components/EspacoSideralFX.astro';
 
 interface Props {
   title?: string;
@@ -47,6 +51,10 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
   </head>
   <body>
     <MatrixCinematography />
+    <ArcadeFX />
+    <VintageFX />
+    <FundoDoMarFX />
+    <EspacoSideralFX />
     <header class="header">
       <div class="container header-container">
         <div class="header-brand-group">
@@ -82,6 +90,22 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         <a href={`/t/matrix${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="matrix">
           <span class="theme-color" style="background: #22d3ee; border-color: #0a1420;"></span>
           Matrix
+        </a>
+        <a href={`/t/arcade${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="arcade">
+          <span class="theme-color" style="background: #ff2bd6; border-color: #0a0014;"></span>
+          Arcade
+        </a>
+        <a href={`/t/vintage${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="vintage">
+          <span class="theme-color" style="background: #7a2e1d; border-color: #f2e8d5;"></span>
+          Vintage
+        </a>
+        <a href={`/t/fundo-do-mar${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="fundo-do-mar">
+          <span class="theme-color" style="background: #2dd4bf; border-color: #041c2c;"></span>
+          Fundo do Mar
+        </a>
+        <a href={`/t/espaco-sideral${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="espaco-sideral">
+          <span class="theme-color" style="background: #c084fc; border-color: #05030d;"></span>
+          Espaço Sideral
         </a>
       </div>
     </aside>

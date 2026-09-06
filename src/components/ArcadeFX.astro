@@ -1,0 +1,238 @@
+---
+// src/components/ArcadeFX.astro
+// M19: Fundo + detalhe interativo do tema Arcade (Decisão 10.25)
+// (a) rastro de partículas "sparkle" no cursor · (b) criatura pixelada que persegue e foge
+// (c) "INSERT COIN" piscando ocasionalmente num canto da tela
+---
+
+<div id="arcade-fx-root" aria-hidden="true">
+  <canvas id="arcade-bg-canvas" class="arcade-bg-canvas"></canvas>
+  <div class="arcade-scanlines"></div>
+  <div class="arcade-vignette"></div>
+  <p id="arcade-insert-coin" class="arcade-insert-coin">INSERT COIN</p>
+</div>
+
+<style>
+  .arcade-bg-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  :global([data-theme="arcade"]) .arcade-bg-canvas {
+    display: block;
+  }
+
+  .arcade-scanlines,
+  .arcade-vignette,
+  .arcade-insert-coin {
+    display: none;
+  }
+
+  :global([data-theme="arcade"]) .arcade-scanlines {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0px,
+      rgba(0, 0, 0, 0.18) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+
+  :global([data-theme="arcade"]) .arcade-vignette {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    box-shadow: inset 0 0 12vw rgba(0, 0, 0, 0.65);
+    border-radius: 4vw;
+  }
+
+  :global([data-theme="arcade"]) .arcade-insert-coin {
+    display: block;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 2;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.65rem;
+    color: #ff2bd6;
+    text-shadow: 0 0 8px rgba(255, 43, 214, 0.6);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .arcade-insert-coin.is-visible {
+    animation: arcadeCoinBlink 1.2s steps(1) 3;
+  }
+
+  @keyframes arcadeCoinBlink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arcade-bg-canvas { display: none !important; }
+    .arcade-insert-coin { display: none !important; }
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__arcadeFxBound) return;
+    w.__arcadeFxBound = true;
+
+    function isArcadeTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'arcade';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    function isTouchDevice(): boolean {
+      return window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvas() {
+      const el = document.getElementById('arcade-bg-canvas') as HTMLCanvasElement | null;
+      if (el && el !== canvas) {
+        canvas = el;
+        ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+
+    interface Sparkle { x: number; y: number; vx: number; vy: number; life: number; color: string; }
+    let sparkles: Sparkle[] = [];
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isArcadeTheme() || isReducedMotion()) return;
+      const target = e.target as HTMLElement | null;
+      const near = !!target?.closest('a, button');
+      const count = near ? 3 : 1;
+      for (let i = 0; i < count; i++) {
+        sparkles.push({
+          x: mouseX + (Math.random() - 0.5) * 6,
+          y: mouseY + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5 - 0.3,
+          life: 1,
+          color: Math.random() > 0.5 ? '#ff2bd6' : '#00f0ff',
+        });
+      }
+      if (sparkles.length > 120) sparkles.splice(0, sparkles.length - 120);
+    });
+
+    interface Creature { x: number; y: number; state: 'idle' | 'chase' | 'flee'; }
+    const creature: Creature = { x: -100, y: -100, state: 'idle' };
+
+    function scheduleCreature() {
+      const delay = 12000 + Math.random() * 10000;
+      window.setTimeout(() => {
+        if (!isArcadeTheme() || isReducedMotion() || isTouchDevice() || document.hidden) {
+          scheduleCreature();
+          return;
+        }
+        creature.x = Math.random() * window.innerWidth;
+        creature.y = Math.random() * window.innerHeight;
+        creature.state = 'chase';
+        window.setTimeout(() => {
+          creature.state = 'flee';
+          window.setTimeout(() => {
+            creature.state = 'idle';
+            scheduleCreature();
+          }, 1800);
+        }, 3500);
+      }, delay);
+    }
+    scheduleCreature();
+
+    function scheduleCoin() {
+      const delay = 14000 + Math.random() * 12000;
+      window.setTimeout(() => {
+        const el = document.getElementById('arcade-insert-coin');
+        if (el && isArcadeTheme() && !isReducedMotion() && !document.hidden) {
+          el.classList.remove('is-visible');
+          void (el as HTMLElement).offsetWidth;
+          el.classList.add('is-visible');
+        }
+        scheduleCoin();
+      }, delay);
+    }
+    scheduleCoin();
+
+    function drawCreature() {
+      if (creature.state === 'idle' || !ctx) return;
+      const px = 4;
+      if (creature.state === 'chase') {
+        const dx = mouseX - creature.x;
+        const dy = mouseY - creature.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        if (dist > 40) {
+          creature.x += (dx / dist) * 1.6;
+          creature.y += (dy / dist) * 1.6;
+        }
+      } else if (creature.state === 'flee') {
+        creature.x -= 3;
+        creature.y -= 1.5;
+      }
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillRect(creature.x - px * 3, creature.y - px * 3, px * 6, px * 6);
+      ctx.fillStyle = '#0a0014';
+      ctx.fillRect(creature.x - px, creature.y - px, px, px);
+      ctx.fillRect(creature.x + px, creature.y - px, px, px);
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isArcadeTheme()) return;
+      acquireCanvas();
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (isReducedMotion()) return;
+
+      for (let i = sparkles.length - 1; i >= 0; i--) {
+        const s = sparkles[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.025;
+        if (s.life <= 0) {
+          sparkles.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = s.life;
+        ctx.fillStyle = s.color;
+        ctx.fillRect(s.x, s.y, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+      drawCreature();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>

@@ -71,6 +71,212 @@
   --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
+/* ── Tema: Arcade (magenta/ciano sobre preto — M19) ──────────── */
+[data-theme="arcade"] {
+  --color-bg: #0a0014;
+  --color-bg-secondary: #150022;
+  --color-text: #f5f0ff;
+  --color-text-muted: #c9a8e8;
+  --color-accent: #ff2bd6;
+  --color-accent-hover: #ff6be8;
+  --color-border: #3a1a4a;
+  --color-on-accent: #0a0014;
+
+  --color-success: #00ffcc;
+  --color-success-text: #8affea;
+  --color-error: #ff2b6d;
+  --color-error-text: #ff9ebb;
+  --color-error-danger: #ff4d7d;
+
+  --color-bg-alt: #12001f;
+  --color-bg-overlay: rgba(255, 43, 214, 0.08);
+  --color-border-subtle: rgba(0, 240, 255, 0.12);
+  --color-danger-bg: #1f0018;
+  --color-danger-border: #4a1a3a;
+  --color-danger-text: #ffb8d6;
+  --color-text-secondary: #d9c6f0;
+
+  --font-sans: 'VT323', 'Consolas', monospace;
+  --font-mono: 'Press Start 2P', 'Consolas', monospace;
+}
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/arcade/press-start-2p-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('/fonts/arcade/vt323-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Vintage (sépia/creme/marrom — M19) ────────────────── */
+[data-theme="vintage"] {
+  --color-bg: #f2e8d5;
+  --color-bg-secondary: #e8d9bd;
+  --color-text: #3a2a1a;
+  --color-text-muted: #6b5640;
+  --color-accent: #7a2e1d;
+  --color-accent-hover: #9c3a26;
+  --color-border: #c9b48a;
+  --color-on-accent: #f2e8d5;
+
+  --color-success: #4a6741;
+  --color-success-text: #2f4527;
+  --color-error: #8b2e2e;
+  --color-error-text: #5c1c1c;
+  --color-error-danger: #6b1f1f;
+
+  --color-bg-alt: #ecdfc4;
+  --color-bg-overlay: rgba(122, 46, 29, 0.06);
+  --color-border-subtle: rgba(58, 42, 26, 0.12);
+  --color-danger-bg: #ecdcd4;
+  --color-danger-border: #c9a48a;
+  --color-danger-text: #5c1c1c;
+  --color-text-secondary: #4a3a28;
+
+  --font-sans: 'Special Elite', 'Courier New', monospace;
+  --font-mono: 'Special Elite', 'Courier New', monospace;
+}
+
+@font-face {
+  font-family: 'Special Elite';
+  src: url('/fonts/vintage/special-elite-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Fundo do Mar (azul-abissal/turquesa — M19) ────────── */
+[data-theme="fundo-do-mar"] {
+  --color-bg: #041c2c;
+  --color-bg-secondary: #06283a;
+  --color-text: #d9f5f5;
+  --color-text-muted: #8fc3cd;
+  --color-accent: #2dd4bf;
+  --color-accent-hover: #5eead4;
+  --color-border: #0f3d52;
+  --color-on-accent: #041c2c;
+
+  --color-success: #2dd4bf;
+  --color-success-text: #99f6e4;
+  --color-error: #ff6b6b;
+  --color-error-text: #ffb3b3;
+  --color-error-danger: #ff8787;
+
+  --color-bg-alt: #052233;
+  --color-bg-overlay: rgba(45, 212, 191, 0.08);
+  --color-border-subtle: rgba(45, 212, 191, 0.12);
+  --color-danger-bg: #1f0d0d;
+  --color-danger-border: #4a2020;
+  --color-danger-text: #ffc9c9;
+  --color-text-secondary: #b8dee3;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Comfortaa', 'Inter', system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/fonts/fundo-do-mar/comfortaa-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/fundo-do-mar/inter-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Espaço Sideral (preto/violeta/branco — M19) ───────── */
+[data-theme="espaco-sideral"] {
+  --color-bg: #05030d;
+  --color-bg-secondary: #0d0920;
+  --color-text: #f2eefc;
+  --color-text-muted: #ab9fd4;
+  --color-accent: #c084fc;
+  --color-accent-hover: #d8b4fe;
+  --color-border: #2a1f4a;
+  --color-on-accent: #05030d;
+
+  --color-success: #34d399;
+  --color-success-text: #a7f3d0;
+  --color-error: #f87171;
+  --color-error-text: #fecaca;
+  --color-error-danger: #ef4444;
+
+  --color-bg-alt: #0a0718;
+  --color-bg-overlay: rgba(192, 132, 252, 0.08);
+  --color-border-subtle: rgba(192, 132, 252, 0.12);
+  --color-danger-bg: #1a0d0d;
+  --color-danger-border: #4a2424;
+  --color-danger-text: #fecaca;
+  --color-text-secondary: #cdc3e8;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Orbitron', 'Inter', system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  src: url('/fonts/espaco-sideral/orbitron-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/espaco-sideral/inter-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Cursores customizados por tema (Decisão 10.24) ──────────── */
+[data-theme="arcade"],
+[data-theme="arcade"] a,
+[data-theme="arcade"] button {
+  cursor: url('/cursors/arcade-crosshair.svg') 12 12, auto;
+}
+
+[data-theme="vintage"],
+[data-theme="vintage"] a,
+[data-theme="vintage"] button {
+  cursor: url('/cursors/vintage-nib.svg') 2 30, auto;
+}
+
+[data-theme="fundo-do-mar"],
+[data-theme="fundo-do-mar"] a,
+[data-theme="fundo-do-mar"] button {
+  cursor: url('/cursors/fundo-do-mar-bubble.svg') 14 14, auto;
+}
+
+[data-theme="espaco-sideral"],
+[data-theme="espaco-sideral"] a,
+[data-theme="espaco-sideral"] button {
+  cursor: url('/cursors/espaco-sideral-orb.svg') 14 14, auto;
+}
+
+@media (pointer: coarse) {
+  [data-theme="arcade"],
+  [data-theme="vintage"],
+  [data-theme="fundo-do-mar"],
+  [data-theme="espaco-sideral"] {
+    cursor: auto;
+  }
+}
+
 /* ── Tokens FIXOS de marca (não pertencem a nenhum tema) ─────── */
 :root {
   /* WhatsApp — cores de marca, não temáticas */

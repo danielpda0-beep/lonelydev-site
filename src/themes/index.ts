@@ -10,6 +10,22 @@ import MatrixHome from './matrix/Home.astro';
 import MatrixCard from './matrix/ThemeCard.astro';
 import matrixMeta from './matrix/theme.json';
 
+import ArcadeHome from './arcade/Home.astro';
+import ArcadeCard from './arcade/ThemeCard.astro';
+import arcadeMeta from './arcade/theme.json';
+
+import VintageHome from './vintage/Home.astro';
+import VintageCard from './vintage/ThemeCard.astro';
+import vintageMeta from './vintage/theme.json';
+
+import FundoDoMarHome from './fundo-do-mar/Home.astro';
+import FundoDoMarCard from './fundo-do-mar/ThemeCard.astro';
+import fundoDoMarMeta from './fundo-do-mar/theme.json';
+
+import EspacoSideralHome from './espaco-sideral/Home.astro';
+import EspacoSideralCard from './espaco-sideral/ThemeCard.astro';
+import espacoSideralMeta from './espaco-sideral/theme.json';
+
 export interface ThemeDefinition {
   id: string;
   name: string;
@@ -34,6 +50,26 @@ export const themes: Record<string, ThemeDefinition> = {
     ...matrixMeta,
     Home: MatrixHome,
     Card: MatrixCard,
+  },
+  arcade: {
+    ...arcadeMeta,
+    Home: ArcadeHome,
+    Card: ArcadeCard,
+  },
+  vintage: {
+    ...vintageMeta,
+    Home: VintageHome,
+    Card: VintageCard,
+  },
+  'fundo-do-mar': {
+    ...fundoDoMarMeta,
+    Home: FundoDoMarHome,
+    Card: FundoDoMarCard,
+  },
+  'espaco-sideral': {
+    ...espacoSideralMeta,
+    Home: EspacoSideralHome,
+    Card: EspacoSideralCard,
   },
 };
 

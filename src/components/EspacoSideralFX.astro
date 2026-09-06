@@ -1,0 +1,186 @@
+---
+// src/components/EspacoSideralFX.astro
+// M19: Fundo + detalhe interativo do tema Espaço Sideral (Decisão 10.25)
+// (a) estrela cadente periódica (15-30s) independente do cursor
+// (b) cursor vira corpo gravitacional que atrai levemente as estrelas próximas
+---
+
+<div id="espaco-fx-root" aria-hidden="true">
+  <div class="espaco-nebula"></div>
+  <canvas id="espaco-bg-canvas" class="espaco-bg-canvas"></canvas>
+</div>
+
+<style>
+  .espaco-nebula,
+  .espaco-bg-canvas {
+    display: none;
+  }
+
+  :global([data-theme="espaco-sideral"]) .espaco-nebula {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60vw 40vh at 15% 20%, rgba(168, 85, 247, 0.18), transparent 60%),
+      radial-gradient(ellipse 50vw 35vh at 85% 70%, rgba(192, 132, 252, 0.12), transparent 60%),
+      radial-gradient(ellipse 70vw 50vh at 50% 100%, rgba(88, 28, 135, 0.15), transparent 65%);
+    filter: blur(20px);
+  }
+
+  :global([data-theme="espaco-sideral"]) .espaco-bg-canvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__espacoFxBound) return;
+    w.__espacoFxBound = true;
+
+    function isEspacoTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'espaco-sideral';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvas() {
+      const el = document.getElementById('espaco-bg-canvas') as HTMLCanvasElement | null;
+      if (el && el !== canvas) {
+        canvas = el;
+        ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+    window.addEventListener('resize', () => {
+      if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    });
+
+    interface Star { x: number; y: number; r: number; depth: number; tw: number; }
+    const stars: Star[] = [];
+    let starsInited = false;
+    function initStars(width: number, height: number) {
+      stars.length = 0;
+      for (let i = 0; i < 140; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.4 + 0.3,
+          depth: 0.3 + Math.random() * 1.2,
+          tw: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    let mouseX = -9999;
+    let mouseY = -9999;
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    interface ShootingStar { x: number; y: number; vx: number; vy: number; life: number; }
+    let shooting: ShootingStar | null = null;
+
+    function scheduleShootingStar() {
+      const delay = 15000 + Math.random() * 15000;
+      window.setTimeout(() => {
+        if (isEspacoTheme() && !isReducedMotion() && !document.hidden && canvas) {
+          const fromLeft = Math.random() > 0.5;
+          shooting = {
+            x: fromLeft ? -20 : canvas.width + 20,
+            y: Math.random() * canvas.height * 0.5,
+            vx: (fromLeft ? 1 : -1) * (6 + Math.random() * 4),
+            vy: 3 + Math.random() * 2,
+            life: 1,
+          };
+        }
+        scheduleShootingStar();
+      }, delay);
+    }
+    scheduleShootingStar();
+
+    function drawStars(scrollY: number) {
+      if (!ctx || !canvas) return;
+      const reduce = isReducedMotion();
+      const gravityRadius = 140;
+      for (const s of stars) {
+        s.tw += 0.02;
+        let x = s.x;
+        let y = ((s.y + scrollY * s.depth * 0.08) % (canvas.height + 40)) - 20;
+        if (y < -20) y += canvas.height + 40;
+
+        if (!reduce && mouseX > -1000) {
+          const dx = x - mouseX;
+          const dy = y - mouseY;
+          const dist = Math.hypot(dx, dy);
+          if (dist < gravityRadius && dist > 0.01) {
+            const pull = (1 - dist / gravityRadius) * 8;
+            x -= (dx / dist) * pull;
+            y -= (dy / dist) * pull;
+          }
+        }
+
+        const alpha = 0.5 + Math.sin(s.tw) * 0.35;
+        ctx.globalAlpha = Math.max(0.15, alpha);
+        ctx.fillStyle = '#f2eefc';
+        ctx.beginPath();
+        ctx.arc(x, y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function drawShootingStar() {
+      if (!ctx || !shooting) return;
+      ctx.save();
+      ctx.globalAlpha = shooting.life;
+      const grad = ctx.createLinearGradient(
+        shooting.x, shooting.y,
+        shooting.x - shooting.vx * 6, shooting.y - shooting.vy * 6
+      );
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(1, 'rgba(192,132,252,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(shooting.x, shooting.y);
+      ctx.lineTo(shooting.x - shooting.vx * 6, shooting.y - shooting.vy * 6);
+      ctx.stroke();
+      ctx.restore();
+
+      shooting.x += shooting.vx;
+      shooting.y += shooting.vy;
+      shooting.life -= 1 / 60; // ~1s a 60fps
+      if (shooting.life <= 0 || !canvas || shooting.x < -60 || shooting.x > canvas.width + 60) {
+        shooting = null;
+      }
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isEspacoTheme()) return;
+      acquireCanvas();
+      if (!canvas || !ctx) return;
+      if (!starsInited) { initStars(canvas.width, canvas.height); starsInited = true; }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawStars(window.scrollY || 0);
+      drawShootingStar();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
