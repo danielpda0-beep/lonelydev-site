@@ -1,0 +1,11 @@
+{
+  "id": "cyberpunk-toquio",
+  "name": "Cyberpunk Tóquio",
+  "tagline": "Neon sujo, chuva sem fim e letreiros verticais em kana",
+  "description": "Magenta e ciano sujos sobre um beco encharcado de chuva, com letreiros verticais em kana e reflexo molhado no asfalto. Mover o cursor rápido puxa um rastro de aberração cromática — um drone-holograma sobrevoa em rota fixa, indiferente a você.",
+  "palette": {
+    "primary": "#ff2ad1",
+    "background": "#0a0410",
+    "text": "#f1ecfb"
+  }
+}

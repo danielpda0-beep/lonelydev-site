@@ -42,6 +42,22 @@ import NoirHome from './noir/Home.astro';
 import NoirCard from './noir/ThemeCard.astro';
 import noirMeta from './noir/theme.json';
 
+import CyberpunkToquioHome from './cyberpunk-toquio/Home.astro';
+import CyberpunkToquioCard from './cyberpunk-toquio/ThemeCard.astro';
+import cyberpunkToquioMeta from './cyberpunk-toquio/theme.json';
+
+import SolarpunkHome from './solarpunk/Home.astro';
+import SolarpunkCard from './solarpunk/ThemeCard.astro';
+import solarpunkMeta from './solarpunk/theme.json';
+
+import GameBoyHome from './game-boy/Home.astro';
+import GameBoyCard from './game-boy/ThemeCard.astro';
+import gameBoyMeta from './game-boy/theme.json';
+
+import SteampunkHome from './steampunk/Home.astro';
+import SteampunkCard from './steampunk/ThemeCard.astro';
+import steampunkMeta from './steampunk/theme.json';
+
 export interface ThemeDefinition {
   id: string;
   name: string;
@@ -106,6 +122,26 @@ export const themes: Record<string, ThemeDefinition> = {
     ...noirMeta,
     Home: NoirHome,
     Card: NoirCard,
+  },
+  'cyberpunk-toquio': {
+    ...cyberpunkToquioMeta,
+    Home: CyberpunkToquioHome,
+    Card: CyberpunkToquioCard,
+  },
+  solarpunk: {
+    ...solarpunkMeta,
+    Home: SolarpunkHome,
+    Card: SolarpunkCard,
+  },
+  'game-boy': {
+    ...gameBoyMeta,
+    Home: GameBoyHome,
+    Card: GameBoyCard,
+  },
+  steampunk: {
+    ...steampunkMeta,
+    Home: SteampunkHome,
+    Card: SteampunkCard,
   },
 };
 

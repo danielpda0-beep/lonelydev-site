@@ -1,0 +1,166 @@
+---
+// src/components/SteampunkFX.astro
+// M21: Fundo + detalhe interativo do tema Steampunk (Decisão 10.25, sem libélula mecânica)
+// (a) engrenagens decorativas do fundo giram mais rápido quando o cursor passa perto
+// (b) pequenas nuvens de vapor saem do cursor conforme ele se move
+---
+
+<canvas id="steam-bg-canvas" class="steam-bg-canvas" aria-hidden="true"></canvas>
+
+<style>
+  .steam-bg-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  :global([data-theme="steampunk"]) .steam-bg-canvas {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .steam-bg-canvas { display: none !important; }
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__steamFxBound) return;
+    w.__steamFxBound = true;
+    w.__steamFxDebug = () => ({ puffs: puffs.length, gearSpeeds: gears.map((g) => g.speed) });
+
+    function isSteamTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'steampunk';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    function isTouchDevice(): boolean {
+      return window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvas() {
+      const el = document.getElementById('steam-bg-canvas') as HTMLCanvasElement | null;
+      if (el && el !== canvas) {
+        canvas = el;
+        ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+    window.addEventListener('resize', () => {
+      if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    });
+
+    // ── Engrenagens decorativas do fundo (aceleram perto do cursor) ──
+    interface Gear { xr: number; yr: number; radius: number; teeth: number; baseSpeed: number; angle: number; speed: number; }
+    const gears: Gear[] = [
+      { xr: 0.08, yr: 0.15, radius: 34, teeth: 8, baseSpeed: 0.004, angle: 0, speed: 0.004 },
+      { xr: 0.92, yr: 0.22, radius: 24, teeth: 6, baseSpeed: -0.006, angle: 0, speed: -0.006 },
+      { xr: 0.85, yr: 0.78, radius: 40, teeth: 10, baseSpeed: 0.003, angle: 0, speed: 0.003 },
+      { xr: 0.1, yr: 0.82, radius: 22, teeth: 6, baseSpeed: -0.007, angle: 0, speed: -0.007 },
+      { xr: 0.5, yr: 0.06, radius: 18, teeth: 6, baseSpeed: 0.009, angle: 0, speed: 0.009 },
+    ];
+
+    let mouseX = -9999;
+    let mouseY = -9999;
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      spawnSteam(e.clientX, e.clientY);
+    });
+
+    function drawGear(g: Gear, width: number, height: number) {
+      if (!ctx) return;
+      const cx = g.xr * width;
+      const cy = g.yr * height;
+      const dist = Math.hypot(cx - mouseX, cy - mouseY);
+      const proximity = Math.max(0, 1 - dist / 220);
+      const targetSpeed = g.baseSpeed + Math.sign(g.baseSpeed || 1) * proximity * 0.05;
+      g.speed += (targetSpeed - g.speed) * 0.08;
+      g.angle += g.speed;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(g.angle);
+      ctx.globalAlpha = 0.5 + proximity * 0.35;
+      ctx.fillStyle = '#c98a3e';
+      ctx.beginPath();
+      ctx.arc(0, 0, g.radius * 0.62, 0, Math.PI * 2);
+      ctx.fill();
+      for (let i = 0; i < g.teeth; i++) {
+        const a = (Math.PI * 2 * i) / g.teeth;
+        ctx.save();
+        ctx.rotate(a);
+        ctx.fillRect(-g.radius * 0.13, -g.radius, g.radius * 0.26, g.radius * 0.34);
+        ctx.restore();
+      }
+      ctx.fillStyle = '#241708';
+      ctx.beginPath();
+      ctx.arc(0, 0, g.radius * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // ── Nuvens de vapor que saem do cursor ao mover ──
+    interface Puff { x: number; y: number; r: number; life: number; vx: number; vy: number; }
+    const puffs: Puff[] = [];
+    let lastSteamAt = 0;
+
+    function spawnSteam(x: number, y: number) {
+      if (!isSteamTheme() || isReducedMotion() || isTouchDevice()) return;
+      const now = performance.now();
+      if (now - lastSteamAt < 45) return; // sutil, sem poluir visualmente
+      lastSteamAt = now;
+      puffs.push({
+        x: x + (Math.random() - 0.5) * 4,
+        y: y + (Math.random() - 0.5) * 4,
+        r: 3 + Math.random() * 2,
+        life: 1,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: -0.4 - Math.random() * 0.3,
+      });
+      if (puffs.length > 60) puffs.splice(0, puffs.length - 60);
+    }
+
+    function updateAndDrawPuffs() {
+      if (!ctx) return;
+      for (let i = puffs.length - 1; i >= 0; i--) {
+        const p = puffs[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.r += 0.15;
+        p.life -= 0.02;
+        if (p.life <= 0) { puffs.splice(i, 1); continue; }
+        ctx.globalAlpha = p.life * 0.35;
+        ctx.fillStyle = '#f2e6cf';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isSteamTheme()) return;
+      acquireCanvas();
+      if (!canvas || !ctx) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (isReducedMotion()) return;
+
+      for (const g of gears) drawGear(g, canvas.width, canvas.height);
+      updateAndDrawPuffs();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>

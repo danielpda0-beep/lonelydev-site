@@ -9,6 +9,10 @@ import EspacoSideralFX from '../components/EspacoSideralFX.astro';
 import FisicaQuanticaFX from '../components/FisicaQuanticaFX.astro';
 import BlueprintFX from '../components/BlueprintFX.astro';
 import NoirFX from '../components/NoirFX.astro';
+import CyberpunkToquioFX from '../components/CyberpunkToquioFX.astro';
+import SolarpunkFX from '../components/SolarpunkFX.astro';
+import GameBoyFX from '../components/GameBoyFX.astro';
+import SteampunkFX from '../components/SteampunkFX.astro';
 
 interface Props {
   title?: string;
@@ -61,6 +65,10 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
     <FisicaQuanticaFX />
     <BlueprintFX />
     <NoirFX />
+    <CyberpunkToquioFX />
+    <SolarpunkFX />
+    <GameBoyFX />
+    <SteampunkFX />
     <header class="header">
       <div class="container header-container">
         <div class="header-brand-group">
@@ -128,6 +136,22 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         <a href={`/t/noir${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="noir">
           <span class="theme-color" style="background: #d4d4d4; border-color: #0a0a0a;"></span>
           Noir
+        </a>
+        <a href={`/t/cyberpunk-toquio${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="cyberpunk-toquio">
+          <span class="theme-color" style="background: #ff2ad1; border-color: #0a0410;"></span>
+          Cyberpunk Tóquio
+        </a>
+        <a href={`/t/solarpunk${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="solarpunk">
+          <span class="theme-color" style="background: #4ade80; border-color: #0b1f14;"></span>
+          Solarpunk
+        </a>
+        <a href={`/t/game-boy${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="game-boy">
+          <span class="theme-color" style="background: #2f4f22; border-color: #e4efc9;"></span>
+          Game Boy
+        </a>
+        <a href={`/t/steampunk${cleanPath === '/' ? '' : cleanPath}`} class="theme-option" data-theme-id="steampunk">
+          <span class="theme-color" style="background: #c98a3e; border-color: #241708;"></span>
+          Steampunk
         </a>
       </div>
     </aside>

@@ -1,0 +1,409 @@
+---
+// src/themes/cyberpunk-toquio/Home.astro
+// Layout Bespoke do Tema Cyberpunk Tóquio (Distrito de Neon)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'cyberpunk-toquio' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-cyber-home" data-bespoke-layout="cyberpunk-toquio">
+  <!-- Letreiro de neon principal -->
+  <section class="cy-billboard" aria-labelledby="cy-hero-tagline">
+    <p class="cy-eyebrow">◈ {homeContent.hero.eyebrow} // DISTRITO 7 ◈</p>
+    <h1 id="cy-hero-tagline" class="cy-title">{homeContent.hero.tagline}</h1>
+    <p class="cy-lead">{homeContent.hero.lead}</p>
+    <a class="cy-btn cy-btn-primary" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto} ⌁</a>
+  </section>
+
+  <!-- Ticker de varredura de rua -->
+  <section class="cy-scanline-ticker" aria-label="Indicadores de operação">
+    <div class="cy-ticker-track">
+      <span>{homeContent.telemetria.escopo}</span>
+      <span>{homeContent.telemetria.preco}</span>
+      <span>{homeContent.telemetria.prazo}</span>
+      <span>{homeContent.telemetria.semMensalidade}</span>
+      <span>{homeContent.telemetria.semLockin}</span>
+    </div>
+  </section>
+
+  <!-- Pilares como distritos da cidade -->
+  <section class="cy-section" aria-labelledby="cy-pilares-title">
+    <h2 id="cy-pilares-title" class="cy-section-title">道 {homeContent.pilaresTitulo}</h2>
+    <div class="cy-districts">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['cy-district', { 'cy-district-main': pilar.destaque }]} href={pilar.link}>
+          <span class="cy-district-code">SETOR_0{idx + 1}</span>
+          {pilar.badge && <span class="cy-badge">{pilar.badge}</span>}
+          <h3 class="cy-district-title">{pilar.titulo}</h3>
+          <p class="cy-district-desc">{pilar.resumo}</p>
+          <span class="cy-district-cta">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Passos como protocolo de acesso -->
+  <section class="cy-section" aria-labelledby="cy-passos-title">
+    <h2 id="cy-passos-title" class="cy-section-title">道 {homeContent.passosTitulo}</h2>
+    <ol class="cy-protocol">
+      {homeContent.passos.map((passo) => (
+        <li class="cy-protocol-step">
+          <span class="cy-protocol-n">{passo.n}</span>
+          <div>
+            <h3 class="cy-protocol-title">{passo.titulo}</h3>
+            <p class="cy-protocol-desc">{passo.texto}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <a href={homeContent.passosLinkHref} class="cy-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Pacotes fixos como terminais de mercado -->
+  <section class="cy-section" aria-labelledby="cy-pacotes-title">
+    <h2 id="cy-pacotes-title" class="cy-section-title">道 {homeContent.pacotesInfo.titulo}</h2>
+    <p class="cy-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="cy-terminals">
+      {pacotesFixos.map((pacote, idx) => (
+        <article class="cy-terminal">
+          <span class="cy-terminal-tag">TERM_{String(idx + 1).padStart(2, '0')}</span>
+          <h3 class="cy-terminal-name">{pacote.data.nome}</h3>
+          <p class="cy-terminal-desc">{pacote.data.resumo}</p>
+          <div class="cy-terminal-price">{pacote.data.valor}</div>
+          <div class="cy-terminal-time">{pacote.data.prazo_tipico}</div>
+          <a class="cy-btn cy-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Portfolio como arquivo de vigilância -->
+  <section class="cy-section" aria-labelledby="cy-portfolio-title">
+    <h2 id="cy-portfolio-title" class="cy-section-title">道 {homeContent.portfolio.titulo}</h2>
+    <div class="cy-archive-grid">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="cy-archive-card">
+          <span class="cy-archive-status">{item.status === 'Disponível' ? '● ONLINE' : '◌ EM PROCESSO'}</span>
+          <h3 class="cy-archive-title">{item.titulo}</h3>
+          <p class="cy-archive-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="cy-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="cy-section" aria-labelledby="cy-temas-title">
+    <h2 id="cy-temas-title" class="cy-section-title">道 {homeContent.temasTeaser.titulo}</h2>
+    <p class="cy-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="cy-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Chamada final -->
+  <section class="cy-final-call" aria-labelledby="cy-cta-title">
+    <p class="cy-final-tag">// TRANSMISSÃO ABERTA</p>
+    <h2 id="cy-cta-title" class="cy-final-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="cy-final-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="cy-btn cy-btn-primary cy-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto} ⌁</a>
+  </section>
+</div>
+
+<style>
+  .theme-cyber-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .cy-billboard {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
+    background: rgba(23, 10, 34, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    box-shadow: 0 0 30px rgba(255, 42, 209, 0.25), inset 0 0 40px rgba(32, 230, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .cy-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: #20e6ff;
+    text-shadow: 0 0 6px rgba(32, 230, 255, 0.6);
+  }
+
+  .cy-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 3.6vw, 2rem);
+    line-height: 1.5;
+    color: var(--color-text);
+    text-shadow: 0 0 12px rgba(255, 42, 209, 0.5);
+    max-width: 26ch;
+  }
+
+  .cy-lead {
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    max-width: 46ch;
+  }
+
+  .cy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-decoration: none;
+    padding: 0.85rem 1.6rem;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+
+  .cy-btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    box-shadow: 0 0 18px rgba(255, 42, 209, 0.55);
+  }
+
+  .cy-btn-primary:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 0 26px rgba(255, 42, 209, 0.8);
+  }
+
+  .cy-btn-lg { font-size: 1rem; padding: 1.05rem 2rem; }
+
+  .cy-btn-ghost {
+    background: transparent;
+    color: #20e6ff;
+    border: 1px solid var(--color-border);
+  }
+
+  .cy-btn-ghost:hover {
+    border-color: #20e6ff;
+    box-shadow: 0 0 12px rgba(32, 230, 255, 0.4);
+  }
+
+  .cy-scanline-ticker {
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.65rem 0;
+    overflow-x: auto;
+  }
+
+  .cy-ticker-track {
+    display: flex;
+    gap: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #20e6ff;
+    white-space: nowrap;
+    padding: 0 1rem;
+  }
+
+  .cy-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .cy-section-title {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    color: var(--color-accent);
+    letter-spacing: 0.04em;
+  }
+
+  .cy-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .cy-districts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .cy-districts { grid-template-columns: repeat(3, 1fr); }
+    .cy-district-main { grid-column: 1 / -1; }
+  }
+
+  .cy-district {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--spacing-lg, 2rem);
+    background: rgba(23, 10, 34, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cy-district:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255, 42, 209, 0.35);
+  }
+
+  .cy-district-main { border-color: #20e6ff; }
+
+  .cy-district-code {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+  }
+
+  .cy-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.5rem;
+  }
+
+  .cy-district-title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+  }
+
+  .cy-district-desc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .cy-district-cta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #20e6ff;
+  }
+
+  .cy-protocol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cy-protocol-step {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.85rem 1rem;
+    background: var(--color-bg-secondary);
+    border-left: 2px solid var(--color-accent);
+  }
+
+  .cy-protocol-n {
+    font-family: var(--font-mono);
+    color: #20e6ff;
+  }
+
+  .cy-protocol-title {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+  }
+
+  .cy-protocol-desc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+
+  .cy-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+
+  .cy-link:hover { color: var(--color-accent-hover); }
+
+  .cy-terminals {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .cy-terminals { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cy-terminals { grid-template-columns: repeat(3, 1fr); } }
+
+  .cy-terminal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: var(--spacing-lg, 2rem);
+    background: rgba(23, 10, 34, 0.55);
+    border: 1px dashed var(--color-border);
+  }
+
+  .cy-terminal-tag { font-family: var(--font-mono); font-size: 0.6rem; color: var(--color-text-muted); }
+  .cy-terminal-name { font-family: var(--font-mono); font-size: 1.05rem; color: var(--color-text); }
+  .cy-terminal-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); flex: 1; }
+  .cy-terminal-price { font-family: var(--font-mono); font-size: 1.25rem; color: var(--color-accent); }
+  .cy-terminal-time { font-family: var(--font-mono); font-size: 0.75rem; color: #20e6ff; }
+
+  .cy-archive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .cy-archive-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .cy-archive-card {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .cy-archive-status { font-family: var(--font-mono); font-size: 0.7rem; color: #20e6ff; }
+  .cy-archive-title { font-family: var(--font-mono); font-size: 1.05rem; color: var(--color-text); margin: 0.4rem 0; }
+  .cy-archive-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+
+  .cy-final-call {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: rgba(23, 10, 34, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--color-accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .cy-final-tag { font-family: var(--font-mono); font-size: 0.75rem; color: #20e6ff; letter-spacing: 0.15em; }
+  .cy-final-title { font-family: var(--font-mono); font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--color-text); }
+  .cy-final-lead { font-family: var(--font-sans); font-size: 1.25rem; color: var(--color-text-muted); max-width: 50ch; }
+</style>

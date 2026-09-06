@@ -1,0 +1,11 @@
+{
+  "id": "steampunk",
+  "name": "Steampunk",
+  "tagline": "Latão, cobre e couro girando devagar",
+  "description": "Engrenagens, rebites e mostradores analógicos numa oficina vitoriana. As engrenagens do fundo aceleram quando o cursor passa perto, como se fossem ativadas por ele, e pequenas nuvens de vapor escapam conforme você move o ponteiro.",
+  "palette": {
+    "primary": "#c98a3e",
+    "background": "#241708",
+    "text": "#f2e6cf"
+  }
+}

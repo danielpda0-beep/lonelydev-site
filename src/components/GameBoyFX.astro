@@ -1,0 +1,214 @@
+---
+// src/components/GameBoyFX.astro
+// M21: Fundo + detalhes interativos do tema Game Boy (Decisão 10.25 — os 3 escolhidos)
+// (a) rastro de "ghosting" autêntico de tela LCD atrás do cursor em movimento
+// (b) criaturinha pixelada genérica que foge quando o cursor se aproxima
+// (c) explosão de pixels 8-bit ao clicar em qualquer lugar
+// Paleta restrita a 4 tons de verde-oliva (Decisão 10.7): #12200d · #2f4f22 · #9ab973 · #e4efc9
+---
+
+<canvas id="gb-bg-canvas" class="gb-bg-canvas" aria-hidden="true"></canvas>
+
+<style>
+  .gb-bg-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  :global([data-theme="game-boy"]) .gb-bg-canvas {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gb-bg-canvas { display: none !important; }
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__gbFxBound) return;
+    w.__gbFxBound = true;
+    w.__gbFxDebug = () => ({ trailLen: trail.length, fleeing: creature.fleeing, chips: chips.length });
+
+    const TONE_DARK = '#12200d';
+    const TONE_MID = '#2f4f22';
+    const TONE_LIGHT = '#9ab973';
+
+    function isGbTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'game-boy';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    function isTouchDevice(): boolean {
+      return window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvas() {
+      const el = document.getElementById('gb-bg-canvas') as HTMLCanvasElement | null;
+      if (el && el !== canvas) {
+        canvas = el;
+        ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+    window.addEventListener('resize', () => {
+      if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    });
+
+    // ── Ghosting: cópias fantasmas do cursor em frames anteriores ──
+    interface GhostPos { x: number; y: number; }
+    const trail: GhostPos[] = [];
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isGbTheme() || isReducedMotion() || isTouchDevice()) return;
+      trail.push({ x: e.clientX, y: e.clientY });
+      if (trail.length > 8) trail.shift();
+    });
+
+    function drawGhostTrail() {
+      if (!ctx || trail.length === 0) return;
+      for (let i = 0; i < trail.length; i++) {
+        const p = trail[i];
+        const age = trail.length - i; // 1 = mais recente
+        ctx.globalAlpha = Math.max(0, 0.35 - age * 0.045);
+        ctx.fillStyle = TONE_MID;
+        ctx.fillRect(p.x - 6, p.y - 6, 12, 12);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // ── Criaturinha pixelada genérica (foge do cursor) ──
+    interface Creature { x: number; y: number; vx: number; vy: number; fleeing: boolean; }
+    const creature: Creature = { x: -100, y: -100, vx: 0.3, vy: 0.2, fleeing: false };
+    let creatureInited = false;
+
+    function initCreature(width: number, height: number) {
+      creature.x = width * 0.5;
+      creature.y = height * 0.6;
+      creatureInited = true;
+    }
+
+    function updateCreature(width: number, height: number) {
+      const fleeRadius = 90;
+      const canReact = !isTouchDevice() && mouseX > -1000;
+      if (canReact) {
+        const d = Math.hypot(creature.x - mouseX, creature.y - mouseY);
+        creature.fleeing = d < fleeRadius;
+        if (creature.fleeing) {
+          const dx = creature.x - mouseX;
+          const dy = creature.y - mouseY;
+          const dist = Math.hypot(dx, dy) || 1;
+          creature.vx = (dx / dist) * 2.2;
+          creature.vy = (dy / dist) * 2.2;
+        }
+      } else {
+        creature.fleeing = false;
+      }
+
+      if (!creature.fleeing) {
+        creature.vx += (Math.random() - 0.5) * 0.06;
+        creature.vy += (Math.random() - 0.5) * 0.06;
+        const maxSpeed = 0.5;
+        const sp = Math.hypot(creature.vx, creature.vy);
+        if (sp > maxSpeed) { creature.vx = (creature.vx / sp) * maxSpeed; creature.vy = (creature.vy / sp) * maxSpeed; }
+      }
+
+      creature.x += creature.vx;
+      creature.y += creature.vy;
+      const margin = 20;
+      creature.x = Math.max(margin, Math.min(width - margin, creature.x));
+      creature.y = Math.max(margin, Math.min(height - margin, creature.y));
+    }
+
+    function drawCreature() {
+      if (!ctx) return;
+      const px = 3;
+      const x = Math.round(creature.x / px) * px;
+      const y = Math.round(creature.y / px) * px;
+      ctx.fillStyle = TONE_DARK;
+      // corpo simples 5x5 blocos, "genérico" — sem referência a personagem existente
+      const body = [
+        [0, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1],
+        [1, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1],
+        [0, 1, 0, 1, 0],
+      ];
+      for (let r = 0; r < body.length; r++) {
+        for (let c = 0; c < body[r].length; c++) {
+          if (body[r][c]) ctx.fillRect(x + (c - 2) * px, y + (r - 2) * px, px, px);
+        }
+      }
+    }
+
+    // ── Explosão de pixels 8-bit ao clicar ──
+    interface Chip { x: number; y: number; vx: number; vy: number; life: number; tone: string; }
+    const chips: Chip[] = [];
+
+    document.addEventListener('click', (e: MouseEvent) => {
+      if (!isGbTheme() || isReducedMotion()) return;
+      const count = 16;
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+        const speed = 1.5 + Math.random() * 2.5;
+        chips.push({
+          x: e.clientX,
+          y: e.clientY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1,
+          tone: i % 2 === 0 ? TONE_DARK : TONE_MID,
+        });
+      }
+      if (chips.length > 200) chips.splice(0, chips.length - 200);
+    });
+
+    function updateAndDrawChips() {
+      if (!ctx) return;
+      for (let i = chips.length - 1; i >= 0; i--) {
+        const c = chips[i];
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += 0.08;
+        c.life -= 0.035;
+        if (c.life <= 0) { chips.splice(i, 1); continue; }
+        ctx.globalAlpha = c.life;
+        ctx.fillStyle = c.tone;
+        ctx.fillRect(Math.round(c.x / 3) * 3, Math.round(c.y / 3) * 3, 3, 3);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isGbTheme()) return;
+      acquireCanvas();
+      if (!canvas || !ctx) return;
+      if (!creatureInited) initCreature(canvas.width, canvas.height);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (isReducedMotion()) return;
+
+      drawGhostTrail();
+      updateCreature(canvas.width, canvas.height);
+      drawCreature();
+      updateAndDrawChips();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>

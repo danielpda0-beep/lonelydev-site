@@ -1,0 +1,11 @@
+{
+  "id": "solarpunk",
+  "name": "Solarpunk",
+  "tagline": "Verde vivo, latão e luz difusa de estufa",
+  "description": "Folhagem, vidro e madeira numa Home arejada, iluminada por luz natural difusa. Borboletas e abelhas curiosas se aproximam do cursor, um brotinho nasce a cada clique, e pétalas caem levemente quando você muda de página.",
+  "palette": {
+    "primary": "#4ade80",
+    "background": "#0b1f14",
+    "text": "#eef7ec"
+  }
+}

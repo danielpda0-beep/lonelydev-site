@@ -1,0 +1,384 @@
+---
+// src/themes/steampunk/Home.astro
+// Layout Bespoke do Tema Steampunk (Oficina vitoriana)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'steampunk' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-steam-home" data-bespoke-layout="steampunk">
+  <!-- Placa de latão da oficina -->
+  <section class="st-plaque" aria-labelledby="st-hero-tagline">
+    <p class="st-eyebrow">⚙ {homeContent.hero.eyebrow} — OFICINA Nº VII ⚙</p>
+    <h1 id="st-hero-tagline" class="st-title">{homeContent.hero.tagline}</h1>
+    <p class="st-lead">{homeContent.hero.lead}</p>
+    <a class="st-btn st-btn-primary" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+  </section>
+
+  <!-- Mostradores analógicos -->
+  <section class="st-gauges" aria-label="Indicadores da oficina">
+    <div class="st-gauge"><span class="st-gauge-label">Escopo</span><span class="st-gauge-value">{homeContent.telemetria.escopo}</span></div>
+    <div class="st-gauge"><span class="st-gauge-label">Preço</span><span class="st-gauge-value">{homeContent.telemetria.preco}</span></div>
+    <div class="st-gauge"><span class="st-gauge-label">Prazo</span><span class="st-gauge-value">{homeContent.telemetria.prazo}</span></div>
+    <div class="st-gauge"><span class="st-gauge-label">Mensalidade</span><span class="st-gauge-value">{homeContent.telemetria.semMensalidade}</span></div>
+    <div class="st-gauge"><span class="st-gauge-label">Lock-in</span><span class="st-gauge-value">{homeContent.telemetria.semLockin}</span></div>
+  </section>
+
+  <!-- Pilares como bancadas de trabalho -->
+  <section class="st-section" aria-labelledby="st-pilares-title">
+    <h2 id="st-pilares-title" class="st-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="st-benches">
+      {homeContent.pilares.map((pilar, idx) => (
+        <a class:list={['st-bench', { 'st-bench-main': pilar.destaque }]} href={pilar.link}>
+          <span class="st-bench-plate">BANCADA {String(idx + 1).padStart(2, '0')}</span>
+          {pilar.badge && <span class="st-badge">{pilar.badge}</span>}
+          <h3 class="st-bench-title">{pilar.titulo}</h3>
+          <p class="st-bench-desc">{pilar.resumo}</p>
+          <span class="st-bench-cta">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Passos como processo de manufatura -->
+  <section class="st-section" aria-labelledby="st-passos-title">
+    <h2 id="st-passos-title" class="st-section-title">{homeContent.passosTitulo}</h2>
+    <ol class="st-process">
+      {homeContent.passos.map((passo) => (
+        <li class="st-process-step">
+          <span class="st-process-n">⚙ {passo.n}</span>
+          <div>
+            <h3 class="st-process-title">{passo.titulo}</h3>
+            <p class="st-process-desc">{passo.texto}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <a href={homeContent.passosLinkHref} class="st-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Pacotes fixos como catálogo de peças -->
+  <section class="st-section" aria-labelledby="st-pacotes-title">
+    <h2 id="st-pacotes-title" class="st-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="st-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="st-catalog">
+      {pacotesFixos.map((pacote) => (
+        <article class="st-part">
+          <h3 class="st-part-name">{pacote.data.nome}</h3>
+          <p class="st-part-desc">{pacote.data.resumo}</p>
+          <div class="st-part-price">{pacote.data.valor}</div>
+          <div class="st-part-time">{pacote.data.prazo_tipico}</div>
+          <a class="st-btn st-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Portfolio como vitrine de invenções -->
+  <section class="st-section" aria-labelledby="st-portfolio-title">
+    <h2 id="st-portfolio-title" class="st-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="st-inventions">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="st-invention">
+          <span class="st-invention-status">{item.status === 'Disponível' ? 'PATENTEADO' : 'EM PROTÓTIPO'}</span>
+          <h3 class="st-invention-title">{item.titulo}</h3>
+          <p class="st-invention-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="st-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="st-section" aria-labelledby="st-temas-title">
+    <h2 id="st-temas-title" class="st-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="st-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="st-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Telegrama final -->
+  <section class="st-telegram" aria-labelledby="st-cta-title">
+    <p class="st-telegram-tag">— TELEGRAMA —</p>
+    <h2 id="st-cta-title" class="st-telegram-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="st-telegram-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="st-btn st-btn-primary st-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-steam-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .st-plaque {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 4px rgba(201, 138, 62, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .st-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+  }
+
+  .st-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.3rem, 3.6vw, 2.1rem);
+    line-height: 1.4;
+    color: var(--color-text);
+    max-width: 26ch;
+  }
+
+  .st-lead {
+    font-family: var(--font-sans);
+    font-size: 1.3rem;
+    color: var(--color-text-muted);
+    max-width: 46ch;
+  }
+
+  .st-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    text-decoration: none;
+    padding: 0.85rem 1.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-accent);
+    transition: all 0.2s ease;
+  }
+
+  .st-btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .st-btn-primary:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+
+  .st-btn-lg { font-size: 1.1rem; padding: 1rem 2.2rem; }
+
+  .st-btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+  }
+
+  .st-btn-ghost:hover { background: var(--color-bg-overlay); }
+
+  .st-gauges {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) { .st-gauges { grid-template-columns: repeat(5, 1fr); } }
+
+  .st-gauge {
+    background: var(--color-bg-secondary);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .st-gauge-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  .st-gauge-value {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-accent);
+  }
+
+  .st-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .st-section-title {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+  }
+
+  .st-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .st-benches {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .st-benches { grid-template-columns: repeat(3, 1fr); }
+    .st-bench-main { grid-column: 1 / -1; }
+  }
+
+  .st-bench {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .st-bench:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+  }
+
+  .st-bench-main { border-color: var(--color-accent); }
+
+  .st-bench-plate {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  .st-badge {
+    align-self: flex-start;
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.55rem;
+    border-radius: 3px;
+  }
+
+  .st-bench-title { font-family: var(--font-mono); font-size: 1.15rem; color: var(--color-text); }
+  .st-bench-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+  .st-bench-cta { font-family: var(--font-sans); font-size: 0.9rem; color: var(--color-accent); }
+
+  .st-process {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .st-process-step {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.85rem 1rem;
+    background: var(--color-bg-secondary);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .st-process-n { font-family: var(--font-mono); color: var(--color-accent); }
+  .st-process-title { font-family: var(--font-mono); font-size: 1rem; color: var(--color-text); margin-bottom: 0.25rem; }
+  .st-process-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+
+  .st-link {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+
+  .st-link:hover { color: var(--color-accent-hover); }
+
+  .st-catalog {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .st-catalog { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .st-catalog { grid-template-columns: repeat(3, 1fr); } }
+
+  .st-part {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px dashed var(--color-border);
+    border-radius: 6px;
+  }
+
+  .st-part-name { font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text); }
+  .st-part-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); flex: 1; }
+  .st-part-price { font-family: var(--font-mono); font-size: 1.3rem; color: var(--color-accent); }
+  .st-part-time { font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-text-muted); }
+
+  .st-inventions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .st-inventions { grid-template-columns: repeat(2, 1fr); } }
+
+  .st-invention {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .st-invention-status { font-family: var(--font-sans); font-size: 0.75rem; letter-spacing: 0.05em; color: var(--color-accent); }
+  .st-invention-title { font-family: var(--font-mono); font-size: 1.1rem; color: var(--color-text); margin: 0.4rem 0; }
+  .st-invention-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+
+  .st-telegram {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-accent);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .st-telegram-tag { font-family: var(--font-sans); font-size: 0.9rem; letter-spacing: 0.15em; color: var(--color-accent); }
+  .st-telegram-title { font-family: var(--font-mono); font-size: clamp(1.2rem, 3vw, 1.7rem); color: var(--color-text); }
+  .st-telegram-lead { font-family: var(--font-sans); font-size: 1.3rem; color: var(--color-text-muted); max-width: 50ch; }
+</style>

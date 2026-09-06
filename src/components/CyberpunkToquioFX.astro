@@ -1,0 +1,241 @@
+---
+// src/components/CyberpunkToquioFX.astro
+// M21: Fundo + detalhe interativo do tema Cyberpunk Tóquio (Decisão 10.25)
+// (a) rastro de aberração cromática reage ao CURSOR quando ele se move rápido
+// (b) chuva com respingos e (c) drone-holograma em rota fixa repetitiva são AMBIENTE,
+//     independentes do cursor — nunca sincronizados com nada que o visitante faça.
+---
+
+<div id="cyber-fx-root" aria-hidden="true">
+  <canvas id="cyber-bg-canvas" class="cyber-bg-canvas"></canvas>
+  <div class="cyber-kana-strip cyber-kana-1">歌舞伎町</div>
+  <div class="cyber-kana-strip cyber-kana-2">ネオン</div>
+  <div class="cyber-kana-strip cyber-kana-3">深夜営業</div>
+</div>
+
+<style>
+  .cyber-bg-canvas {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  :global([data-theme="cyberpunk-toquio"]) .cyber-bg-canvas {
+    display: block;
+  }
+
+  .cyber-kana-strip {
+    display: none;
+  }
+
+  :global([data-theme="cyberpunk-toquio"]) .cyber-kana-strip {
+    display: block;
+    position: fixed;
+    top: 8vh;
+    writing-mode: vertical-rl;
+    font-size: 1.4rem;
+    letter-spacing: 0.3em;
+    color: #20e6ff;
+    text-shadow: 0 0 8px rgba(32, 230, 255, 0.7), 0 0 18px rgba(255, 42, 209, 0.35);
+    opacity: 0.35;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .cyber-kana-1 { left: 6vw; }
+  .cyber-kana-2 { left: 50vw; color: #ff2ad1; text-shadow: 0 0 8px rgba(255, 42, 209, 0.7), 0 0 18px rgba(32, 230, 255, 0.35); top: 20vh; }
+  .cyber-kana-3 { right: 8vw; top: 12vh; }
+
+  @media (max-width: 768px) {
+    .cyber-kana-strip { font-size: 1rem; opacity: 0.22; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cyber-bg-canvas { display: none !important; }
+  }
+</style>
+
+<script>
+  (function () {
+    const w = window as any;
+    if (w.__cyberFxBound) return;
+    w.__cyberFxBound = true;
+    w.__cyberFxDebug = () => ({ ghosts: ghosts.length });
+
+    function isCyberTheme(): boolean {
+      return document.documentElement.getAttribute('data-theme') === 'cyberpunk-toquio';
+    }
+    function isReducedMotion(): boolean {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    let canvas: HTMLCanvasElement | null = null;
+    let ctx: CanvasRenderingContext2D | null = null;
+
+    function acquireCanvas() {
+      const el = document.getElementById('cyber-bg-canvas') as HTMLCanvasElement | null;
+      if (el && el !== canvas) {
+        canvas = el;
+        ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+    window.addEventListener('resize', () => {
+      if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    });
+
+    // ── Chuva ambiente + respingos (independente do cursor) ──
+    interface Drop { x: number; y: number; len: number; speed: number; }
+    const drops: Drop[] = [];
+    interface Splash { x: number; y: number; r: number; life: number; }
+    const splashes: Splash[] = [];
+    let dropsInited = false;
+
+    function initDrops(width: number, height: number) {
+      drops.length = 0;
+      for (let i = 0; i < 70; i++) {
+        drops.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          len: 10 + Math.random() * 18,
+          speed: 5 + Math.random() * 6,
+        });
+      }
+    }
+
+    function updateAndDrawRain(height: number) {
+      if (!ctx) return;
+      ctx.save();
+      for (const d of drops) {
+        d.y += d.speed;
+        if (d.y > height) {
+          splashes.push({ x: d.x, y: height - 2, r: 1, life: 1 });
+          d.y = -d.len;
+          d.x = Math.random() * (canvas?.width || window.innerWidth);
+        }
+        const hue = Math.random() > 0.5 ? 'rgba(255,42,209,0.22)' : 'rgba(32,230,255,0.22)';
+        ctx.strokeStyle = hue;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x, d.y + d.len);
+        ctx.stroke();
+      }
+      for (let i = splashes.length - 1; i >= 0; i--) {
+        const s = splashes[i];
+        s.r += 0.6;
+        s.life -= 0.06;
+        if (s.life <= 0) { splashes.splice(i, 1); continue; }
+        ctx.globalAlpha = s.life * 0.4;
+        ctx.strokeStyle = '#20e6ff';
+        ctx.beginPath();
+        ctx.ellipse(s.x, s.y, s.r, s.r * 0.35, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
+    // ── Drone-holograma: rota fixa, longa e repetitiva (independente do cursor) ──
+    const droneWaypoints = [
+      [0.12, 0.18], [0.42, 0.09], [0.78, 0.22], [0.88, 0.52],
+      [0.6, 0.68], [0.28, 0.6], [0.08, 0.4],
+    ];
+    const droneLoopSeconds = 42; // longa o bastante pra não parecer repetição óbvia
+
+    function droneCurrentPos(t: number, width: number, height: number) {
+      const n = droneWaypoints.length;
+      const progress = (t % droneLoopSeconds) / droneLoopSeconds;
+      const segF = progress * n;
+      const i0 = Math.floor(segF) % n;
+      const i1 = (i0 + 1) % n;
+      const localT = segF - Math.floor(segF);
+      const p0 = droneWaypoints[i0];
+      const p1 = droneWaypoints[i1];
+      const x = (p0[0] + (p1[0] - p0[0]) * localT) * width;
+      const y = (p0[1] + (p1[1] - p0[1]) * localT) * height + Math.sin(t * 2) * 6;
+      return { x, y };
+    }
+
+    function drawDrone(t: number, width: number, height: number) {
+      if (!ctx) return;
+      const { x, y } = droneCurrentPos(t, width, height);
+      ctx.save();
+      ctx.globalAlpha = 0.8 + Math.sin(t * 6) * 0.15;
+      ctx.fillStyle = '#20e6ff';
+      ctx.beginPath();
+      ctx.moveTo(x, y - 5);
+      ctx.lineTo(x + 9, y);
+      ctx.lineTo(x, y + 5);
+      ctx.lineTo(x - 9, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,42,209,0.6)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y - 9);
+      ctx.lineTo(x, y + 9);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ── Aberração cromática no cursor (reage à VELOCIDADE do movimento) ──
+    interface Ghost { x: number; y: number; life: number; }
+    const ghosts: Ghost[] = [];
+    let lastMouseX = -9999;
+    let lastMouseY = -9999;
+    let lastMoveTime = performance.now();
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!isCyberTheme() || isReducedMotion()) return;
+      const now = performance.now();
+      const dt = Math.max(1, now - lastMoveTime);
+      const dist = Math.hypot(e.clientX - lastMouseX, e.clientY - lastMouseY);
+      const speed = dist / dt; // px/ms
+      lastMoveTime = now;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      if (speed > 0.9) {
+        ghosts.push({ x: e.clientX, y: e.clientY, life: 1 });
+        if (ghosts.length > 40) ghosts.splice(0, ghosts.length - 40);
+      }
+    });
+
+    function drawGhosts() {
+      if (!ctx) return;
+      for (let i = ghosts.length - 1; i >= 0; i--) {
+        const g = ghosts[i];
+        g.life -= 0.06;
+        if (g.life <= 0) { ghosts.splice(i, 1); continue; }
+        ctx.globalAlpha = g.life * 0.55;
+        ctx.fillStyle = '#ff2ad1';
+        ctx.fillRect(g.x - 4 - 3, g.y - 4, 8, 8);
+        ctx.fillStyle = '#20e6ff';
+        ctx.fillRect(g.x - 4 + 3, g.y - 4, 8, 8);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame() {
+      requestAnimationFrame(frame);
+      if (document.hidden || !isCyberTheme()) return;
+      acquireCanvas();
+      if (!canvas || !ctx) return;
+      if (!dropsInited) { initDrops(canvas.width, canvas.height); dropsInited = true; }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (isReducedMotion()) return;
+
+      const t = performance.now() / 1000;
+      updateAndDrawRain(canvas.height);
+      drawDrone(t, canvas.width, canvas.height);
+      drawGhosts();
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>

@@ -1,0 +1,355 @@
+---
+// src/themes/solarpunk/Home.astro
+// Layout Bespoke do Tema Solarpunk (Estufa arejada)
+// Regra 10.9: Todo o conteúdo vem de homeContent e getPacotesFixos()
+import { homeContent, getPacotesFixos } from '../../data/homeContent';
+
+interface Props {
+  theme?: string;
+}
+
+const { theme = 'solarpunk' } = Astro.props;
+const pacotesFixos = await getPacotesFixos();
+---
+
+<div class="theme-solar-home" data-bespoke-layout="solarpunk">
+  <!-- Entrada da estufa -->
+  <section class="sp-greenhouse" aria-labelledby="sp-hero-tagline">
+    <p class="sp-eyebrow">🌿 {homeContent.hero.eyebrow}</p>
+    <h1 id="sp-hero-tagline" class="sp-title">{homeContent.hero.tagline}</h1>
+    <p class="sp-lead">{homeContent.hero.lead}</p>
+    <a class="sp-btn sp-btn-primary" href={homeContent.hero.ctaHref}>{homeContent.hero.ctaTexto}</a>
+  </section>
+
+  <!-- Selos ecológicos -->
+  <section class="sp-badges" aria-label="Indicadores do processo">
+    <span class="sp-badge">{homeContent.telemetria.escopo}</span>
+    <span class="sp-badge">{homeContent.telemetria.preco}</span>
+    <span class="sp-badge">{homeContent.telemetria.prazo}</span>
+    <span class="sp-badge">{homeContent.telemetria.semMensalidade}</span>
+    <span class="sp-badge">{homeContent.telemetria.semLockin}</span>
+  </section>
+
+  <!-- Pilares como canteiros -->
+  <section class="sp-section" aria-labelledby="sp-pilares-title">
+    <h2 id="sp-pilares-title" class="sp-section-title">{homeContent.pilaresTitulo}</h2>
+    <div class="sp-beds">
+      {homeContent.pilares.map((pilar) => (
+        <a class:list={['sp-bed', { 'sp-bed-main': pilar.destaque }]} href={pilar.link}>
+          {pilar.badge && <span class="sp-badge-tag">{pilar.badge}</span>}
+          <h3 class="sp-bed-title">{pilar.titulo}</h3>
+          <p class="sp-bed-desc">{pilar.resumo}</p>
+          <span class="sp-bed-cta">{homeContent.pilaresCta} →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Ciclo de cultivo -->
+  <section class="sp-section" aria-labelledby="sp-passos-title">
+    <h2 id="sp-passos-title" class="sp-section-title">{homeContent.passosTitulo}</h2>
+    <div class="sp-cycle">
+      {homeContent.passos.map((passo) => (
+        <div class="sp-cycle-step">
+          <span class="sp-cycle-n">{passo.n}</span>
+          <h3 class="sp-cycle-title">{passo.titulo}</h3>
+          <p class="sp-cycle-desc">{passo.texto}</p>
+        </div>
+      ))}
+    </div>
+    <a href={homeContent.passosLinkHref} class="sp-link">{homeContent.passosLinkTexto} →</a>
+  </section>
+
+  <!-- Pacotes fixos como cestas de colheita -->
+  <section class="sp-section" aria-labelledby="sp-pacotes-title">
+    <h2 id="sp-pacotes-title" class="sp-section-title">{homeContent.pacotesInfo.titulo}</h2>
+    <p class="sp-section-sub">{homeContent.pacotesInfo.intro}</p>
+    <div class="sp-baskets">
+      {pacotesFixos.map((pacote) => (
+        <article class="sp-basket">
+          <h3 class="sp-basket-name">{pacote.data.nome}</h3>
+          <p class="sp-basket-desc">{pacote.data.resumo}</p>
+          <div class="sp-basket-price">{pacote.data.valor}</div>
+          <div class="sp-basket-time">{pacote.data.prazo_tipico}</div>
+          <a class="sp-btn sp-btn-ghost" href="/contato">{pacote.data.cta}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Portfolio como galeria da estufa -->
+  <section class="sp-section" aria-labelledby="sp-portfolio-title">
+    <h2 id="sp-portfolio-title" class="sp-section-title">{homeContent.portfolio.titulo}</h2>
+    <div class="sp-gallery">
+      {homeContent.portfolio.itens.map((item) => (
+        <article class="sp-gallery-card">
+          <span class="sp-gallery-status">{item.status === 'Disponível' ? '🌱 Disponível' : '🌰 Em germinação'}</span>
+          <h3 class="sp-gallery-title">{item.titulo}</h3>
+          <p class="sp-gallery-desc">{item.texto}</p>
+        </article>
+      ))}
+    </div>
+    <a href={homeContent.portfolio.ctaHref} class="sp-link">{homeContent.portfolio.ctaTexto} →</a>
+  </section>
+
+  <!-- Vitrine de temas -->
+  <section class="sp-section" aria-labelledby="sp-temas-title">
+    <h2 id="sp-temas-title" class="sp-section-title">{homeContent.temasTeaser.titulo}</h2>
+    <p class="sp-section-sub">{homeContent.temasTeaser.texto}</p>
+    <a href={homeContent.temasTeaser.linkHref} class="sp-link">{homeContent.temasTeaser.linkTexto} →</a>
+  </section>
+
+  <!-- Convite final -->
+  <section class="sp-invite" aria-labelledby="sp-cta-title">
+    <p class="sp-invite-tag">🍃 Convite aberto</p>
+    <h2 id="sp-cta-title" class="sp-invite-title">{homeContent.ctaFinal.titulo}</h2>
+    <p class="sp-invite-lead">{homeContent.ctaFinal.texto}</p>
+    <a class="sp-btn sp-btn-primary sp-btn-lg" href={homeContent.ctaFinal.ctaHref}>{homeContent.ctaFinal.ctaTexto}</a>
+  </section>
+</div>
+
+<style>
+  .theme-solar-home {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl, 4rem);
+    position: relative;
+    z-index: 2;
+  }
+
+  .sp-greenhouse {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 1rem);
+  }
+
+  .sp-eyebrow {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-accent);
+  }
+
+  .sp-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(1.4rem, 3.6vw, 2.2rem);
+    line-height: 1.4;
+    color: var(--color-text);
+    max-width: 26ch;
+  }
+
+  .sp-lead {
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    max-width: 46ch;
+  }
+
+  .sp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    padding: 0.85rem 1.8rem;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+  }
+
+  .sp-btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  .sp-btn-primary:hover { background: var(--color-accent-hover); }
+
+  .sp-btn-lg { font-size: 1.05rem; padding: 1rem 2.2rem; }
+
+  .sp-btn-ghost {
+    background: transparent;
+    color: var(--color-accent);
+    border: 1px solid var(--color-border);
+  }
+
+  .sp-btn-ghost:hover { border-color: var(--color-accent); }
+
+  .sp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .sp-badge {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .sp-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  .sp-section-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-accent);
+  }
+
+  .sp-section-sub {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    max-width: 60ch;
+  }
+
+  .sp-beds {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) {
+    .sp-beds { grid-template-columns: repeat(3, 1fr); }
+    .sp-bed-main { grid-column: 1 / -1; }
+  }
+
+  .sp-bed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .sp-bed:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+  }
+
+  .sp-bed-main { border-color: var(--color-accent); }
+
+  .sp-badge-tag {
+    align-self: flex-start;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .sp-bed-title { font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem; color: var(--color-text); }
+  .sp-bed-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+  .sp-bed-cta { font-family: var(--font-sans); font-weight: 600; font-size: 0.9rem; color: var(--color-accent); }
+
+  .sp-cycle {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .sp-cycle { grid-template-columns: repeat(3, 1fr); } }
+
+  .sp-cycle-step {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-radius: 18px;
+    border-top: 3px solid var(--color-accent);
+  }
+
+  .sp-cycle-n { font-family: var(--font-mono); font-weight: 700; font-size: 1.6rem; color: var(--color-accent); }
+  .sp-cycle-title { font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: var(--color-text); margin: 0.4rem 0; }
+  .sp-cycle-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+
+  .sp-link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    align-self: flex-start;
+  }
+
+  .sp-link:hover { color: var(--color-accent-hover); }
+
+  .sp-baskets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .sp-baskets { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sp-baskets { grid-template-columns: repeat(3, 1fr); } }
+
+  .sp-basket {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+  }
+
+  .sp-basket-name { font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: var(--color-text); }
+  .sp-basket-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); flex: 1; }
+  .sp-basket-price { font-family: var(--font-mono); font-weight: 700; font-size: 1.3rem; color: var(--color-accent); }
+  .sp-basket-time { font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-text-muted); }
+
+  .sp-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md, 1.5rem);
+  }
+
+  @media (min-width: 768px) { .sp-gallery { grid-template-columns: repeat(2, 1fr); } }
+
+  .sp-gallery-card {
+    padding: var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+  }
+
+  .sp-gallery-status { font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-accent); }
+  .sp-gallery-title { font-family: var(--font-mono); font-weight: 700; font-size: 1.1rem; color: var(--color-text); margin: 0.4rem 0; }
+  .sp-gallery-desc { font-family: var(--font-sans); font-size: 1.1rem; color: var(--color-text-muted); }
+
+  .sp-invite {
+    text-align: center;
+    padding: var(--spacing-xl, 3rem) var(--spacing-lg, 2rem);
+    background: var(--color-bg-secondary);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .sp-invite-tag { font-family: var(--font-sans); font-weight: 700; font-size: 0.9rem; color: var(--color-accent); }
+  .sp-invite-title { font-family: var(--font-mono); font-weight: 700; font-size: clamp(1.2rem, 3vw, 1.7rem); color: var(--color-text); }
+  .sp-invite-lead { font-family: var(--font-sans); font-size: 1.25rem; color: var(--color-text-muted); max-width: 50ch; }
+</style>

@@ -1,0 +1,11 @@
+{
+  "id": "game-boy",
+  "name": "Game Boy",
+  "tagline": "4 tons de verde-oliva, pixel 8-bit e moldura de console",
+  "description": "Restrição estrita de 4 tons de verde-oliva, como a tela de LCD de um portátil clássico. O cursor deixa um rastro de ghosting autêntico de tela antiga, uma criaturinha pixelada foge da sua aproximação, e cada clique estoura em pixels 8-bit.",
+  "palette": {
+    "primary": "#12200d",
+    "background": "#e4efc9",
+    "text": "#12200d"
+  }
+}

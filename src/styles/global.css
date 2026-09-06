@@ -432,6 +432,190 @@
   font-display: swap;
 }
 
+/* ── Tema: Cyberpunk Tóquio (magenta/ciano sujos, chuva — M21) ── */
+[data-theme="cyberpunk-toquio"] {
+  --color-bg: #0a0410;
+  --color-bg-secondary: #170a22;
+  --color-text: #f1ecfb;
+  --color-text-muted: #a89bc4;
+  --color-accent: #ff2ad1;
+  --color-accent-hover: #ff6be0;
+  --color-border: #3a1f4d;
+  --color-on-accent: #0a0410;
+
+  --color-success: #20e6ff;
+  --color-success-text: #a6f3ff;
+  --color-error: #ff4d6d;
+  --color-error-text: #ffb3c1;
+  --color-error-danger: #ff6b85;
+
+  --color-bg-alt: #120819;
+  --color-bg-overlay: rgba(255, 42, 209, 0.08);
+  --color-border-subtle: rgba(32, 230, 255, 0.14);
+  --color-danger-bg: #1f0d14;
+  --color-danger-border: #4a2030;
+  --color-danger-text: #ffc9d6;
+  --color-text-secondary: #c9bfe0;
+
+  --font-sans: 'Share Tech Mono', 'Consolas', monospace;
+  --font-mono: 'Audiowide', 'Consolas', monospace;
+}
+
+@font-face {
+  font-family: 'Share Tech Mono';
+  src: url('/fonts/cyberpunk-toquio/share-tech-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Audiowide';
+  src: url('/fonts/cyberpunk-toquio/audiowide-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Solarpunk (verde vivo, latão, luz difusa — M21) ────── */
+[data-theme="solarpunk"] {
+  --color-bg: #0b1f14;
+  --color-bg-secondary: #123322;
+  --color-text: #eef7ec;
+  --color-text-muted: #a9c9ae;
+  --color-accent: #4ade80;
+  --color-accent-hover: #86efac;
+  --color-border: #1f4a30;
+  --color-on-accent: #0b1f14;
+
+  --color-success: #4ade80;
+  --color-success-text: #bbf7d0;
+  --color-error: #f87171;
+  --color-error-text: #ffd0d0;
+  --color-error-danger: #fb8a8a;
+
+  --color-bg-alt: #0f2a1c;
+  --color-bg-overlay: rgba(74, 222, 128, 0.08);
+  --color-border-subtle: rgba(202, 161, 75, 0.18);
+  --color-danger-bg: #2a1414;
+  --color-danger-border: #4a2424;
+  --color-danger-text: #ffd6d6;
+  --color-text-secondary: #c3ddc4;
+  --color-brass: #caa14b; /* token auxiliar do tema — latão decorativo */
+
+  --font-sans: 'Karla', system-ui, sans-serif;
+  --font-mono: 'Quicksand', system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: 'Karla';
+  src: url('/fonts/solarpunk/karla-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/solarpunk/quicksand-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Game Boy (4 tons de verde-oliva, só — M21) ─────────── */
+/* Restrição estrita de paleta (Decisão 10.7): TODO token abaixo é
+   composto exclusivamente por 4 tons de verde-oliva:
+   #12200d (A, mais escuro) · #2f4f22 (B) · #9ab973 (C) · #e4efc9 (D, mais claro) */
+[data-theme="game-boy"] {
+  --color-bg: #e4efc9;
+  --color-bg-secondary: #2f4f22;
+  --color-text: #12200d;
+  --color-text-muted: #2f4f22;
+  --color-accent: #12200d;
+  --color-accent-hover: #2f4f22;
+  --color-border: #9ab973;
+  --color-on-accent: #e4efc9;
+
+  --color-success: #2f4f22;
+  --color-success-text: #12200d;
+  --color-error: #2f4f22;
+  --color-error-text: #e4efc9;
+  --color-error-danger: #12200d;
+
+  --color-bg-alt: #9ab973;
+  --color-bg-overlay: rgba(18, 32, 13, 0.08);
+  --color-border-subtle: rgba(47, 79, 34, 0.25);
+  --color-danger-bg: rgba(47, 79, 34, 0.14);
+  --color-danger-border: #2f4f22;
+  --color-danger-text: #12200d;
+  --color-text-secondary: #2f4f22;
+
+  --font-sans: 'VT323', 'Consolas', monospace;
+  --font-mono: 'Silkscreen', 'Consolas', monospace;
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('/fonts/game-boy/vt323-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/game-boy/silkscreen-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tema: Steampunk (latão, cobre, couro — M21) ──────────────── */
+[data-theme="steampunk"] {
+  --color-bg: #241708;
+  --color-bg-secondary: #3a2410;
+  --color-text: #f2e6cf;
+  --color-text-muted: #c2a377;
+  --color-accent: #c98a3e;
+  --color-accent-hover: #e0a75c;
+  --color-border: #5a3d1c;
+  --color-on-accent: #241708;
+
+  --color-success: #8fae5c;
+  --color-success-text: #d4e6b8;
+  --color-error: #c15b4a;
+  --color-error-text: #ffcfc4;
+  --color-error-danger: #d97a68;
+
+  --color-bg-alt: #2c1c0c;
+  --color-bg-overlay: rgba(201, 138, 62, 0.1);
+  --color-border-subtle: rgba(90, 61, 28, 0.35);
+  --color-danger-bg: #2a1410;
+  --color-danger-border: #5a2c20;
+  --color-danger-text: #ffd4c9;
+  --color-text-secondary: #d8c3a0;
+
+  --font-sans: 'EB Garamond', Georgia, serif;
+  --font-mono: 'Cinzel', Georgia, serif;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/steampunk/eb-garamond-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cinzel';
+  src: url('/fonts/steampunk/cinzel-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Cursores customizados por tema (Decisão 10.24) ──────────── */
 [data-theme="arcade"],
 [data-theme="arcade"] a,
@@ -490,6 +674,30 @@ html.ld-cursor-fx-active[data-theme="noir"] button {
   cursor: none;
 }
 
+[data-theme="cyberpunk-toquio"],
+[data-theme="cyberpunk-toquio"] a,
+[data-theme="cyberpunk-toquio"] button {
+  cursor: url('/cursors/cyberpunk-toquio-glitch.svg') 6 4, auto;
+}
+
+[data-theme="solarpunk"],
+[data-theme="solarpunk"] a,
+[data-theme="solarpunk"] button {
+  cursor: url('/cursors/solarpunk-leaf.svg') 4 3, auto;
+}
+
+[data-theme="game-boy"],
+[data-theme="game-boy"] a,
+[data-theme="game-boy"] button {
+  cursor: url('/cursors/game-boy-dpad.svg') 12 12, auto;
+}
+
+[data-theme="steampunk"],
+[data-theme="steampunk"] a,
+[data-theme="steampunk"] button {
+  cursor: url('/cursors/steampunk-gear.svg') 13 13, auto;
+}
+
 @media (pointer: coarse) {
   [data-theme="arcade"],
   [data-theme="vintage"],
@@ -497,7 +705,11 @@ html.ld-cursor-fx-active[data-theme="noir"] button {
   [data-theme="espaco-sideral"],
   [data-theme="fisica-quantica"],
   [data-theme="blueprint"],
-  [data-theme="noir"] {
+  [data-theme="noir"],
+  [data-theme="cyberpunk-toquio"],
+  [data-theme="solarpunk"],
+  [data-theme="game-boy"],
+  [data-theme="steampunk"] {
     cursor: auto;
   }
 
