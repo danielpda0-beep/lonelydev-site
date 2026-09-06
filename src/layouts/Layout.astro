@@ -121,16 +121,19 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
     </footer>
 
     <script>
+      import { getAudioManager } from '../scripts/audioManager';
+
       // The logic for drawer and sound toggle needs to re-run on page navigation
       function initLayout() {
+        const audioManager = getAudioManager();
+        audioManager.setupEventListeners();
+
         const drawer = document.getElementById('theme-drawer');
         const backdrop = document.getElementById('drawer-backdrop');
         const toggleBtn = document.getElementById('theme-toggle');
         const closeBtn = document.getElementById('drawer-close');
-        
+
         const soundBtn = document.getElementById('sound-toggle');
-        const soundOff = soundBtn?.querySelector('.icon-sound-off') as HTMLElement;
-        const soundOn = soundBtn?.querySelector('.icon-sound-on') as HTMLElement;
 
         let isDrawerOpen = false;
 
@@ -160,23 +163,10 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
         closeBtn?.addEventListener('click', closeDrawer);
         backdrop?.addEventListener('click', closeDrawer);
 
-        // Sound toggle
-        let isSoundOn = localStorage.getItem('ld-som') === 'true';
-        function updateSoundIcon() {
-          if (isSoundOn) {
-            soundOff && (soundOff.style.display = 'none');
-            soundOn && (soundOn.style.display = 'block');
-          } else {
-            soundOff && (soundOff.style.display = 'block');
-            soundOn && (soundOn.style.display = 'none');
-          }
-        }
-        updateSoundIcon();
-
+        // Sound toggle — delega pro AudioManager (M18), que decide ligar/desligar o
+        // AudioContext, fazer fade in/out e persistir `ld-som`.
         soundBtn?.addEventListener('click', () => {
-          isSoundOn = !isSoundOn;
-          localStorage.setItem('ld-som', isSoundOn ? 'true' : 'false');
-          updateSoundIcon();
+          audioManager.toggle();
         });
 
         // Theme link click handling
@@ -187,14 +177,18 @@ const cleanPath = currentPath.replace(/^\/t\/[^\/]+/, '') || '/';
             if (targetTheme) {
               localStorage.setItem('ld-tema', targetTheme);
               document.documentElement.setAttribute('data-theme', targetTheme);
+              // Crossfade do ambiente sonoro pro novo tema (decisão 10.15); é no-op se o som
+              // estiver desligado — AudioManager.setTheme() só carrega/toca com `ld-som` ativo.
+              audioManager.setTheme(targetTheme, 1.0);
             }
             closeDrawer();
           });
         });
       }
 
-      // Initialize on load and on astro:page-load
-      initLayout();
+      // `astro:page-load` do ClientRouter dispara também na carga inicial da página (não só em
+      // navegações subsequentes) — chamar initLayout() aqui TAMBÉM duplicaria os listeners de
+      // clique (ex.: o botão de som alternaria duas vezes por clique, parecendo não fazer nada).
       document.addEventListener('astro:page-load', initLayout);
     </script>
 
